@@ -1,4 +1,4 @@
-var movementHelper = require('movement.helper');
+var helperCreep = require('helper.creep');
 
 
 var roleCombat = {
@@ -47,7 +47,7 @@ var roleCombat = {
                 }
             }
             if (!maxCombatUnit && null == target && Game.time % 128 === 0) {
-                movementHelper.moveRandomly(creep, 8);
+                helperCreep.moveRandomly(creep, 8);
             } else if (maxCombatUnit && null == target && Game.time % 128 === 0) {
 
                 var room = creep.room;

@@ -4,10 +4,11 @@ var helperEnergy = require('helper.energy');
 var rolesSetup = {
 
     UTILITY: {name: "utility", maxCount: 1, baseBody: [WORK, CARRY, MOVE], filler: true},
+    MINE: {name: "mine", maxCount: 0, baseBody: [WORK, WORK, WORK, WORK, WORK, MOVE]},
     CLAIM: {name: "claim", maxCount: 2, baseBody: [CLAIM, MOVE], simpleBody: false},
     COMBAT: {name: "combat", maxCount: 1, baseBody: [ATTACK, MOVE, MOVE, TOUGH]},
     COMBAT2: {name: "combat", maxCount: 1, baseBody: [ATTACK, MOVE, TOUGH]},
-    HEAL: {name: "heal", maxCount: 1, baseBody: [HEAL, MOVE, MOVE, TOUGH]},
+    HEALER: {name: "heal", maxCount: 1, baseBody: [HEAL, MOVE, MOVE, TOUGH]},
 
     /** @param {Creep} creep **/
     spawn: function (type) {
@@ -53,7 +54,7 @@ var rolesSetup = {
                         continue;
                     }
 
-                    if ((type.name === this.HEAL.name && Memory.utilityUnitCount[spawn.room.name] < Memory.utilityMaxCount[spawn.room.name]) || (type.name === this.HEAL.name && spawn.room.controller.level < 3)) {
+                    if ((type.name === this.HEALER.name && Memory.utilityUnitCount[spawn.room.name] < Memory.utilityMaxCount[spawn.room.name]) || (type.name === this.HEALER.name && spawn.room.controller.level < 3)) {
                         console.log('Not building heal yet, reason, not enough utility or room.controller.level < 3');
                         continue;
                     }
@@ -85,7 +86,7 @@ var rolesSetup = {
             Memory.maxUtilityBase[room.name].baseValue = 7;
             Memory.maxUtilityBase[room.name].currentValue = 7;
         }
-        
+
         var result = Math.floor((Memory.maxUtilityBase[room.name].currentValue - room.controller.level) / 2); // arbitrary min value
         // var energySources = helperEnergy.findAllRoomEnergySources(helperRoom.getRoom());
         var mineSpots = helperEnergy.countEnergyMineSpots(room);

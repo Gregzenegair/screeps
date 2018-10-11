@@ -1,4 +1,4 @@
-var movementHelper = require('movement.helper');
+var helperCreep = require('helper.creep');
 var helperEnergy = require('helper.energy');
 
 var roleFiller = require('role.filler');
@@ -46,14 +46,14 @@ var roleUtility = {
         }
 
         if (!creep.memory.canWork) {
-            var energySource = this.setEnergySource(creep, false);
+            var energySource = helperCreep.setEnergySource(creep, false);
 
             if (energySource) {
                 switch (creep.memory.energySourceType) {
                     case helperEnergy.ENERGY_SOURCE_TYPES.DROPPED:
                         var creepPickupAction = creep.pickup(energySource);
                         if (creepPickupAction === ERR_NOT_IN_RANGE) {
-                            this.moveTo(creep, energySource);
+                            helperCreep.moveTo(creep, energySource);
                         }
 
                         if (creepPickupAction === ERR_INVALID_TARGET) {
@@ -64,7 +64,7 @@ var roleUtility = {
                     case helperEnergy.ENERGY_SOURCE_TYPES.DEPOSIT:
                         var creepWithdrawAction = creep.withdraw(energySource, RESOURCE_ENERGY);
                         if (creepWithdrawAction === ERR_NOT_IN_RANGE) {
-                            this.moveTo(creep, energySource);
+                            helperCreep.moveTo(creep, energySource);
                         }
 
                         if (creepWithdrawAction === ERR_INVALID_ARGS || creepWithdrawAction === ERR_INVALID_TARGET || creepWithdrawAction === ERR_NOT_ENOUGH_RESOURCES) {
@@ -78,7 +78,7 @@ var roleUtility = {
                         creep.memory.filler = true;
                         var creepHarvestAction = creep.harvest(energySource);
                         if (creepHarvestAction === ERR_NOT_IN_RANGE) {
-                            this.moveTo(creep, energySource);
+                            helperCreep.moveTo(creep, energySource);
                         }
 
                         if (creepHarvestAction === ERR_NOT_ENOUGH_RESOURCES) {
@@ -134,53 +134,6 @@ var roleUtility = {
         if (Game.time % 256 === 0) {
             this.mustUpgrade(creep);
         }
-    },
-
-    moveTo: function (creep, energySource) {
-        var moveResult = creep.moveTo(energySource, {
-            reusePath: 32,
-            visualizePathStyle: {stroke: '#fffd00'}
-        });
-
-        if (moveResult === ERR_NO_PATH) {
-            creep.memory.errorPathCount++;
-            if (creep.memory.errorPathCount > 3) {
-                creep.memory.errorPathCount = 0;
-                creep.memory.alternativePath = true;
-            }
-        }
-
-        if (moveResult === ERR_NO_PATH && !creep.memory.alternativePath) {
-
-            energySource = this.setEnergySource(creep, true);
-            creep.moveTo(energySource,
-                    {reusePath: 32, visualizePathStyle: {stroke: '#fffd00'}});
-        }
-        
-//        creep.say("Moved=" + moveResult);
-    },
-
-    setEnergySource: function (creep, seekOtherPath) {
-        var energySource = null;
-        if (null != creep.memory.energySourceId && !seekOtherPath) {
-            energySource = Game.getObjectById(creep.memory.energySourceId);
-        } else {
-            if (!seekOtherPath && !creep.memory.alternativePath) {
-                // a filler can not pretend to seek into deposits
-                energySource = helperEnergy.findNearestEnergySource(creep, !creep.memory.filler);
-            } else {
-                console.log("find a new path for creep=" + creep.name);
-                energySource = helperEnergy.findValidPathHarvestSource(creep);
-                creep.memory.alternativePath = true;
-            }
-
-            if (energySource) {
-                creep.memory.energySourceId = energySource.target.id;
-                creep.memory.energySourceType = energySource.energySourceType;
-                energySource = energySource.target;
-            }
-        }
-        return energySource;
     },
 
     mustUpgrade: function (creep) {

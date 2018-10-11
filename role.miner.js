@@ -1,4 +1,4 @@
-var movementHelper = require('movement.helper');
+var helperCreep = require('helper.creep');
 var helperEnergy = require('helper.energy');
 
 var roleFiller = require('role.filler');
@@ -9,10 +9,43 @@ var roleRepairer = require('role.repairer');
 /**
  * A specialised miner that only mine one spot
  * and fill it's assigned container
- *
+ * 
+ * Goals :
+ * - seek for free containers (should not be built if nothings free
+ * in the first place
+ * - reach the container (already built next to mining spot)
+ * - mine until it dies, when it dies notify the memory he freed
+ * the current spot he was mining on, to generate a new creep
+ * 
+ * 5Work 1Move
  * @type {{run: roleMiner.run}}
  */
 var roleMiner = {
+
+    getFreeSpot: function (creep) {
+        var room = creep.room;
+        var containerSources = Memory.containerSources[room.name];
+        for (var i = 0; i < containerSources.length; i++) {
+            var containerSource = containerSources[i];
+            if (containerSource.free) {
+                containerSource.free = creep.id;
+                return containerSource.container;
+            }
+        }
+    },
+
+    moveToFreeSpot: function (creep) {
+        if (null == creep.memory.containerSpot) {
+            creep.memory.containerSpot = this.getFreeSpot(creep);
+        }
+        
+        this.moveTo(creep, creep.memory.containerSpot);
+
+    },
+
+    mineSpot: function (creep) {
+
+    },
 
     /** @param {Creep} creep **/
     run: function (creep) {

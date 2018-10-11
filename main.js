@@ -59,7 +59,7 @@ module.exports.loop = function () {
             roleCombat.run(creep, hasBeenUnderAttack, Memory.combatUnitCount / Memory.roomWithCombatUnit >= rolesSetup.COMBAT.maxCount);
         }
 
-        if (creep.memory.role === rolesSetup.HEAL.name) {
+        if (creep.memory.role === rolesSetup.HEALER.name) {
             roleHealer.run(creep);
         }
     }
@@ -132,7 +132,9 @@ module.exports.loop = function () {
                             var path = paths[i];
                             for (var j = 0; j < path.length; j++) {
                                 var p = path[j];
-                                constructResult = room.createConstructionSite(p.x, p.y, STRUCTURE_ROAD);
+                                if (0 === Game.map.getRoomTerrain(room.name).get(p.x, p.y)) {
+                                    constructResult = room.createConstructionSite(p.x, p.y, STRUCTURE_ROAD);
+                                }
                             }
                         }
 
