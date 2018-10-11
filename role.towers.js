@@ -7,11 +7,11 @@ var roleTowers = {
         for (var name in Game.rooms) {
             var room = Game.rooms[name];
 
-            if (null == Memory.myTowers) {
+            if (null == Memory.myTowers || Game.time % 2048 === 0) {
                 Memory.myTowers = {};
             }
 
-            if (null == Memory.myTowers[name] || Game.time % 2048 === 0) {
+            if (null == Memory.myTowers[name]) {
                 Memory.myTowers[name] = [];
                 var foundTowers = room.find(FIND_MY_STRUCTURES, {
                     filter: {structureType: STRUCTURE_TOWER}
