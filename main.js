@@ -69,6 +69,7 @@ module.exports.loop = function () {
     if (null == Memory.pathBuiltAroundSources || null == Memory.pathBuilt || Game.time % 2048 === 0) {
         Memory.pathBuiltAroundSources = {};
         Memory.pathBuilt = {};
+        Memory.combatExitRoom = null; //TODO: rework this
     }
 
     roleTowers.run();
@@ -79,7 +80,7 @@ module.exports.loop = function () {
     if (Game.time % 256 === 0) {
         Memory.lastWantedBuild = {};
 
-        Memory.hasBeenUnderAttack--;
+        Memory.hasBeenUnderAttack--; // TODO: Move this event somewhere else
         var roomWithCombatUnit = 0;
         for (var name in Game.rooms) {
             var room = Game.rooms[name];
@@ -103,17 +104,16 @@ module.exports.loop = function () {
                     var scanneds = room.lookAt(newPosX, newPosY);
                     Memory.lastWantedBuild[room.name] = scanneds;
                     // this allow to not build on roads
-                    var canBuild = false;
+                    var canBuild = true;
                     for (var i = 0; i < scanneds.length; i++) {
                         if (scanneds[i].type == "structure" && scanneds[i].structure.structureType == "road") {
-                            canBuild = true;
+                            canBuild = false;
                             break;
                         }
                     }
 
                     var constructResult = 0;
                     if (canBuild) {
-
                         constructResult = room.createConstructionSite(newPosX, newPosY, STRUCTURE_EXTENSION);
 
                         if (constructResult < 0) {
@@ -140,7 +140,6 @@ module.exports.loop = function () {
 
                         Memory.pathBuilt[room.name] = true;
                     }
-
                 }
             }
 
