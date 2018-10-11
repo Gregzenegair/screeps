@@ -140,62 +140,78 @@ module.exports.loop = function () {
                     }
 
                 }
+            }
 
-                if (room.controller && null != sources && sources.length > 0) { // ensure there is a controller before trying to build a spawn
-                    // calc average between spawn and sources :
-                    var avX = 0;
-                    var avY = 0;
 
+            if (room.controller && null != sources && sources.length > 0) { // ensure there is a controller before trying to build a spawn
+                // calc average between spawn and sources :
+                var avX = 0;
+                var avY = 0;
+
+                for (var j = 0; j < sources.length; j++) {
+                    var source = sources[j];
+                    avX += source.pos.x;
+                    avY += source.pos.y;
+                }
+                avX += room.controller.pos.x;
+                avY += room.controller.pos.y;
+
+                avX = Math.floor(avX / sources.length);
+                avY = Math.floor(avY / sources.length);
+
+                var coords = energyHelper.getCoordsAround(avX, avY);
+
+                for (var i = 0; i < coords.length; i++) {
+                    var coord = coords[i];
+                    if (0 === Game.map.getRoomTerrain(room.name).get(coord.x, coord.y)) { //0 is plain
+                        var constructResult = room.createConstructionSite(avX, avY, STRUCTURE_SPAWN);
+                        console.log("building spawn resulted=" + constructResult);
+                        if (constructResult === ERR_INVALID_TARGET) {
+                            var newPosX = room.controller.pos.x + Math.myRandom(-12, 12);
+                            var newPosY = room.controller.pos.y + Math.myRandom(-12, 12);
+                            newPosX = newPosX < 0 ? 0 : newPosX;
+                            newPosY = newPosY < 0 ? 0 : newPosY;
+                            newPosX = newPosX > 49 ? 49 : newPosX;
+                            newPosY = newPosY > 49 ? 49 : newPosY;
+                            constructResult = room.createConstructionSite(newPosX, newPosY, STRUCTURE_SPAWN);
+                            console.log("building spawn resulted=" + constructResult);
+                        }
+                    }
+                }
+
+                /**
+                 * For each source build roads around
+                 */
+                if (!Memory.pathBuiltAroundSources[room.name]) {
                     for (var j = 0; j < sources.length; j++) {
                         var source = sources[j];
-                        avX += source.pos.x;
-                        avY += source.pos.y;
-                    }
-                    avX += room.controller.pos.x;
-                    avY += room.controller.pos.y;
+                        var coords = energyHelper.getCoordsAround(source.pos.x, source.pos.y);
+                        for (var i = 0; i < coords.length; i++) {
+                            var coord = coords[i];
+                            if (0 === Game.map.getRoomTerrain(room.name).get(coord.x, coord.y)) {
+                                var buildRoad = room.createConstructionSite(coord.x, coord.y, STRUCTURE_ROAD);
+                                console.log("Build road around source resulted=" + buildRoad);
+                                // should be somehow built only if  Memory.pathBuilt[room] = false
+                                // this build roads around  each ressource
 
-                    avX = Math.floor(avX / sources.length);
-                    avY = Math.floor(avY / sources.length);
-
-                    var coords = energyHelper.getCoordsAround(avX, avY);
-
-                    for (var i = 0; i < coords.length; i++) {
-                        var coord = coords[i];
-                        if (0 === Game.map.getRoomTerrain(room.name).get(coord.x, coord.y)) { //0 is plain
-                            var constructResult = room.createConstructionSite(avX, avY, STRUCTURE_SPAWN);
-                            console.log("building spawn resulted=" + constructResult);
-                            if (constructResult === ERR_INVALID_TARGET) {
-                                var newPosX = room.controller.pos.x + Math.myRandom(-12, 12);
-                                var newPosY = room.controller.pos.y + Math.myRandom(-12, 12);
-                                newPosX = newPosX < 0 ? 0 : newPosX;
-                                newPosY = newPosY < 0 ? 0 : newPosY;
-                                newPosX = newPosX > 49 ? 49 : newPosX;
-                                newPosY = newPosY > 49 ? 49 : newPosY;
-                                constructResult = room.createConstructionSite(newPosX, newPosY, STRUCTURE_SPAWN);
-                                console.log("building spawn resulted=" + constructResult);
                             }
-                        }
 
-                        if (!Memory.pathBuiltAroundSources[room.name]) {
-                            // should be somehow built only if  Memory.pathBuilt[room] = false
-                            // this build roads around  each ressource
-                            room.createConstructionSite(coord.x, coord.y, STRUCTURE_ROAD);
                         }
                     }
 
-                    if (!Memory.pathBuiltAroundSources[room.name]) {
-                        Memory.pathBuiltAroundSources[room.name] = true;
-                    }
-
-                } else {
-                    console.log("No controller or no source found, or nothing to build")
+                    Memory.pathBuiltAroundSources[room.name] = true;
                 }
 
 
-                if (constructResult !== OK && spawnUtilityResult !== OK) { // if nothing to build, make an army TODO: improve algorithm to determine if there is really nothing to build
-                    // rolesSetup.spawn(rolesSetup.COMBAT);
-                }
+            } else {
+                console.log("No controller or no source found, or nothing to build")
             }
+
+
+            if (constructResult !== OK && spawnUtilityResult !== OK) { // if nothing to build, make an army TODO: improve algorithm to determine if there is really nothing to build
+                // rolesSetup.spawn(rolesSetup.COMBAT);
+            }
+
 
             // in each possible room with creep or building, try to build a container
             for (var j = 0; j < sources.length; j++) {
