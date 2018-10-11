@@ -1,5 +1,7 @@
 require('object.extension')();
 
+var helperCreep = require('helper.creep');
+
 var roleClaimer = {
 
     /** @param {Creep} creep **/
@@ -120,19 +122,13 @@ var roleClaimer = {
             creep.memory.claimingSpot = true;
 
             if (claimResult === ERR_NOT_IN_RANGE) {
-                creep.moveTo(room.controller, {
-                    reusePath: 32,
-                    visualizePathStyle: {stroke: '#00ff00'}
-                });
+                helperCreep.moveTo(creep, room.controller);
 
             } else if (claimResult !== OK) {
                 var claimReserveResult = creep.reserveController(room.controller);
                 creep.say("C R=" + claimReserveResult);
                 if (claimReserveResult === ERR_NOT_IN_RANGE) {
-                    creep.moveTo(room.controller, {
-                        reusePath: 32,
-                        visualizePathStyle: {stroke: '#00ff00'}
-                    });
+                    helperCreep.moveTo(creep, room.controller);
 
                     if (creep.memory.previousPosX == creep.pos.x && creep.memory.previousPosY == creep.pos.y) {
                         creep.memory.claimingSpotError++;

@@ -53,7 +53,7 @@ var roleUtility = {
                     case helperEnergy.ENERGY_SOURCE_TYPES.DROPPED:
                         var creepPickupAction = creep.pickup(energySource);
                         if (creepPickupAction === ERR_NOT_IN_RANGE) {
-                            helperCreep.moveTo(creep, energySource);
+                            helperCreep.moveToEnergySource(creep, energySource);
                         }
 
                         if (creepPickupAction === ERR_INVALID_TARGET) {
@@ -64,7 +64,7 @@ var roleUtility = {
                     case helperEnergy.ENERGY_SOURCE_TYPES.DEPOSIT:
                         var creepWithdrawAction = creep.withdraw(energySource, RESOURCE_ENERGY);
                         if (creepWithdrawAction === ERR_NOT_IN_RANGE) {
-                            helperCreep.moveTo(creep, energySource);
+                            helperCreep.moveToEnergySource(creep, energySource);
                         }
 
                         if (creepWithdrawAction === ERR_INVALID_ARGS || creepWithdrawAction === ERR_INVALID_TARGET || creepWithdrawAction === ERR_NOT_ENOUGH_RESOURCES) {
@@ -78,7 +78,7 @@ var roleUtility = {
                         creep.memory.filler = true;
                         var creepHarvestAction = creep.harvest(energySource);
                         if (creepHarvestAction === ERR_NOT_IN_RANGE) {
-                            helperCreep.moveTo(creep, energySource);
+                            helperCreep.moveToEnergySource(creep, energySource);
                         }
 
                         if (creepHarvestAction === ERR_NOT_ENOUGH_RESOURCES) {

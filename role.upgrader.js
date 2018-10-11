@@ -1,3 +1,5 @@
+var helperCreep = require('helper.creep');
+
 var roleUpgrader = {
 
     /** @param {Creep} creep **/
@@ -8,13 +10,7 @@ var roleUpgrader = {
         }
         if (target) {
             if (creep.upgradeController(target) == ERR_NOT_IN_RANGE) {
-                var moveToResult = creep.moveTo(target, {reusePath: 32, visualizePathStyle: {stroke: '#ffffff'}});
-                if (moveToResult === ERR_NO_PATH) {
-                    creep.memory.errorPathCount++;
-                    if (creep.memory.errorPathCount > 3) {
-                        creep.moveTo(target, {visualizePathStyle: {stroke: '#0000ff'}});
-                    }
-                }
+                var moveToResult = helperCreep.moveTo(creep, target);
             }
         }
         return target;

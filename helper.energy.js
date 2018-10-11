@@ -17,7 +17,7 @@ var helperEnergy = {
         },
         'inf': function (a, b) {
             return a < b;
-        },
+        }
     },
 
     structureValues: {
@@ -196,7 +196,7 @@ var helperEnergy = {
             target = targets[i];
             // ensure we seek in the same room and the path to move to is ok
             if (creep.room.name === target.room.name &&
-                    creep.moveTo(target, {reusePath: 32, visualizePathStyle: {stroke: '#0000FF'}}) == OK) {
+                    creep.moveTo(target) == OK) {
                 break;
             } else {
                 target = null;
@@ -255,7 +255,7 @@ var helperEnergy = {
             target = targets[i];
             // ensure we seek in the same room and the path to move to is ok
             if (creep.room.name === target.room.name &&
-                    creep.moveTo(target, {reusePath: 32, visualizePathStyle: {stroke: '#0000FF'}}) == OK) {
+                   creep.moveTo(target) == OK) {
                 break;
             } else {
                 target = null;

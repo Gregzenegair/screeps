@@ -1,3 +1,5 @@
+var helperCreep = require('helper.creep');
+
 var roleRepairer = {
 
     /** @param {Creep} creep **/
@@ -19,13 +21,8 @@ var roleRepairer = {
 
         if (target) {
             if (creep.repair(target) === ERR_NOT_IN_RANGE) {
-                var moveToResult = creep.moveTo(target, {reusePath: 32, visualizePathStyle: {stroke: '#ffffff'}});
-                if (moveToResult === ERR_NO_PATH) {
-                    creep.memory.errorPathCount++;
-                    if (creep.memory.errorPathCount > 3) {
-                        creep.moveTo(target, {visualizePathStyle: {stroke: '#0000ff'}});
-                    }
-                }
+                var moveToResult = helperCreep.moveTo(creep, target);
+
             }
         }
         return target;

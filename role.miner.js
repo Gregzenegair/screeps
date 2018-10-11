@@ -1,11 +1,6 @@
 var helperCreep = require('helper.creep');
 var helperEnergy = require('helper.energy');
 
-var roleFiller = require('role.filler');
-var roleBuilder = require('role.builder');
-var roleUpgrader = require('role.upgrader');
-var roleRepairer = require('role.repairer');
-
 /**
  * A specialised miner that only mine one spot
  * and fill it's assigned container
@@ -39,7 +34,7 @@ var roleMiner = {
             creep.memory.containerSpot = this.getFreeSpot(creep);
         }
         
-        this.moveTo(creep, creep.memory.containerSpot);
+        helperCreep.moveTo(creep, creep.memory.containerSpot);
 
     },
 
@@ -47,6 +42,11 @@ var roleMiner = {
 
     },
 
+
+
+
+
+//delete after this
     /** @param {Creep} creep **/
     run: function (creep) {
 

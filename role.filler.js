@@ -1,3 +1,4 @@
+var helperCreep = require('helper.creep');
 var helperEnergy = require('helper.energy');
 
 var roleFiller = {
@@ -11,7 +12,7 @@ var roleFiller = {
         }
         if (target) {
             if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(target, {reusePath: 32, ignoreCreeps: true, visualizePathStyle: {stroke: '#ffffff'}});
+                helperCreep.moveTo(creep, target);
             }
         }
         return target;
