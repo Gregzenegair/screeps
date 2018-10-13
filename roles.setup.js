@@ -13,7 +13,7 @@ var rolesSetup = {
 
     /** @param {Creep} creep **/
     spawn: function (type) {
-        if (Game.time % 16 === 0) {
+        if (Game.time % 16 === 0 || null == Memory.utilityMaxCount) {
 
             for (var name in Memory.creeps) {
                 if (!Game.creeps[name]) {
@@ -111,9 +111,8 @@ var rolesSetup = {
         console.log("mineSpots=" + mineSpots);
         
         
-        result = Math.round(Math.round(mineSpots * 1.1) - (room.controller.level / 2));
-        result += sourcesCount;
-        result = result < 4 ? 4 : result;
+        result = Math.round(Math.round(mineSpots * 1.) - (room.controller.level / 3));
+        result += sourcesCount * 2;
         console.log("calcMaxUtility=" + result);
         return result;
     },

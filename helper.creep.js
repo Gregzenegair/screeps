@@ -1,9 +1,15 @@
 var helperCreep = {
 
-    moveTo: function (creep, target) { // should be into an helper class
+    moveTo: function (creep, target, ignoreCreeps) { // should be into an helper class
+
+        if (null == ignoreCreeps) {
+            ignoreCreeps = true;
+        }
+
         var moveResult = creep.moveTo(target, {
-            reusePath: 32,
-            visualizePathStyle: {stroke: '#fffd00'}
+            reusePath: 16,
+            visualizePathStyle: {stroke: '#fffd00'},
+            ignoreCreeps: false
         });
 
         if (moveResult === ERR_NO_PATH) {

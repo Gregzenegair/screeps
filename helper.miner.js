@@ -37,9 +37,9 @@ var helperMiner = {
         }
     },
 
-/**
- * Free a container Id if its screep is dead
- */
+    /**
+     * Free a container Id if its screep is dead
+     */
     freedSpot: function (containerId) {
         for (var roomName in Memory.containerSources) {
             for (var i = 0; i < roomName.length; i++) {

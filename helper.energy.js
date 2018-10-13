@@ -3,6 +3,9 @@ var helperCreep = require('helper.creep');
 
 var helperEnergy = {
 
+    /**
+     * Star of generic seek energy source methods
+     */
     ENERGY_SOURCE_TYPES: {
         DROPPED: "DROPPED",
         DEPOSIT: "DEPOSIT",
@@ -87,51 +90,65 @@ var helperEnergy = {
         return target;
     },
 
-    moveToEnergySource: function (creep, energySource) { // should be into an helper class
-        var moveResult = helperCreep.moveTo(creep, energySource);
+    findClosestContainerOperatorMoreFilledThanCreep: function (creep, operator, a, b) {
 
-        if (moveResult === ERR_NO_PATH) {
-            creep.memory.errorPathCount++;
-            if (creep.memory.errorPathCount > 3) {
-                creep.memory.errorPathCount = 0;
-                creep.memory.alternativePath = true;
+        var target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.store < creep.carryCapacity
+                        && structure.structureType === STRUCTURE_CONTAINER
+                        && this.operators[operator](a(structure), b(structure)
+                        ));
             }
-        }
+        });
 
-        if (moveResult === ERR_NO_PATH && !creep.memory.alternativePath) {
-
-            energySource = this.setEnergySource(creep, true);
-            helperCreep.moveTo(creep, energySource);
-        }
-
-//        creep.say("Moved=" + moveResult);
+        return target;
     },
 
-    setEnergySource: function (creep, seekOtherPath) {
-        var energySource = null;
-        if (null != creep.memory.energySourceId && !seekOtherPath) {
-            energySource = Game.getObjectById(creep.memory.energySourceId);
-        } else {
-            if (!seekOtherPath && !creep.memory.alternativePath) {
-                // a filler can not pretend to seek into deposits
-                energySource = helperEnergy.findNearestEnergySource(creep, !creep.memory.filler);
+    findMostFilledContainerOperator: function (creep) {
+
+        var targets = creep.room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.structureType === STRUCTURE_CONTAINER);
+            }
+        });
+
+        var result = null;
+        for (var i = 0; i < targets.length; i++) {
+            var target = targets[i];
+            if (null == result) {
+                result = target;
             } else {
-                console.log("find a new path for creep=" + creep.name);
-                energySource = helperEnergy.findValidPathHarvestSource(creep);
-                creep.memory.alternativePath = true;
-            }
-
-            if (null == energySource) {
-                helperCreep.moveRandomExitRoom(creep);
-            }
-
-            if (energySource) {
-                creep.memory.energySourceId = energySource.target.id;
-                creep.memory.energySourceType = energySource.energySourceType;
-                energySource = energySource.target;
+                if (target.store > result.store) {
+                    result = target;
+                }
             }
         }
-        return energySource;
+
+        return result;
+    },
+
+    findMostFilledContainerOperatorMoreFilledThanCreep: function (creep) {
+
+        var targets = creep.room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.store < creep.carryCapacity
+                        && structure.structureType === STRUCTURE_CONTAINER);
+            }
+        });
+
+        var result = null;
+        for (var i = 0; i < targets.length; i++) {
+            var target = targets[i];
+            if (null == result) {
+                result = target;
+            } else {
+                if (target.store > result.store) {
+                    result = target;
+                }
+            }
+        }
+
+        return result;
     },
 
     findNotFullDeposit: function (room) {
@@ -187,10 +204,70 @@ var helperEnergy = {
 
 
     },
+    /**
+     * End of generic seek energy source methods
+     */
 
-    findNearestEnergySource: function (creep, canSeekIntoDeposits) {
-        var energySourceType = this.ENERGY_SOURCE_TYPES.DROPPED;
-        var target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES);
+    moveToEnergySource: function (creep, energySource) { // should be into an helper class
+        var moveResult = helperCreep.moveTo(creep, energySource);
+
+        if (moveResult === ERR_NO_PATH) {
+            creep.memory.errorPathCount++;
+            if (creep.memory.errorPathCount > 3) {
+                creep.memory.errorPathCount = 0;
+                creep.memory.alternativePath = true;
+            }
+        }
+
+        if (moveResult === ERR_NO_PATH && !creep.memory.alternativePath) {
+
+            energySource = this.setEnergySource(creep, true);
+            helperCreep.moveTo(creep, energySource, false);
+        }
+
+//        creep.say("Moved=" + moveResult);
+    },
+
+    setEnergySource: function (creep, seekOtherPath) {
+        var energySource = null;
+
+        var canSeekForSources = Memory.minerMaxCount[creep.room.name] != Memory.minerUnitCount[creep.room.name];
+
+        if (null != creep.memory.energySourceId && !seekOtherPath) {
+            energySource = Game.getObjectById(creep.memory.energySourceId);
+        } else {
+            if (!seekOtherPath && !creep.memory.alternativePath) {
+                // a filler can not pretend to seek into deposits
+                energySource = helperEnergy.findNearestEnergySource(creep, !creep.memory.filler, canSeekForSources);
+            } else {
+                console.log("find a new path for creep=" + creep.name);
+                energySource = helperEnergy.findValidPathHarvestSource(creep);
+                creep.memory.alternativePath = true;
+            }
+
+            if (null == energySource) {
+                helperCreep.moveRandomExitRoom(creep);
+            }
+
+            if (energySource) {
+                creep.memory.energySourceId = energySource.target.id;
+                creep.memory.energySourceType = energySource.energySourceType;
+                energySource = energySource.target;
+            }
+        }
+        return energySource;
+    },
+
+    findNearestEnergySource: function (creep, canSeekIntoDeposits, canSeekForSources) {
+        // First check into full containers if exists, to prevent infinie dropped
+        // ressources on the floor pushed by miners
+        var energySourceType = this.ENERGY_SOURCE_TYPES.CONTAINER;
+        var target = this.findFullClosestContainer(creep);
+
+        if (null == target) {
+            energySourceType = this.ENERGY_SOURCE_TYPES.DROPPED;
+            target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES);
+        }
 
         // If not at maximum, keep feeling deposits, we ensure to have them always filled at priority
         if (canSeekIntoDeposits && creep.room.energyAvailable !== creep.room.energyCapacityAvailable) {
@@ -209,21 +286,37 @@ var helperEnergy = {
 
         if (null == target && !canSeekIntoDeposits) {
             energySourceType = this.ENERGY_SOURCE_TYPES.CONTAINER;
-            target = this.findNotEmptyClosestContainer(creep);
-            console.log("sourcetarget CONTAINER=" + target);
+            target = this.findMostFilledContainerOperatorMoreFilledThanCreep(creep);
+            if (null != target) {
+                console.log("sourcetarget most full CONTAINER=" + target);
+            }
+
         }
 
-        if (null == target) {
+        if (null == target && !canSeekIntoDeposits) {
+            energySourceType = this.ENERGY_SOURCE_TYPES.CONTAINER;
+            target = this.findClosestContainerOperatorMoreFilledThanCreep(creep);
+            if (null != target) {
+                console.log("sourcetarget CONTAINER=" + target);
+            }
+
+        }
+
+        if (null == target && canSeekForSources) {
             energySourceType = this.ENERGY_SOURCE_TYPES.SOURCE;
             target = creep.pos.findClosestByRange(FIND_SOURCES, {
                 filter: function (source) {
                     return source.energy > 0;
                 }
             });
-            console.log("sourcetarget SOURCE=" + target);
+            if (null != target) {
+                console.log("sourcetarget SOURCE=" + target);
+            }
+
         }
 
         if (null == target) {
+            console.log("sourcetarget not found, returning null");
             return null;
         }
 

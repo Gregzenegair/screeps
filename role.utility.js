@@ -87,7 +87,7 @@ var roleUtility = {
                         }
                         break;
                 }
-                
+
                 if (creep.memory.energySourceType == helperEnergy.ENERGY_SOURCE_TYPES.CONTAINER
                         || creep.memory.energySourceType == helperEnergy.ENERGY_SOURCE_TYPES.DROPPED) {
                     creep.memory.filler = true;
@@ -106,7 +106,8 @@ var roleUtility = {
 
             var target = null;
 
-            if (creep.memory.filler && !creep.memory.upgrade) {
+            if (creep.memory.filler && !creep.memory.upgrade
+                    && !this.getBuildingPriority(creep)) {
                 target = roleFiller.run(creep);
             }
 
@@ -149,6 +150,12 @@ var roleUtility = {
         } else {
             creep.memory.upgrade = false;
         }
+    },
+
+    getBuildingPriority: function (creep) {
+        var targets = creep.room.find(Game.CONSTRUCTION_SITES);
+        
+        return targets.length > 10 && Memory.utilityUnitCount[creep.room.name] === Memory.utilityMaxCount[creep.room.name];
     }
 
 };

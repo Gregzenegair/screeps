@@ -138,7 +138,7 @@ module.exports.loop = function () {
                         }
                     }
 
-                    var canBuildPaths = (constructResult < 0 && room.controller.level > 2);
+                    var canBuildPaths = (constructResult < 0 && room.controller.level > 2 || !room.controller.my);
                     if ((canBuildPaths && !Memory.pathBuilt[room.name])) {
                         var pathsSources = helperRoom.findPathToSources(room);
                         var pathsMyStructures = helperRoom.findPathMyStructures(room);
