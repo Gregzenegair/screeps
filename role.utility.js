@@ -61,6 +61,7 @@ var roleUtility = {
                         }
                         break;
 
+                    case helperEnergy.ENERGY_SOURCE_TYPES.CONTAINER:
                     case helperEnergy.ENERGY_SOURCE_TYPES.DEPOSIT:
                         var creepWithdrawAction = creep.withdraw(energySource, RESOURCE_ENERGY);
                         if (creepWithdrawAction === ERR_NOT_IN_RANGE) {
@@ -72,8 +73,7 @@ var roleUtility = {
                         }
                         break;
 
-                    default :
-                    case helperEnergy.ENERGY_SOURCE_TYPES.CONTAINER:
+                    default :                    
                     case helperEnergy.ENERGY_SOURCE_TYPES.SOURCE:
                         // console.log("energySource=" + energySource + " creep name=" + creep.name);
                         creep.memory.filler = true;
@@ -87,6 +87,10 @@ var roleUtility = {
                         }
                         break;
                 }
+                if (creep.memory.energySourceType == helperEnergy.ENERGY_SOURCE_TYPES.CONTAINER) {
+                    creep.memory.filler = true;
+                }
+                
 
             } else {
                 console.log("energySource is null or not found");
