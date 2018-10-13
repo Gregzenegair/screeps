@@ -4,6 +4,16 @@ var roleRepairer = {
 
     /** @param {Creep} creep **/
     run: function (creep) {
+        var room = creep.room;
+        if (!(null == room.controller
+                || (null != room.controller
+                        && room.controller.my)
+                || (null != room.controller
+                        && room.controller.reservation
+                        && room.controller.reservation.username === "Gregzenegair"
+                        && room.controller.reservation.ticksToEnd > 1024))) {
+            return null;// prevento to repair any not a minimum controlloed by me
+        }
 
         var target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
             filter: function (structure) {

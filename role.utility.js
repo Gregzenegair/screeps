@@ -137,13 +137,19 @@ var roleUtility = {
                 //TODO : should not be null, there is always a controller to upgrade right ?
                 //TODO : or controller is full, there is no more anything to do here
                 //TODO : or has movved to an other room, keep it back to home
-                if (null != creep.memory.roomHome) {
-                    creep.say('BackHome');
-                    helperCreep.moveToAnOtherRoom(creep, creep.memory.roomHome);
-                } else {
-                    creep.say('BackR');
-                    helperCreep.moveRandomExitRoom(creep);
+                if (creep.memory.roomHome != creep.room.name) {
+                    if (null != creep.memory.roomHome) {
+                        creep.say('BackHome');
+                        helperCreep.moveToAnOtherRoom(creep, creep.memory.roomHome);
+                    } else {
+                        creep.say('BackR');
+                        helperCreep.moveRandomExitRoom(creep);
+                    }
                 }
+            }
+
+            if (null == target) {
+                helperCreep.moveRandomly(creep, 8); // prevent to stay stuck (may block a miner position)
             }
 
         }

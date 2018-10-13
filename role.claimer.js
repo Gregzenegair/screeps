@@ -4,6 +4,8 @@ var helperCreep = require('helper.creep');
 
 var roleClaimer = {
 
+//TODO : re write completly the logic behind this
+
     /** @param {Creep} creep **/
     run: function (creep, room) {
 
@@ -27,14 +29,7 @@ var roleClaimer = {
         }
 
 
-        if (null == room.controller
-                || (null != room.controller
-                        && room.controller.my)
-                || (null != room.controller
-                        && room.controller.reservation
-                        && room.controller.reservation.username === "Gregzenegair"
-                        && room.controller.reservation.ticksToEnd >= 100
-                        && !creep.memory.claimingSpot)) {
+        if (this.isNotClaimableNow(creep)) {
 
             if (Memory.noControllerRooms.indexOf(room.name) < 0) {
                 Memory.noControllerRooms.push(room.name);
@@ -136,10 +131,25 @@ var roleClaimer = {
                 } else if (claimReserveResult === ERR_INVALID_TARGET) {
                     var claimAttackResult = creep.attackController(room.controller);
                     creep.say("C A=" + claimAttackResult);
+                } else {
+                    creep.memory.claimingSpotError = 0;
                 }
             }
         }
 
+    },
+
+    isNotClaimableNow: function (creep) {
+        var room = creep.room;
+        return null == room.controller
+                || (null != room.controller
+                        && room.controller.my)
+                || (null != room.controller
+                        && room.controller.reservation
+                        && room.controller.reservation.username === "Gregzenegair"
+                        && room.controller.reservation.ticksToEnd >= 100
+                        && !creep.memory.claimingSpot)
+                || creep.memory.claimingSpotError > 10;
     }
 
 
