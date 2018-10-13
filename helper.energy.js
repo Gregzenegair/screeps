@@ -231,7 +231,9 @@ var helperEnergy = {
     setEnergySource: function (creep, seekOtherPath) {
         var energySource = null;
 
-        var canSeekForSources = Memory.minerMaxCount[creep.room.name] != Memory.minerUnitCount[creep.room.name];
+        var canSeekForSources = (null == Memory.minerMaxCount[creep.room.name]
+                || null == Memory.minerUnitCount[creep.room.name])
+                || Memory.minerMaxCount[creep.room.name] != Memory.minerUnitCount[creep.room.name];
 
         if (null != creep.memory.energySourceId && !seekOtherPath) {
             energySource = Game.getObjectById(creep.memory.energySourceId);
