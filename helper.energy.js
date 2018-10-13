@@ -90,14 +90,14 @@ var helperEnergy = {
         return target;
     },
 
-    findClosestContainerOperatorMoreFilledThanCreep: function (creep, operator, a, b) {
+    findClosestContainerOperatorMoreFilledThanCreep: function (creep) {
 
         var target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
             filter: (structure) => {
-                return (structure.store < creep.carryCapacity
-                        && structure.structureType === STRUCTURE_CONTAINER
-                        && this.operators[operator](a(structure), b(structure)
-                        ));
+                return (structure.structureType === STRUCTURE_CONTAINER
+                        && structure.store[RESOURCE_ENERGY] > creep.carryCapacity
+
+                        );
             }
         });
 
@@ -131,8 +131,9 @@ var helperEnergy = {
 
         var targets = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
-                return (structure.store < creep.carryCapacity
-                        && structure.structureType === STRUCTURE_CONTAINER);
+                return (structure.structureType === STRUCTURE_CONTAINER
+                        && structure.store[RESOURCE_ENERGY] > creep.carryCapacity
+                        );
             }
         });
 
