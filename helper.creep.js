@@ -22,6 +22,27 @@ var helperCreep = {
         return moveResult;
     },
 
+    moveToAnOtherRoom: function (creep, targetRoom) { // should be into an helper class
+        var exit;
+        if (null == creep.memory.targetRoomExit) {
+            var exitDir = Game.map.findExit(creep.room, targetRoom);
+            exit = creep.pos.findClosestByRange(exitDir);
+            creep.memory.targetRoomExit = exit;
+        } else {
+            exit = new RoomPosition(creep.memory.targetRoomExit.x, creep.memory.targetRoomExit.y, creep.memory.targetRoomExit.roomName);
+        }
+
+        var moveExit = null;
+        if (null != exit) {
+            moveExit = creep.moveTo(exit, {
+                reusePath: 64,
+                visualizePathStyle: {stroke: '#ba0062'}
+            });
+
+        }
+        return moveExit;
+    },
+
     /** @param {Creep} creep **/
     findNearest: function (creep, endPositions) {
         var targeted = creep.pos.findClosestByRange(endPositions);
@@ -146,16 +167,10 @@ var helperCreep = {
 
         if (null != creep.memory.exitRoom) {
 
-            var exitDir = Game.map.findExit(creep.room, creep.memory.exitRoom);
-            var exit = creep.pos.findClosestByRange(exitDir);
-
-            var moveExit = creep.moveTo(exit, {
-                reusePath: 32,
-                visualizePathStyle: {stroke: '#44ff88'}
-            });
+            var moveExit = this.moveToAnOtherRoom(creep, creep.memory.exitRoom);
 
             if (moveExit === ERR_NO_PATH || moveExit === ERR_INVALID_TARGET) {
-                console.log("No path found for room " + exitDir + " re-init target claimer room");
+                console.log("No path found for room " + moveExit + " re-init target claimer room");
                 if (creep.memory.unreachableRooms.indexOf(roomFromTo) === -1) {
                     creep.memory.unreachableRooms.push(roomFromTo);
                 }

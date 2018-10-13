@@ -60,7 +60,7 @@ var roleCombat = {
         } else if (maxCombatUnit && null == target && Game.time % 128 === 0 || null != Memory.combatExitRoom) {
 
             var room = creep.room;
-            if (null == Memory.combatExitRoom || room.name === Memory.combatExitRoom || Memory.unreachableRooms.indexOf(Memory.combatExitRoom) === -1) { // seek another room
+            if (null == Memory.combatExitRoom || room.name === Memory.combatExitRoom) { // seek another room
                 // go to another room
                 var exits = Game.map.describeExits(room.name);
                 var exitCount = Object.keys(exits).length;
@@ -85,16 +85,9 @@ var roleCombat = {
             }
 
             if (null != Memory.combatExitRoom) {
-                var exitDir = Game.map.findExit(creep.room, Memory.combatExitRoom);
-                var exit = creep.pos.findClosestByRange(exitDir);
-                var moveExit = creep.moveTo(exit, {
-                    reusePath: 64,
-                    visualizePathStyle: {stroke: '#ba0062'}
-                });
+                var moveExit = helperCreep.moveToAnOtherRoom(creep, Memory.combatExitRoom);
+                
                 if (moveExit === ERR_NO_PATH) {
-                    if (Memory.unreachableRooms.indexOf(Memory.combatExitRoom) === -1) {
-                        Memory.unreachableRooms.push(Memory.combatExitRoom);
-                    }
                     console.log("No path found for room " + Memory.combatExitRoom + " re-init target combat room");
                     Memory.combatExitRoom = null;
                 }
