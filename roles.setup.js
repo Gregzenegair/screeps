@@ -37,7 +37,8 @@ var rolesSetup = {
                         continue;
                     }
 
-                    var seekTypes = _.filter(Game.creeps, (creep) => creep.memory.role == type.name && creep.memory.roomAssigned == room.name);
+                    var seekTypes = _.filter(Game.creeps, (creep) => creep.memory.role == type.name && creep.memory.roomAssigned == room.name
+                            && creep.ticksToLive > 64); // replace a diying creep sooner
 
                     console.log("spawn=" + spawn.name + ", " + type.name + "=" + seekTypes.length);
 
