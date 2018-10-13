@@ -17,7 +17,7 @@ var rolesSetup = {
 
             for (var name in Memory.creeps) {
                 if (!Game.creeps[name]) {
-                    helperMiner.freedSpot(Memory.creeps[name].containerSpot);
+                    helperMiner.freedSpot(Memory.creeps[name], Memory.creeps[name].containerSpot);
                     delete Memory.creeps[name];
                     console.log('Clearing non-existing creep memory:', name);
                 }
@@ -38,7 +38,7 @@ var rolesSetup = {
                     }
 
                     var seekTypes = _.filter(Game.creeps, (creep) => creep.memory.role == type.name && creep.memory.roomAssigned == room.name
-                            && creep.ticksToLive > 64); // replace a diying creep sooner
+                                && creep.ticksToLive > 64); // replace a diying creep sooner
 
                     console.log("spawn=" + spawn.name + ", " + type.name + "=" + seekTypes.length);
 

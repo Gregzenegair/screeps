@@ -45,7 +45,11 @@ var helperMiner = {
     /**
      * Free a container Id if its screep is dead
      */
-    freedSpot: function (containerId) {
+    freedSpot: function (creep, containerId) {
+        if (creep.memory.role == "miner") {
+            Memory.containerSources = null;
+        }
+
         for (var roomName in Memory.containerSources) {
             for (var i = 0; i < roomName.length; i++) {
                 var containerSource = roomName[i];
