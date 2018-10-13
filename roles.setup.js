@@ -105,10 +105,15 @@ var rolesSetup = {
             // ^ Not used yet
         }
 
+        var sourcesCount = room.find(FIND_SOURCES).length;
         var mineSpots = helperEnergy.countEnergyMineSpots(room);
+        console.log("sourcesCount=" + sourcesCount);
         console.log("mineSpots=" + mineSpots);
-        result = Math.floor(mineSpots * 1.1) - room.controller.level;
-        result = result < 3 ? 3 : result;
+        
+        
+        result = Math.round(Math.round(mineSpots * 1.1) - (room.controller.level / 2));
+        result += sourcesCount;
+        result = result < 4 ? 4 : result;
         console.log("calcMaxUtility=" + result);
         return result;
     },
