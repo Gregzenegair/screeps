@@ -73,7 +73,7 @@ var roleUtility = {
                         }
                         break;
 
-                    default :                    
+                    default :
                     case helperEnergy.ENERGY_SOURCE_TYPES.SOURCE:
                         // console.log("energySource=" + energySource + " creep name=" + creep.name);
                         creep.memory.filler = true;
@@ -87,10 +87,12 @@ var roleUtility = {
                         }
                         break;
                 }
-                if (creep.memory.energySourceType == helperEnergy.ENERGY_SOURCE_TYPES.CONTAINER) {
+                
+                if (creep.memory.energySourceType == helperEnergy.ENERGY_SOURCE_TYPES.CONTAINER
+                        || creep.memory.energySourceType == helperEnergy.ENERGY_SOURCE_TYPES.DROPPED) {
                     creep.memory.filler = true;
                 }
-                
+
 
             } else {
                 console.log("energySource is null or not found");
