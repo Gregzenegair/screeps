@@ -1,10 +1,11 @@
 require('object.extension')();
 var helperEnergy = require('helper.energy');
+var helperMiner = require('helper.miner');
 
 var rolesSetup = {
 
     UTILITY: {name: "utility", maxCount: 1, baseBody: [WORK, CARRY, MOVE], filler: true},
-    MINE: {name: "mine", maxCount: 0, baseBody: [WORK, WORK, WORK, WORK, WORK, MOVE]},
+    MINER: {name: "miner", maxCount: 0, baseBody: [MOVE, WORK, WORK, WORK, WORK, WORK], simpleBody: true},
     CLAIM: {name: "claim", maxCount: 2, baseBody: [CLAIM, MOVE], simpleBody: false},
     COMBAT: {name: "combat", maxCount: 1, baseBody: [ATTACK, MOVE, MOVE, TOUGH]},
     COMBAT2: {name: "combat", maxCount: 1, baseBody: [ATTACK, MOVE, TOUGH]},
@@ -15,7 +16,8 @@ var rolesSetup = {
         if (Game.time % 16 === 0) {
 
             for (var name in Memory.creeps) {
-                if (!Game.creeps[name]) {
+                if (!Game.creeps[name]) {                    
+                    helperMiner.freedSpot(Memory.creeps[name].containerSpot);
                     delete Memory.creeps[name];
                     console.log('Clearing non-existing creep memory:', name);
                 }
@@ -28,28 +30,43 @@ var rolesSetup = {
 
                 console.log("spawn=" + spawn.name + ", " + type.name + "=" + seekTypes.length);
 
-                if (null == Memory.utilityMaxCount) {
+                if (null == Memory.utilityMaxCount || null == Memory.minerMaxCount) {
                     Memory.utilityMaxCount = {};
                     Memory.utilityUnitCount = {};
+                    Memory.minerMaxCount = {};
+                    Memory.minerUnitCount = {};
                 }
 
-                if (null == Memory.utilityMaxCount[spawn.room.name] || Game.time % 256 === 0) {
+                if (null == Memory.utilityMaxCount[spawn.room.name] || Game.time % 4096 === 0) {
                     var maxUtility = this.calcMaxUtility(spawn.room); //TODO set max utility by room with spawn ?
                     Memory.utilityMaxCount[spawn.room.name] = maxUtility;
                     Memory.utilityUnitCount[spawn.room.name] = 0;
                     console.log("calculated maxUtility=" + maxUtility);
+
+                    var maxMiner = this.calcMaxMiner(spawn.room);
+                    Memory.minerMaxCount[spawn.room.name] = maxMiner;
+                    Memory.minerUnitCount[spawn.room.name] = 0;
+                    console.log("calculated maxMiner=" + maxMiner);
                 }
 
                 if (type.name === "utility") {
                     Memory.utilityUnitCount[spawn.room.name] = seekTypes.length;
                 }
 
+                if (type.name === "miner") {
+                    Memory.minerUnitCount[spawn.room.name] = seekTypes.length;
+                }
+
                 if (type.name === this.UTILITY.name && null != Memory.utilityMaxCount[spawn.room.name]) {
                     type.maxCount = Memory.utilityMaxCount[spawn.room.name];
                 }
 
+                if (type.name === this.MINER.name && null != Memory.minerMaxCount[spawn.room.name]) {
+                    type.maxCount = Memory.minerMaxCount[spawn.room.name];
+                }
+
                 if (seekTypes.length < type.maxCount) {
-                    if ((type.name === this.COMBAT.name && Memory.utilityUnitCount[spawn.room.name] < Memory.utilityMaxCount[spawn.room.name]) || (type.name === this.COMBAT.name && spawn.room.controller.level < 3)) {
+                    if ((type.name === this.COMBAT.name && Memory.utilityUnitCount[spawn.room.name] < Memory.utilityMaxCount[spawn.room.name] && Memory.hasBeenUnderAttack <= 0) || (type.name === this.COMBAT.name && spawn.room.controller.level < 3 && Memory.hasBeenUnderAttack <= 0)) {
                         console.log('Not building combat yet, reason, not enough utility or room.controller.level < 3');
                         continue;
                     }
@@ -80,19 +97,33 @@ var rolesSetup = {
     },
 
     calcMaxUtility: function (room) {
-        if (null == Memory.maxUtilityBase || null == Memory.maxUtilityBase[room.name] || Game.time % 16384 === 0) {
+        if (null == Memory.maxUtilityBase || null == Memory.maxUtilityBase[room.name]) {
             Memory.maxUtilityBase = {};
             Memory.maxUtilityBase[room.name] = {};
-            Memory.maxUtilityBase[room.name].baseValue = 7;
-            Memory.maxUtilityBase[room.name].currentValue = 7;
+            Memory.maxUtilityBase[room.name].baseValue = 5;
+            Memory.maxUtilityBase[room.name].currentValue = 5;
+            // ^ Not used yet
         }
-
-        var result = Math.floor((Memory.maxUtilityBase[room.name].currentValue - room.controller.level) / 2); // arbitrary min value
-        // var energySources = helperEnergy.findAllRoomEnergySources(helperRoom.getRoom());
+        
         var mineSpots = helperEnergy.countEnergyMineSpots(room);
         console.log("mineSpots=" + mineSpots);
-        result += Math.floor(mineSpots * 1.7);
+        result = Math.floor(mineSpots * 1.1) - room.controller.level;
+        result = result < 3 ? 3 : result;
         console.log("calcMaxUtility=" + result);
+        return result;
+    },
+
+    calcMaxMiner: function (room) {
+        var result = 0;
+        var sources = room.find(FIND_SOURCES);
+        for (var i = 0; i < sources.length; i++) {
+            var source = sources[i];
+            var container = helperEnergy.hasAContainerAround(source, room);
+
+            if (container.structureType === STRUCTURE_CONTAINER && container.hitsMax) {
+                result++;
+            }
+        }
         return result;
     }
 

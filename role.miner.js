@@ -1,5 +1,6 @@
 var helperCreep = require('helper.creep');
 var helperEnergy = require('helper.energy');
+var helperMiner = require('helper.miner');
 
 /**
  * A specialised miner that only mine one spot
@@ -17,36 +18,49 @@ var helperEnergy = require('helper.energy');
  */
 var roleMiner = {
 
+    run: function (creep) {
+        this.mineSpot(creep);
+    },
+
     getFreeSpot: function (creep) {
         var room = creep.room;
         var containerSources = Memory.containerSources[room.name];
         for (var i = 0; i < containerSources.length; i++) {
             var containerSource = containerSources[i];
-            if (containerSource.free) {
-                containerSource.free = creep.id;
+            if (containerSource.free == true) {
+                Memory.containerSources[room.name][i].free = creep.id;
                 return containerSource.container;
             }
         }
+        return null;
     },
 
     moveToFreeSpot: function (creep) {
         if (null == creep.memory.containerSpot) {
-            creep.memory.containerSpot = this.getFreeSpot(creep);
+            var freeSpot = this.getFreeSpot(creep);
+            if ((null != freeSpot)) {
+                creep.memory.containerSpot = freeSpot;
+            }
         }
 
-        helperCreep.moveTo(creep, creep.memory.containerSpot);
-        if (creep.pos.x === creep.memory.containerSpot.pos.x
-                && creep.pos.y === creep.memory.containerSpot.pos.y) {
-            creep.memory.mineSpotReached = true;
+        if (null != creep.memory.containerSpot) {
+            var containerSpot = Game.getObjectById(creep.memory.containerSpot);
+            helperCreep.moveTo(creep, containerSpot);
+            if (creep.pos.x === containerSpot.pos.x
+                    && creep.pos.y === containerSpot.pos.y) {
+                creep.memory.mineSpotReached = true;
+            }
         }
 
     },
 
     mineSpot: function (creep) {
+        helperMiner.memoryStoreSpot(creep.room);
         if (creep.memory.mineSpotReached) {
             var source = creep.pos.findClosestByRange(FIND_SOURCES);
             creep.harvest(source);
         } else {
+            creep.say("FreeSpot");
             this.moveToFreeSpot(creep);
         }
     }

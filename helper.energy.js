@@ -34,9 +34,9 @@ var helperEnergy = {
         'storeCapacity': function (structure) {
             return structure.storeCapacity;
         },
-        'zero': function () {
+        'zero': function (structure) {
             return 0;
-        },
+        }
     },
 
     /**
@@ -85,8 +85,8 @@ var helperEnergy = {
 
         return target;
     },
-    
-        moveToEnergySource: function (creep, energySource) { // should be into an helper class
+
+    moveToEnergySource: function (creep, energySource) { // should be into an helper class
         var moveResult = helperCreep.moveTo(creep, energySource);
 
         if (moveResult === ERR_NO_PATH) {
@@ -118,6 +118,10 @@ var helperEnergy = {
                 console.log("find a new path for creep=" + creep.name);
                 energySource = helperEnergy.findValidPathHarvestSource(creep);
                 creep.memory.alternativePath = true;
+            }
+
+            if (null == energySource) {
+                helperCreep.moveRandomExitRoom(creep);
             }
 
             if (energySource) {
@@ -165,6 +169,10 @@ var helperEnergy = {
         return this.findClosestContainerOperator(creep, 'eq', this.structureValues.store, this.structureValues.storeCapacity);
     },
 
+    findNotEmptyClosestContainer: function (creep) {
+        return this.findClosestContainerOperator(creep, 'sup', this.structureValues.store, this.structureValues.zero);
+    },
+
     findNotFullClosestContainer: function (creep) {
         return this.findClosestContainerOperator(creep, 'inf', this.structureValues.store, this.structureValues.storeCapacity);
     },
@@ -172,7 +180,7 @@ var helperEnergy = {
     findNotFullNotEmptyClosestContainer: function (creep) {
         var target = this.findClosestContainerOperator(creep, 'inf', this.structureValues.store, this.structureValues.storeCapacity);
         if (target.store[RESOURCE_ENERGY] === 0) {
-            target = this.findClosestContainerOperator(creep, 'sup', this.structureValues.store, 0);
+            target = this.findClosestContainerOperator(creep, 'sup', this.structureValues.store, this.structureValues.zero);
         }
         return target;
 
@@ -200,8 +208,8 @@ var helperEnergy = {
 
         if (null == target && !canSeekIntoDeposits) {
             energySourceType = this.ENERGY_SOURCE_TYPES.DEPOSIT;
-            target = this.findFullClosestContainer(creep);
-            console.log("sourcetarget DEPOSIT=" + target);
+            target = this.findNotEmptyClosestContainer(creep);
+            console.log("sourcetarget DEPOSIT (container)=" + target);
         }
 
         if (null == target) {
@@ -217,7 +225,7 @@ var helperEnergy = {
         if (null == target) {
             return null;
         }
-        
+
         return {"target": target, "energySourceType": energySourceType};
     },
 
@@ -299,7 +307,7 @@ var helperEnergy = {
             target = targets[i];
             // ensure we seek in the same room and the path to move to is ok
             if (creep.room.name === target.room.name &&
-                   helperCreep.moveTo(creep, target) == OK) {
+                    helperCreep.moveTo(creep, target) == OK) {
                 break;
             } else {
                 target = null;
@@ -393,20 +401,20 @@ var helperEnergy = {
                     return structure.structureType === STRUCTURE_CONTAINER;
                 }
             });
-            
+
             var constructionSites = room.find(FIND_CONSTRUCTION_SITES, {
                 filter: (structure) => {
                     return structure.structureType === STRUCTURE_CONTAINER;
                 }
             });
-            
+
             for (var j = 0; j < containers.length; j++) {
                 var container = containers[j];
                 if (container.pos.x === coord.x && container.pos.y === coord.y) {
                     return container;
                 }
             }
-            
+
             for (var j = 0; j < constructionSites.length; j++) {
                 var constructionSite = constructionSites[j];
                 if (constructionSite.pos.x === coord.x && constructionSite.pos.y === coord.y) {

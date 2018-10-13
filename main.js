@@ -6,6 +6,8 @@ var roleClaimer = require('role.claimer');
 
 var roleHealer = require('role.healer');
 
+var roleMiner =  require('role.miner');
+
 var roleTowers = require('role.towers');
 
 var rolesSetup = require('roles.setup');
@@ -22,8 +24,14 @@ module.exports.loop = function () {
 
     var hasBeenUnderAttack = false;
     for (var name in Game.creeps) {
+        
         var creep = Game.creeps[name];
-        if (creep.hits < creep.hitsMax || Memory.hasBeenUnderAttack > 0) {
+        
+        if (Memory.hasBeenUnderAttack > 0) {
+            hasBeenUnderAttack = true;
+        }
+        
+        if (creep.hits < creep.hitsMax) {
             hasBeenUnderAttack = true;
             Memory.hasBeenUnderAttack = 10;
             break;
@@ -38,6 +46,8 @@ module.exports.loop = function () {
     rolesSetup.spawn(rolesSetup.COMBAT);
 //    }
 
+    rolesSetup.spawn(rolesSetup.MINER);
+
     var spawnUtilityResult = rolesSetup.spawn(rolesSetup.UTILITY);
     var elapsed = Game.cpu.getUsed() - startCpu;
 //    console.log('Spawns used ' + elapsed + ' CPU time');
@@ -48,6 +58,10 @@ module.exports.loop = function () {
         var creep = Game.creeps[creepName];
         if (creep.memory.role && creep.memory.role.indexOf(rolesSetup.UTILITY.name) > -1) {
             roleUtility.run(creep);
+        }
+
+        if (creep.memory.role === rolesSetup.MINER.name) {
+            roleMiner.run(creep);
         }
 
         if (creep.memory.role === rolesSetup.CLAIM.name) {
@@ -77,10 +91,13 @@ module.exports.loop = function () {
     elapsed = Game.cpu.getUsed() - startCpu;
 //    console.log('Creep runs have used ' + elapsed + ' CPU time');
 
+    if (Game.time % 64 === 0) {
+        Memory.hasBeenUnderAttack--;
+    }
+
     if (Game.time % 256 === 0) {
         Memory.lastWantedBuild = {};
 
-        Memory.hasBeenUnderAttack--; // TODO: Move this event somewhere else
         var roomWithCombatUnit = 0;
         for (var name in Game.rooms) {
             var room = Game.rooms[name];
@@ -225,4 +242,4 @@ module.exports.loop = function () {
         Memory.roomWithCombatUnit = roomWithCombatUnit;
     }
 
-}
+};

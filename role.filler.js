@@ -7,8 +7,9 @@ var roleFiller = {
     run: function (creep) {
 
         var target = helperEnergy.findNotFullClosestDeposit(creep);
+        // NO MORE FILL CONTAINERS
         if (null == target) {
-            target = helperEnergy.findNotFullClosestContainer(creep);
+            //target = helperEnergy.findNotFullClosestContainer(creep);
         }
         if (target) {
             if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {

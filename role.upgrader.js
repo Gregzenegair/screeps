@@ -5,7 +5,10 @@ var roleUpgrader = {
     /** @param {Creep} creep **/
     run: function (creep) {
         var target;
-        if (creep.room.controller.my) {
+        if (null != creep
+                && null != creep.room
+                && null != creep.room.controller
+                && creep.room.controller.my) {
             target = creep.room.controller;
         }
         if (target) {

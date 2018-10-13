@@ -25,9 +25,9 @@ module.exports = function () {
 
         // create creep with the created body and the given role
         if (type.filler) {
-            return this.createCreep(body, undefined, {role: type.name, filler: type.filler, spawner: spawnerName});
+            return this.createCreep(body, null, {role: type.name, filler: type.filler, spawner: spawnerName});
         } else {
-            return this.createCreep(body, undefined, {role: type.name, spawner: spawnerName});
+            return this.createCreep(body, null, {role: type.name, spawner: spawnerName});
         }
     };
 
@@ -49,5 +49,15 @@ module.exports = function () {
             return array.indexOf(i) < 0;
         });
     };
+
+
+    /**
+     * Glbals usages
+     */
+    console.log("Creating source memory...");
+    if (Memory.sources == undefined) {
+        Memory.sources = {};
+    }
+    Source.prototype.memory = Memory.sources[this.id];
 
 };
