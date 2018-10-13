@@ -41,7 +41,7 @@ var roleCombat = {
             if (creep.room.name === target.room.name) {
                 if (creep.attack(target) == ERR_NOT_IN_RANGE) {
                     var moveAttack = creep.moveTo(target, {
-                        reusePath: 8,
+                        reusePath: 16,
                         visualizePathStyle: {stroke: '#ff0500'}
                     });
                     if (moveAttack === ERR_NO_PATH) {
