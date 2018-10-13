@@ -28,7 +28,7 @@ var roleMiner = {
         for (var i = 0; i < containerSources.length; i++) {
             var containerSource = containerSources[i];
             if (containerSource.free == true) {
-                Memory.containerSources[room.name][i].free = creep.id;
+                Memory.containerSources[room.name][i].free = false;
                 return containerSource.container;
             }
         }

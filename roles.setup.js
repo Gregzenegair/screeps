@@ -5,7 +5,7 @@ var helperMiner = require('helper.miner');
 var rolesSetup = {
 
     UTILITY: {name: "utility", maxCount: 1, baseBody: [WORK, CARRY, MOVE], filler: true},
-    MINER: {name: "miner", maxCount: 0, baseBody: [MOVE, WORK, WORK, WORK, WORK, WORK], simpleBody: true},
+    MINER: {name: "miner", maxCount: 0, baseBody: [MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK], simpleBody: true},
     CLAIM: {name: "claim", maxCount: 2, baseBody: [CLAIM, MOVE], simpleBody: false},
     COMBAT: {name: "combat", maxCount: 1, baseBody: [ATTACK, MOVE, MOVE, TOUGH]},
     COMBAT2: {name: "combat", maxCount: 1, baseBody: [ATTACK, MOVE, TOUGH]},
@@ -16,7 +16,7 @@ var rolesSetup = {
         if (Game.time % 16 === 0) {
 
             for (var name in Memory.creeps) {
-                if (!Game.creeps[name]) {                    
+                if (!Game.creeps[name]) {
                     helperMiner.freedSpot(Memory.creeps[name].containerSpot);
                     delete Memory.creeps[name];
                     console.log('Clearing non-existing creep memory:', name);
@@ -104,7 +104,7 @@ var rolesSetup = {
             Memory.maxUtilityBase[room.name].currentValue = 5;
             // ^ Not used yet
         }
-        
+
         var mineSpots = helperEnergy.countEnergyMineSpots(room);
         console.log("mineSpots=" + mineSpots);
         result = Math.floor(mineSpots * 1.1) - room.controller.level;
