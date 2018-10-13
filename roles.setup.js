@@ -17,7 +17,7 @@ var rolesSetup = {
 
             for (var name in Memory.creeps) {
                 if (!Game.creeps[name]) {
-                    helperMiner.freedSpot(Memory.creeps[name], Memory.creeps[name].containerSpot);
+                    helperMiner.freedSpot(Memory.creeps[name].containerSpot);
                     delete Memory.creeps[name];
                     console.log('Clearing non-existing creep memory:', name);
                 }
