@@ -24,6 +24,11 @@ var helperCreep = {
 
     moveToAnOtherRoom: function (creep, targetRoom) { // should be into an helper class
         var exit;
+
+        if (creep.room.name != creep.memory.previousRoomName) {
+            creep.memory.targetRoomExit = null;
+        }
+
         if (null == creep.memory.targetRoomExit) {
             var exitDir = Game.map.findExit(creep.room, targetRoom);
             exit = creep.pos.findClosestByRange(exitDir);
@@ -36,10 +41,11 @@ var helperCreep = {
         if (null != exit) {
             moveExit = creep.moveTo(exit, {
                 reusePath: 64,
-                visualizePathStyle: {stroke: '#ba0062'}
+                visualizePathStyle: {stroke: '#4462ac'}
             });
 
         }
+        creep.memory.previousRoomName = creep.room.name;
         return moveExit;
     },
 

@@ -15,10 +15,6 @@ var roleClaimer = {
             Memory.claimableControllerRooms = [];
         }
 
-        if (null == Memory.unreachableRooms || Game.time % 4096 === 0) {
-            Memory.unreachableRooms = [];
-        }
-
         if (creep.room.name === creep.memory.exitRoom) {
             creep.memory.exitRoom = null;
         }
@@ -50,29 +46,34 @@ var roleClaimer = {
                 var exitCount = Object.keys(exits).length;
                 var randomSelected = Math.myRandom(0, exitCount - 1);
                 var exitRoom;
-
                 for (var roomKey in exits) {
-//                    console.log(exits[roomKey]);
-//                    console.log(Memory.noControllerRooms[0]);
-
-                    if (Memory.noControllerRooms.indexOf(exits[roomKey]) === -1 && Memory.unreachableRooms.indexOf(exits[roomKey]) === -1) {
+                    if (Memory.noControllerRooms.indexOf(exits[roomKey]) === -1) {
                         exitRoom = exits[roomKey];
                         console.log("Claimer going through room=" + exits[roomKey]);
                         break;
                     }
                 }
 
-                var index = 0;
+
                 if (null == exitRoom) {
 
-                    var claimableRooms = Memory.claimableControllerRooms //_.difference(Memory.claimableControllerRooms, Memory.noControllerRooms);
+                    var claimableRooms = Memory.claimableControllerRooms; //_.difference(Memory.claimableControllerRooms, Memory.noControllerRooms);
                     // if there are known claimableRooms, let's select one randomly
                     if (claimableRooms.length > 0) {
-                        exitRoom = exits[Math.myRandom(0, claimableRooms.length - 1)];
+                        var index = 0;
+                        var randomSelectedClaimable = Math.myRandom(0, claimableRooms.length - 1);
+                        for (var roomKey in exits) {
+                            if (randomSelectedClaimable === index) {
+                                exitRoom = exits[roomKey];
+                                break;
+                            }
+                            index++;
+                        }
                     }
 
                     // if still null, let's select it randomly
                     if (null == exitRoom) {
+                        var index = 0;
                         for (var roomKey in exits) {
                             if (randomSelected === index) {
                                 exitRoom = exits[roomKey];
@@ -83,7 +84,7 @@ var roleClaimer = {
                     }
                 }
 
-                if (null != exitRoom && Game.map.isRoomAvailable(exitRoom) && Memory.unreachableRooms.indexOf(exitRoom) === -1) {
+                if (null != exitRoom && Game.map.isRoomAvailable(exitRoom)) {
                     creep.memory.exitRoom = exitRoom;
                 } else {
                     creep.memory.exitRoom = null;
@@ -92,19 +93,9 @@ var roleClaimer = {
 
             if (null != creep.memory.exitRoom) {
 
-                var exitDir = Game.map.findExit(creep.room, creep.memory.exitRoom);
-                var exit = creep.pos.findClosestByRange(exitDir); // TODO : serialize path or exit and save it into memory
-                // TODO : with a double entry array startRoom -> endRoom
-
-                var moveExit = creep.moveTo(exit, {
-                    reusePath: 32,
-                    visualizePathStyle: {stroke: '#dd63ff'}
-                });
+                var moveExit = helperCreep.moveToAnOtherRoom(creep, creep.memory.exitRoom);
                 if (moveExit === ERR_NO_PATH) {
-                    console.log("No path found for room " + exitDir + " re-init target claimer room");
-                    if (Memory.unreachableRooms.indexOf(creep.memory.exitRoom) === -1) {
-                        Memory.unreachableRooms.push(creep.memory.exitRoom);
-                    }
+                    console.log("No path found for room " + moveExit + " re-init target claimer room");
                     creep.memory.exitRoom = null;
                 }
             }

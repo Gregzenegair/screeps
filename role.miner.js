@@ -57,6 +57,7 @@ var roleMiner = {
     mineSpot: function (creep) {
 
         if (creep.room.name != creep.memory.roomAssigned) {
+            creep.say("GoSpotR");
             helperCreep.moveToAnOtherRoom(creep, creep.memory.roomAssigned);
             return;
         }
@@ -66,7 +67,7 @@ var roleMiner = {
             var source = creep.pos.findClosestByRange(FIND_SOURCES);
             creep.harvest(source);
         } else {
-            creep.say("FreeSpot");
+            creep.say("GoSpot");
             this.moveToFreeSpot(creep);
         }
     }

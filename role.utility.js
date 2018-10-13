@@ -139,10 +139,7 @@ var roleUtility = {
                 //TODO : or has movved to an other room, keep it back to home
                 if (null != creep.memory.roomHome) {
                     creep.say('BackHome');
-                    target = creep.room.findExitTo(creep.memory.roomHome);
-                    if (null != target) {
-                        helperCreep.moveTo(creep, target);
-                    }
+                    helperCreep.moveToAnOtherRoom(creep, creep.memory.roomHome);
                 } else {
                     creep.say('BackR');
                     helperCreep.moveRandomExitRoom(creep);
