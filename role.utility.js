@@ -73,6 +73,7 @@ var roleUtility = {
                         break;
 
                     default :
+                    case helperEnergy.ENERGY_SOURCE_TYPES.CONTAINER:
                     case helperEnergy.ENERGY_SOURCE_TYPES.SOURCE:
                         // console.log("energySource=" + energySource + " creep name=" + creep.name);
                         creep.memory.filler = true;

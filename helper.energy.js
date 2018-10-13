@@ -6,6 +6,7 @@ var helperEnergy = {
     ENERGY_SOURCE_TYPES: {
         DROPPED: "DROPPED",
         DEPOSIT: "DEPOSIT",
+        CONTAINER: "CONTAINER",
         SOURCE: "SOURCE"
     },
 
@@ -207,9 +208,9 @@ var helperEnergy = {
         }
 
         if (null == target && !canSeekIntoDeposits) {
-            energySourceType = this.ENERGY_SOURCE_TYPES.DEPOSIT;
+            energySourceType = this.ENERGY_SOURCE_TYPES.CONTAINER;
             target = this.findNotEmptyClosestContainer(creep);
-            console.log("sourcetarget DEPOSIT (container)=" + target);
+            console.log("sourcetarget CONTAINER=" + target);
         }
 
         if (null == target) {
