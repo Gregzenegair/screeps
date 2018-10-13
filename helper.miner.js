@@ -10,8 +10,13 @@ var helperMiner = {
 
         if (null == Memory.containerSources || Game.time % 2048 === 0) {
             Memory.containerSources = {};
+            for (var name in Game.creeps) {
+                var creep = Game.creeps[name];
+                creep.memory.containerSpot = null;
+                creep.memory.mineSpotReached = null;
+            }
         }
-
+ 
         if (Game.time % 256 === 0 || null == Memory.containerSources[room.name]) {
             var sources = room.find(FIND_SOURCES);
 
