@@ -1,6 +1,6 @@
 module.exports = function () {
 
-    StructureSpawn.prototype.spawnCustom = function spawnCustom(type, energy, spawnerName) {
+    StructureSpawn.prototype.spawnCustom = function spawnCustom(type, energy, spawn, roomAssigned) {
 
         var body = type.baseBody;
 
@@ -25,9 +25,20 @@ module.exports = function () {
 
         // create creep with the created body and the given role
         if (type.filler) {
-            return this.createCreep(body, null, {role: type.name, filler: type.filler, spawner: spawnerName});
+            return this.createCreep(body, null, {
+                role: type.name,
+                filler: type.filler,
+                spawner: spawn.name,
+                roomHome: spawn.room.name,
+                roomAssigned: roomAssigned
+            });
         } else {
-            return this.createCreep(body, null, {role: type.name, spawner: spawnerName});
+            return this.createCreep(body, null, {
+                role: type.name,
+                spawner: spawn.name,
+                roomHome: spawn.room.name,
+                roomAssigned: roomAssigned
+            });
         }
     };
 

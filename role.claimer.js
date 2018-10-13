@@ -15,7 +15,7 @@ var roleClaimer = {
             Memory.claimableControllerRooms = [];
         }
 
-        if (null == Memory.unreachableRooms  || Game.time % 4096 === 0) {
+        if (null == Memory.unreachableRooms || Game.time % 4096 === 0) {
             Memory.unreachableRooms = [];
         }
 
@@ -32,14 +32,14 @@ var roleClaimer = {
 
 
         if (null == room.controller
-            || (null != room.controller
-                && room.controller.my)
-            || (null != room.controller
-                && room.controller.reservation
-                && room.controller.reservation.username === "Gregzenegair"
-                && room.controller.reservation.ticksToEnd >= 100
-                && !creep.memory.claimingSpot)) {
-            
+                || (null != room.controller
+                        && room.controller.my)
+                || (null != room.controller
+                        && room.controller.reservation
+                        && room.controller.reservation.username === "Gregzenegair"
+                        && room.controller.reservation.ticksToEnd >= 100
+                        && !creep.memory.claimingSpot)) {
+
             if (Memory.noControllerRooms.indexOf(room.name) < 0) {
                 Memory.noControllerRooms.push(room.name);
             }
@@ -54,10 +54,10 @@ var roleClaimer = {
                 for (var roomKey in exits) {
 //                    console.log(exits[roomKey]);
 //                    console.log(Memory.noControllerRooms[0]);
-                    
+
                     if (Memory.noControllerRooms.indexOf(exits[roomKey]) === -1 && Memory.unreachableRooms.indexOf(exits[roomKey]) === -1) {
                         exitRoom = exits[roomKey];
-                        console.log("Claimer going through room=" +exits[roomKey]);
+                        console.log("Claimer going through room=" + exits[roomKey]);
                         break;
                     }
                 }
@@ -108,7 +108,7 @@ var roleClaimer = {
                     creep.memory.exitRoom = null;
                 }
             }
-            
+
         } else {
             creep.memory.exitRoom = null;
             // claim this room's controller

@@ -456,7 +456,7 @@ var helperEnergy = {
 
             for (var i = 0; i < coords.length; i++) {
                 var coord = coords[i];
-                if (0 === Game.map.getRoomTerrain(room.name).get(coord.x, coord.y)) {
+                if (TERRAIN_MASK_WALL !== Game.map.getRoomTerrain(room.name).get(coord.x, coord.y)) {
                     result++;
                 }
             }
@@ -530,7 +530,7 @@ var helperEnergy = {
         if (coords instanceof Array) {
             for (var i = 0; i < coords.length; i++) {
                 var coord = coords[i];
-                if (0 === Game.map.getRoomTerrain(room.name).get(coord.x, coord.y)) {
+                if (TERRAIN_MASK_WALL !== Game.map.getRoomTerrain(room.name).get(coord.x, coord.y)) {
                     return room.createConstructionSite(coord.x, coord.y, STRUCTURE_CONTAINER);
                 }
             }

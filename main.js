@@ -38,6 +38,9 @@ module.exports.loop = function () {
         }
     }
     var startCpu = Game.cpu.getUsed();
+    
+    rolesSetup.spawn(rolesSetup.HEALER);
+    
     rolesSetup.spawn(rolesSetup.COMBAT2);
 
     rolesSetup.spawn(rolesSetup.CLAIM);
@@ -149,7 +152,7 @@ module.exports.loop = function () {
                             var path = paths[i];
                             for (var j = 0; j < path.length; j++) {
                                 var p = path[j];
-                                if (0 === Game.map.getRoomTerrain(room.name).get(p.x, p.y)) {
+                                if (TERRAIN_MASK_WALL !== Game.map.getRoomTerrain(room.name).get(p.x, p.y)) {
                                     constructResult = room.createConstructionSite(p.x, p.y, STRUCTURE_ROAD);
                                 }
                             }
@@ -181,7 +184,7 @@ module.exports.loop = function () {
 
                 for (var i = 0; i < coords.length; i++) {
                     var coord = coords[i];
-                    if (0 === Game.map.getRoomTerrain(room.name).get(coord.x, coord.y)) { //0 is plain
+                    if (TERRAIN_MASK_WALL !== Game.map.getRoomTerrain(room.name).get(coord.x, coord.y)) { //0 is plain
                         var constructResult = room.createConstructionSite(avX, avY, STRUCTURE_SPAWN);
                         console.log("building spawn resulted=" + constructResult);
                         if (constructResult === ERR_INVALID_TARGET) {
@@ -206,7 +209,7 @@ module.exports.loop = function () {
                         var coords = energyHelper.getCoordsAround(source.pos.x, source.pos.y);
                         for (var i = 0; i < coords.length; i++) {
                             var coord = coords[i];
-                            if (0 === Game.map.getRoomTerrain(room.name).get(coord.x, coord.y)) {
+                            if (TERRAIN_MASK_WALL !== Game.map.getRoomTerrain(room.name).get(coord.x, coord.y)) {
                                 var buildRoad = room.createConstructionSite(coord.x, coord.y, STRUCTURE_ROAD);
                                 console.log("Build road around source resulted=" + buildRoad);
                                 // should be somehow built only if  Memory.pathBuilt[room] = false

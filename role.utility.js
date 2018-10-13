@@ -136,6 +136,17 @@ var roleUtility = {
             if (null == target) {
                 //TODO : should not be null, there is always a controller to upgrade right ?
                 //TODO : or controller is full, there is no more anything to do here
+                //TODO : or has movved to an other room, keep it back to home
+                if (null != creep.memory.roomHome) {
+                    creep.say('BackHome');
+                    target = creep.room.findExitTo(creep.memory.roomHome);
+                    if (null != target) {
+                        helperCreep.moveTo(creep, target);
+                    }
+                } else {
+                    creep.say('BackR');
+                    helperCreep.moveRandomExitRoom(creep);
+                }
             }
 
         }
@@ -154,7 +165,7 @@ var roleUtility = {
 
     getBuildingPriority: function (creep) {
         var targets = creep.room.find(Game.CONSTRUCTION_SITES);
-        
+
         return targets.length > 10 && Memory.utilityUnitCount[creep.room.name] === Memory.utilityMaxCount[creep.room.name];
     }
 

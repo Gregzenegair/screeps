@@ -7,12 +7,11 @@ var roleCombat = {
     run: function (creep, hasBeenUnderAttack, maxCombatUnit) {
         var target = null;
 
-        if ((null == Memory.combatTarget && Game.time % 128 === 0) || (null == Memory.combatTarget && hasBeenUnderAttack) || (maxCombatUnit && Game.time % 128 === 0)) {
+        if (Game.time % 128 === 0 || (null == Memory.combatTarget && hasBeenUnderAttack) || (maxCombatUnit && Game.time % 128 === 0)) {
             target = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
             var targets;
-            for (var creepName in Game.creeps) {
-                var creepRoom = Game.creeps[creepName];
-                var room = creepRoom.room;
+            for (var roomName in Game.rooms) {
+                var room = Game.rooms[roomName];
                 targets = room.find(FIND_HOSTILE_CREEPS);
                 if (null != targets && targets.length > 0) {
                     target = targets[0];
@@ -25,32 +24,40 @@ var roleCombat = {
                     }
                 }
             }
-            Memory.combatTarget = target;
+            if (null != target) {
+                Memory.combatTarget = target.id;
+            }
         } else if (Game.time % 256 === 0) {
             Memory.combatTarget = null;
-
         }
 
-        target = Game.getObjectById(Memory.combatTarget);
+        if (null != Memory.combatTarget) {
+            target = Game.getObjectById(Memory.combatTarget);
+        }
 
-        // console.log("target=" + target);
         if (target) {
-            if (creep.attack(target) == ERR_NOT_IN_RANGE) {
-                var moveAttack = creep.moveTo(target, {
-                    reusePath: 8,
-                    visualizePathStyle: {stroke: '#ff0500'}
-                });
-                if (moveAttack === ERR_NO_PATH) {
-                    // TODO: attack the wall or go away
-                    // For now go away
-                    Memory.combatExitRoom = null;
+            if (creep.room.name === target.room.name) {
+                if (creep.attack(target) == ERR_NOT_IN_RANGE) {
+                    var moveAttack = creep.moveTo(target, {
+                        reusePath: 8,
+                        visualizePathStyle: {stroke: '#ff0500'}
+                    });
+                    if (moveAttack === ERR_NO_PATH) {
+                        // TODO: attack the wall or go away
+                        // For now go away
+                        Memory.combatExitRoom = null;
+                    }
                 }
+            } else {
+                Memory.combatExitRoom = target.room.name;
             }
+        } else {
+            Memory.combatTarget = null;
         }
 
-        if (!maxCombatUnit && null == target && Game.time % 128 === 0) {
+        if ((!maxCombatUnit && null == target && Game.time % 128 === 0) || null != creep.memory.moveToRandomly) {
             helperCreep.moveRandomly(creep, 8);
-        } else if (maxCombatUnit && null == target && Game.time % 128 === 0) {
+        } else if (maxCombatUnit && null == target && Game.time % 128 === 0 || null != Memory.combatExitRoom) {
 
             var room = creep.room;
             if (null == Memory.combatExitRoom || room.name === Memory.combatExitRoom || Memory.unreachableRooms.indexOf(Memory.combatExitRoom) === -1) { // seek another room
@@ -63,14 +70,14 @@ var roleCombat = {
 
                 for (var roomName in exits) {
                     if (randomSelected === index) {
-                        exitRoom = exits[roomName];
+                        exitRoom = roomName;
                         break;
                     }
                     index++;
                 }
 
                 if (null != exitRoom && Game.map.isRoomAvailable(exitRoom)) {
-                    Memory.combatExitRoom = exitRoom;
+                    Memory.combatExitRoom = roomName;
                 }
 
                 // Consider that room as explored, set Memory data

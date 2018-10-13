@@ -3,13 +3,13 @@ var helperCreep = {
     moveTo: function (creep, target, ignoreCreeps) { // should be into an helper class
 
         if (null == ignoreCreeps) {
-            ignoreCreeps = true;
+            ignoreCreeps = false;
         }
 
         var moveResult = creep.moveTo(target, {
             reusePath: 16,
             visualizePathStyle: {stroke: '#fffd00'},
-            ignoreCreeps: false
+            ignoreCreeps: ignoreCreeps
         });
 
         if (moveResult === ERR_NO_PATH) {
@@ -30,11 +30,29 @@ var helperCreep = {
 
     /** @param {Creep} creep **/
     moveRandomly: function (creep, range) {
-        var newPosX = creep.pos.x + Math.round(Math.random() * range) - range / 2;
-        var newPosY = creep.pos.y + Math.round(Math.random() * range) - range / 2;
+        var newPosX;
+        var newPosY;
+        if (null == creep.memory.moveToRandomly) {
+            newPosX = creep.pos.x + Math.round(Math.random() * range) - range / 2;
+            newPosY = creep.pos.y + Math.round(Math.random() * range) - range / 2;
+            newPosX = newPosX < 0 ? 0 : newPosX;
+            newPosY = newPosY < 0 ? 0 : newPosY;
+            newPosX = newPosX > 49 ? 49 : newPosX;
+            newPosY = newPosY > 49 ? 49 : newPosY;
+
+            creep.memory.moveToRandomly = {};
+            creep.memory.moveToRandomly.x = newPosX;
+            creep.memory.moveToRandomly.y = newPosY;
+        } else {
+            newPosX = creep.memory.moveToRandomly.x;
+            newPosY = creep.memory.moveToRandomly.y;
+        }
         creep.moveTo(newPosX, newPosY, {reusePath: 32, visualizePathStyle: {stroke: '#ffffff'}});
-    }
-    ,
+
+        if (creep.pos.x === newPosX && creep.pos.y === newPosY) {
+            creep.memory.moveToRandomly = null;
+        }
+    },
 
     findMinerHarvestSource: function (creep) {
         var target = null;
@@ -102,6 +120,13 @@ var helperCreep = {
         var exitRoom;
         var index = 0;
 
+        var roomFromTo = {};
+        roomFromTo.from = creep.room.name;
+
+        if (null == creep.memory.unreachableRooms) {
+            creep.memory.unreachableRooms = [];
+        }
+
         if (null == exitRoom && null == creep.memory.exitRoom) {
             for (var roomKey in exits) {
                 if (randomSelected === index) {
@@ -111,8 +136,8 @@ var helperCreep = {
                 index++;
             }
 
-
-            if (null != exitRoom && Game.map.isRoomAvailable(exitRoom) && Memory.unreachableRooms.indexOf(exitRoom) === -1) {
+            roomFromTo.to = exitRoom;
+            if (null != exitRoom && Game.map.isRoomAvailable(exitRoom) && creep.memory.unreachableRooms.indexOf(roomFromTo) === -1) {
                 creep.memory.exitRoom = exitRoom;
             } else {
                 creep.memory.exitRoom = null;
@@ -129,10 +154,10 @@ var helperCreep = {
                 visualizePathStyle: {stroke: '#44ff88'}
             });
 
-            if (moveExit === ERR_NO_PATH) {
+            if (moveExit === ERR_NO_PATH || moveExit === ERR_INVALID_TARGET) {
                 console.log("No path found for room " + exitDir + " re-init target claimer room");
-                if (Memory.unreachableRooms.indexOf(creep.memory.exitRoom) === -1) {
-                    Memory.unreachableRooms.push(creep.memory.exitRoom);
+                if (creep.memory.unreachableRooms.indexOf(roomFromTo) === -1) {
+                    creep.memory.unreachableRooms.push(roomFromTo);
                 }
                 creep.memory.exitRoom = null;
             }
