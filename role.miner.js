@@ -25,6 +25,22 @@ var roleMiner = {
     getFreeSpot: function (creep) {
         var room = creep.room;
         var containerSources = Memory.containerSources[room.name];
+
+        // try to match the containter we already are on
+        // to prevent creep swithing after spawn
+        // loop two times
+        for (var i = 0; i < containerSources.length; i++) {
+            var containerSource = containerSources[i];
+            var container = Game.getObjectById(containerSource.container);
+            if (null != container) {
+                if (containerSource.free == true && creep.pos.x === container.pos.x
+                        && creep.pos.y === container.pos.y) {
+                    Memory.containerSources[room.name][i].free = false;
+                    return containerSource.container;
+                }
+            }
+        }
+
         for (var i = 0; i < containerSources.length; i++) {
             var containerSource = containerSources[i];
             if (containerSource.free == true) {
@@ -32,6 +48,7 @@ var roleMiner = {
                 return containerSource.container;
             }
         }
+
         return null;
     },
 
