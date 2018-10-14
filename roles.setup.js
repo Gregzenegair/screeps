@@ -26,7 +26,6 @@ var rolesSetup = {
             for (var key in Game.spawns) {
                 var spawn = Game.spawns[key];
 
-
                 for (var roomName in Game.rooms) {
                     var room = Game.rooms[roomName];
 
@@ -38,7 +37,7 @@ var rolesSetup = {
                     }
 
                     var seekTypes = _.filter(Game.creeps, (creep) => creep.memory.role == type.name && creep.memory.roomAssigned == room.name
-                                && creep.ticksToLive > 64); // replace a diying creep sooner
+                                && creep.ticksToLive > 32); // replace a diying creep sooner (by not counting it if under 32)
 
                     console.log("spawn=" + spawn.name + ", " + type.name + "=" + seekTypes.length);
 
@@ -119,7 +118,6 @@ var rolesSetup = {
                         } else {
                             console.log('Error spawning wanted type : ' + type.name + ' Error=' + spawnResult);
                         }
-
 
                     }
                 }
