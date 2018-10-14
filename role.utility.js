@@ -115,7 +115,7 @@ var roleUtility = {
                 creep.memory.filler = false;
                 // if he was a filler, has emptied his load but is not full now,
                 // make if get full again before going to work
-                if (creep.carry.energy < creep.carryCapacity) {
+                if (creep.carry.energy === 0) {
                     creep.memory.canWork = false;
                 }
             }
