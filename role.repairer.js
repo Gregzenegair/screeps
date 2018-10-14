@@ -17,14 +17,14 @@ var roleRepairer = {
 
         var target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
             filter: function (structure) {
-                return (structure.hits < structure.hitsMax / 3);
+                return (structure.hits < structure.hitsMax / 3 && structure.isActive());
             }
         });
 
         if (null == target) {
             target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: function (structure) {
-                    return structure.structureType === STRUCTURE_ROAD && (structure.hits < structure.hitsMax / 3);
+                    return structure.structureType === STRUCTURE_ROAD && (structure.hits < structure.hitsMax / 3 && structure.isActive());
                 }
             });
         }
