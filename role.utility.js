@@ -120,8 +120,9 @@ var roleUtility = {
                 }
             }
 
-            if (null == target && !creep.memory.upgrade
-                    && creep.room.controller && creep.room.controller.level < 3) {
+            if (null == target && !creep.memory.upgrade && null != creep.room
+                    && null != creep.room.controller
+                    && creep.room.controller && creep.room.controller.my) {
                 target = roleRepairer.run(creep);
             }
 
