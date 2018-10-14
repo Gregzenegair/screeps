@@ -4,12 +4,13 @@ var helperCreep = require('helper.creep');
 
 var roleClaimer = {
 
-//TODO : re write completly the logic behind this
+// TODO : re write completly the logic behind this
+// TODO: room.find(FIND_SOURCES).length === 1 no more claim room with 1 res only reserve them
 
     /** @param {Creep} creep **/
     run: function (creep, room) {
 
-        if (null == Memory.noControllerRooms || Game.time % 1024 === 0) {
+        if (null == Memory.noControllerRooms || Game.time % 4096 === 0) {
             Memory.noControllerRooms = [];
         }
 
@@ -44,7 +45,6 @@ var roleClaimer = {
                 for (var roomKey in exits) {
                     if (Memory.noControllerRooms.indexOf(exits[roomKey]) === -1) {
                         exitRoom = exits[roomKey];
-                        console.log("Claimer going through room=" + exits[roomKey]);
                         break;
                     }
                 }
@@ -87,7 +87,7 @@ var roleClaimer = {
             }
 
             if (null != creep.memory.exitRoom) {
-
+                console.log("Claimer going through room=" + creep.memory.exitRoom);
                 var moveExit = helperCreep.moveToAnOtherRoom(creep, creep.memory.exitRoom);
                 if (moveExit === ERR_NO_PATH) {
                     console.log("No path found for room " + moveExit + " re-init target claimer room");
@@ -98,8 +98,12 @@ var roleClaimer = {
         } else {
             creep.memory.exitRoom = null;
             // claim this room's controller
-            var claimResult = creep.claimController(room.controller);
-            creep.say("C=" + claimResult);
+            var claimResult;
+
+            if (room.find(FIND_SOURCES).length > 1) {
+                claimResult = creep.claimController(room.controller);
+                creep.say("C=" + claimResult);
+            }
 
             if (Memory.claimableControllerRooms.indexOf(room.name) < 0) {
                 Memory.claimableControllerRooms.push(room.name);

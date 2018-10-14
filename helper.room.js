@@ -109,6 +109,18 @@ var helperRoom = {
         }
 
         return paths;
+    },
+    
+    activateSafeMode: function (room) {
+        var controller = this.getMyRoomController(room);
+        
+        //safeMode
+        //safeModeAvailable
+        //safeModeCooldown
+    },
+    
+    getMyRoomController: function(room){
+        
     }
 
 };
