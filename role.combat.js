@@ -38,7 +38,7 @@ var roleCombat = {
         }
 
         if (target) {
-            creep.say("?", true);
+            creep.say("💀", true);
             if (creep.room.name === target.room.name) {
                 if (creep.attack(target) == ERR_NOT_IN_RANGE) {
                     var moveAttack = creep.moveTo(target, {
@@ -55,7 +55,7 @@ var roleCombat = {
                 Memory.combatExitRoom = target.room.name;
             }
         } else {
-            creep.say("?", true);
+            creep.say("🐼", true);
             Memory.combatTarget = null;
         }
 
@@ -95,7 +95,7 @@ var roleCombat = {
                     console.log("No path found for room " + Memory.combatExitRoom + " re-init target combat room");
                     Memory.combatExitRoom = null;
                 }
-                creep.say("?", true);
+                creep.say("🏃", true);
             }
 
         }
