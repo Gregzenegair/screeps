@@ -5,12 +5,12 @@ var roleHealer = {
     /** @param {Creep} creep **/
     run: function (creep) {
 
-        var targets = _.filter(Game.creeps, (creep) => creep.memory.role == "combat" && creep.hits < creep.hitsMax && creep.ticksToLive > 256);
+        var targets = _.filter(Game.creeps, (creep) => creep.memory.role == "combat" && creep.hits < creep.hitsMax && creep.ticksToLive > 128);
         var target;
         if (null != targets && targets.length > 0) {
             target = targets[0];
         } else {
-            targets = _.filter(Game.creeps, (creep) => creep.memory.role == "combat" && creep.ticksToLive > 256);
+            targets = _.filter(Game.creeps, (creep) => creep.memory.role == "combat" && creep.ticksToLive > 128);
             if (null != targets && targets.length > 0) {
                 target = targets[0];
             }
