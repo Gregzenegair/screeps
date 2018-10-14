@@ -67,6 +67,9 @@ var roleMiner = {
                     && creep.pos.y === containerSpot.pos.y) {
                 creep.memory.mineSpotReached = true;
             }
+            creep.say("GoSpot");
+        } else {
+            creep.say("WaitSpot");
         }
 
     },
@@ -84,7 +87,6 @@ var roleMiner = {
             var source = creep.pos.findClosestByRange(FIND_SOURCES);
             creep.harvest(source);
         } else {
-            creep.say("GoSpot");
             this.moveToFreeSpot(creep);
         }
     }
