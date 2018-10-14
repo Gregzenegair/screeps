@@ -146,8 +146,8 @@ var rolesSetup = {
             roomControlerLevel = room.controller.level
         }
 
-        result = Math.round(Math.round(mineSpots * 1.) - (roomControlerLevel / 3));
-        result += sourcesCount * 3;
+        result = Math.round(Math.round(mineSpots * 1.1) - (roomControlerLevel / 2));
+        result += sourcesCount * 2;
         console.log("calcMaxUtility=" + result);
         return result;
     },
