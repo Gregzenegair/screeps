@@ -46,17 +46,18 @@ var helperMiner = {
      * Free a container Id if its screep is dead
      */
     freedSpot: function (containerId) {
-        Memory.containerSources = null;
+        if (null != containerId) {
+            Memory.containerSources = null;
 
-        for (var roomName in Memory.containerSources) {
-            for (var i = 0; i < roomName.length; i++) {
-                var containerSource = roomName[i];
-                if (containerSource.container == containerId) {
-                    roomName[i].free = true;
+            for (var roomName in Memory.containerSources) {
+                for (var i = 0; i < roomName.length; i++) {
+                    var containerSource = roomName[i];
+                    if (containerSource.container == containerId) {
+                        roomName[i].free = true;
+                    }
                 }
             }
         }
-
     }
 
 };
