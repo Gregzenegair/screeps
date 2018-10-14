@@ -3,11 +3,16 @@ module.exports = function () {
     StructureSpawn.prototype.spawnCustom = function spawnCustom(type, energy, spawn, roomAssigned) {
 
         var body = type.baseBody;
+        var room = spawn.room;
 
         var energyLeft = energy;
         var allPartsCost = this.getPartsCosts(type.baseBody);
         var cost = allPartsCost;
         var maxParts = Math.floor(MAX_CREEP_SIZE / type.baseBody.length) - type.baseBody.length; // secured
+
+        if (room.find(FIND_SOURCES).length === 1) { // do smaller unis if only one source
+            maxParts = Math.round(maxParts / 3);
+        }
 
         while (maxParts > 0) {
             cost += allPartsCost;

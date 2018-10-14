@@ -160,7 +160,7 @@ var roleUtility = {
     },
 
     mustUpgrade: function (creep) {
-        if (creep.room.controller && creep.room.controller.ticksToDowngrade < 1024) {
+        if (creep.room.controller && creep.room.controller.ticksToDowngrade < 4096) {
             creep.memory.upgrade = true;
         } else {
             creep.memory.upgrade = false;
