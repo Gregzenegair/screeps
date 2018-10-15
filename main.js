@@ -6,7 +6,7 @@ var roleClaimer = require('role.claimer');
 
 var roleHealer = require('role.healer');
 
-var roleMiner =  require('role.miner');
+var roleMiner = require('role.miner');
 
 var roleTowers = require('role.towers');
 
@@ -24,13 +24,13 @@ module.exports.loop = function () {
 
     var hasBeenUnderAttack = false;
     for (var name in Game.creeps) {
-        
+
         var creep = Game.creeps[name];
-        
+
         if (Memory.hasBeenUnderAttack > 0) {
             hasBeenUnderAttack = true;
         }
-        
+
         if (creep.hits < creep.hitsMax) {
             hasBeenUnderAttack = true;
             Memory.hasBeenUnderAttack = 10;
@@ -38,9 +38,9 @@ module.exports.loop = function () {
         }
     }
     var startCpu = Game.cpu.getUsed();
-    
+
     rolesSetup.spawn(rolesSetup.HEALER);
-    
+
     rolesSetup.spawn(rolesSetup.COMBAT2);
 
     rolesSetup.spawn(rolesSetup.CLAIM);
@@ -141,7 +141,13 @@ module.exports.loop = function () {
                         }
                     }
 
-                    var canBuildPaths = (constructResult < 0 && room.controller.level > 2 || !room.controller.my);
+                    var canBuildPaths = (constructResult < 0 && room.controller.level > 2
+                            || (null != room.controller && room.controller.my)
+                            || (null != room.controller
+                                    && room.controller.reservation
+                                    && room.controller.reservation.username === "Gregzenegair"
+                                    && room.controller.reservation.ticksToEnd > 1024));
+                            
                     if ((canBuildPaths && !Memory.pathBuilt[room.name])) {
                         var pathsSources = helperRoom.findPathToSources(room);
                         var pathsMyStructures = helperRoom.findPathMyStructures(room);

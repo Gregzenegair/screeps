@@ -13,7 +13,7 @@ var roleUpgrader = {
         }
         if (target) {
             if (creep.upgradeController(target) == ERR_NOT_IN_RANGE) {
-                var moveToResult = helperCreep.moveTo(creep, target);
+                var moveToResult = helperCreep.moveTo(creep, target, true);
             }
         }
         return target;

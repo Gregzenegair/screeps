@@ -210,18 +210,9 @@ var helperEnergy = {
      */
 
     moveToEnergySource: function (creep, energySource) { // should be into an helper class
-        var moveResult = helperCreep.moveTo(creep, energySource);
+        var moveResult = helperCreep.moveTo(creep, energySource, true);
 
-        if (moveResult === ERR_NO_PATH) {
-            creep.memory.errorPathCount++;
-            if (creep.memory.errorPathCount > 3) {
-                creep.memory.errorPathCount = 0;
-                creep.memory.alternativePath = true;
-            }
-        }
-
-        if (moveResult === ERR_NO_PATH && !creep.memory.alternativePath) {
-
+        if (moveResult === ERR_NO_PATH || creep.memory.alternativePath) {
             energySource = this.setEnergySource(creep, true);
             helperCreep.moveTo(creep, energySource, false);
         }
@@ -246,7 +237,7 @@ var helperEnergy = {
             } else {
                 console.log("find a new path for creep=" + creep.name);
                 energySource = helperEnergy.findValidPathHarvestSource(creep);
-                creep.memory.alternativePath = true;
+                creep.memory.alternativePath = true; // may already be true
             }
 
             if (null == energySource) {
@@ -405,7 +396,7 @@ var helperEnergy = {
             target = targets[i];
             // ensure we seek in the same room and the path to move to is ok
             if (creep.room.name === target.room.name &&
-                    helperCreep.moveTo(creep, target) == OK) {
+                    helperCreep.moveTo(creep, target, true) == OK) {
                 break;
             } else {
                 target = null;

@@ -1,6 +1,7 @@
 require('object.extension')();
 
 var helperCreep = require('helper.creep');
+var helperController = require('helper.controller');
 
 var roleClaimer = {
 
@@ -30,73 +31,27 @@ var roleClaimer = {
         }
 
 
-        if (this.isNotClaimableNow(creep)) {
+        if (helperController.isNotClaimable(creep) && !creep.memory.claimingSpot) {
 
             if (Memory.noControllerRooms.indexOf(room.name) < 0) {
                 Memory.noControllerRooms.push(room.name);
             }
 
-            if (null == creep.memory.exitRoom) {
-                // go to another room
-                var exits = Game.map.describeExits(room.name);
-                var exitCount = Object.keys(exits).length;
-                var randomSelected = Math.myRandom(0, exitCount - 1);
-                var exitRoom;
-                for (var roomKey in exits) {
-                    if (Memory.noControllerRooms.indexOf(exits[roomKey]) === -1) {
-                        exitRoom = exits[roomKey];
-                        break;
-                    }
-                }
+            var exitRoom;
 
-
-                if (null == exitRoom) {
-
-                    var claimableRooms = Memory.claimableControllerRooms; //_.difference(Memory.claimableControllerRooms, Memory.noControllerRooms);
-                    // if there are known claimableRooms, let's select one randomly
-                    if (claimableRooms.length > 0) {
-                        var index = 0;
-                        var randomSelectedClaimable = Math.myRandom(0, claimableRooms.length - 1);
-                        for (var roomKey in exits) {
-                            if (randomSelectedClaimable === index) {
-                                exitRoom = exits[roomKey];
-                                break;
-                            }
-                            index++;
-                        }
-                    }
-
-                    // if still null, let's select it randomly
-                    if (null == exitRoom) {
-                        var index = 0;
-                        for (var roomKey in exits) {
-                            if (randomSelected === index) {
-                                exitRoom = exits[roomKey];
-                                break;
-                            }
-                            index++;
-                        }
-                    }
-                }
-
-                if (null != exitRoom && Game.map.isRoomAvailable(exitRoom)) {
-                    creep.memory.exitRoom = exitRoom;
-                } else {
-                    creep.memory.exitRoom = null;
-                }
-            }
-
-            if (null != creep.memory.exitRoom) {
-                console.log("Claimer going through room=" + creep.memory.exitRoom);
-                var moveExit = helperCreep.moveToAnOtherRoom(creep, creep.memory.exitRoom);
-                if (moveExit === ERR_NO_PATH) {
-                    console.log("No path found for room " + moveExit + " re-init target claimer room");
-                    creep.memory.exitRoom = null;
-                }
+            if (null == exitRoom) {
+                exitRoom = helperCreep.moveRandomExitRoom(creep,
+                        {unwatedRooms: Memory.noControllerRooms, wantedRooms: Memory.claimableControllerRooms});
             }
 
         } else {
-            creep.memory.exitRoom = null;
+
+            if (Memory.claimableControllerRooms.indexOf(room.name) < 0) {
+                Memory.claimableControllerRooms.push(room.name);
+            }
+
+            creep.memory.claimingSpot = true;
+
             // claim this room's controller
             var claimResult;
 
@@ -105,33 +60,16 @@ var roleClaimer = {
                 creep.say("C=" + claimResult);
             }
 
-            if (Memory.claimableControllerRooms.indexOf(room.name) < 0) {
-                Memory.claimableControllerRooms.push(room.name);
-            }
+            if (null == claimResult || claimResult === ERR_NOT_IN_RANGE) {
+                helperCreep.moveTo(creep, room.controller, true);
 
-            creep.memory.claimingSpot = true;
-
-            if (claimResult === ERR_NOT_IN_RANGE) {
-                helperCreep.moveTo(creep, room.controller);
-
-            } else if (claimResult !== OK) {
+            } else if (null == claimResult || claimResult !== OK) {
                 var claimReserveResult = creep.reserveController(room.controller);
                 creep.say("C R=" + claimReserveResult);
+
                 if (claimReserveResult === ERR_NOT_IN_RANGE) {
-                    helperCreep.moveTo(creep, room.controller);
+                    helperCreep.moveTo(creep, room.controller, true);
 
-                    if (creep.memory.previousPosX == creep.pos.x && creep.memory.previousPosY == creep.pos.y) {
-                        creep.memory.claimingSpotError++;
-                    }
-                    creep.memory.previousPosX = creep.pos.x;
-                    creep.memory.previousPosY = creep.pos.y;
-
-
-                    if (creep.memory.claimingSpotError > 10) {
-                        creep.say("Change room");
-                        creep.memory.claimingSpot = false;
-                        creep.memory.exitRoom = false;
-                    }
                 } else if (claimReserveResult === ERR_INVALID_TARGET) {
                     var claimAttackResult = creep.attackController(room.controller);
                     creep.say("C A=" + claimAttackResult);
@@ -141,19 +79,6 @@ var roleClaimer = {
             }
         }
 
-    },
-
-    isNotClaimableNow: function (creep) {
-        var room = creep.room;
-        return null == room.controller
-                || (null != room.controller
-                        && room.controller.my)
-                || (null != room.controller
-                        && room.controller.reservation
-                        && room.controller.reservation.username === "Gregzenegair"
-                        && room.controller.reservation.ticksToEnd >= 100
-                        && !creep.memory.claimingSpot)
-                || creep.memory.claimingSpotError > 10;
     }
 
 

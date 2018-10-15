@@ -55,7 +55,7 @@ var roleCombat = {
                 Memory.combatExitRoom = target.room.name;
             }
         } else {
-            creep.say("ðŸ?¼", true);
+            creep.say("ï¿½?ï¿½", true);
             Memory.combatTarget = null;
         }
 
@@ -66,26 +66,7 @@ var roleCombat = {
             var room = creep.room;
             if (null == Memory.combatExitRoom || room.name === Memory.combatExitRoom) { // seek another room
                 // go to another room
-                var exits = Game.map.describeExits(room.name);
-                var exitCount = Object.keys(exits).length;
-                var randomSelected = Math.myRandom(0, exitCount - 1);
-                var index = 0;
-                var exitRoom;
-
-                for (var roomName in exits) {
-                    if (randomSelected === index) {
-                        exitRoom = roomName;
-                        break;
-                    }
-                    index++;
-                }
-
-                if (null != exitRoom && Game.map.isRoomAvailable(exitRoom)) {
-                    Memory.combatExitRoom = roomName;
-                }
-
-                // Consider that room as explored, set Memory data
-                // this.setExplorationData(creep);
+                helperCreep.moveRandomExitRoom(creep);
             }
 
             if (null != Memory.combatExitRoom) {
@@ -95,7 +76,7 @@ var roleCombat = {
                     console.log("No path found for room " + Memory.combatExitRoom + " re-init target combat room");
                     Memory.combatExitRoom = null;
                 }
-                creep.say("ðŸ?ƒ", true);
+                creep.say("ï¿½?ï¿½", true);
             }
 
         }

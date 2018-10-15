@@ -31,8 +31,6 @@ var roleUtility = {
             creep.memory.isEmptyResources = false;
             creep.memory.canWork = true;
             creep.memory.energySourceId = null;
-            creep.memory.alternativePath = false;
-            creep.memory.errorPathCount = 0;
             creep.say('Use/drop Energy');
         }
 
@@ -40,7 +38,6 @@ var roleUtility = {
             creep.memory.isEmptyResources = true;
             creep.memory.isFullResources = false;
             creep.memory.canWork = false;
-            creep.memory.errorPathCount = 0;
             creep.memory.filler = false;
             creep.say('Get Energy');
         }

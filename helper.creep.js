@@ -2,7 +2,12 @@ var helperCreep = {
 
     moveTo: function (creep, target, ignoreCreeps) { // should be into an helper class
 
-        if (null == ignoreCreeps) {
+        if (null == creep.memory.previousPosX || null == creep.memory.previousPosY) {
+            creep.memory.previousPosX = -1;
+            creep.memory.previousPosY = -1;
+        }
+
+        if (null == ignoreCreeps || creep.memory.alternativePath) {
             ignoreCreeps = false;
         }
 
@@ -12,13 +17,24 @@ var helperCreep = {
             ignoreCreeps: ignoreCreeps
         });
 
-        if (moveResult === ERR_NO_PATH) {
+        var didMove = true;
+        if (creep.memory.previousPosX == creep.pos.x && creep.memory.previousPosY == creep.pos.y) {
+            didMove = false;
+        }
+
+        creep.memory.previousPosX = creep.pos.x;
+        creep.memory.previousPosY = creep.pos.y;
+
+        if (moveResult === ERR_NO_PATH || !didMove) {
             creep.memory.errorPathCount++;
-            if (creep.memory.errorPathCount > 3) {
+            if (creep.memory.errorPathCount > 1) {
                 creep.memory.errorPathCount = 0;
                 creep.memory.alternativePath = true;
             }
+        } else {
+            creep.memory.alternativePath = false;
         }
+
         return moveResult;
     },
 
@@ -140,31 +156,46 @@ var helperCreep = {
         return {"target": target, "energySourceType": energySourceType};
     },
 
-    moveRandomExitRoom: function (creep) {
-        var exits = Game.map.describeExits(creep.room.name);
-        var exitCount = Object.keys(exits).length;
-        var randomSelected = Math.myRandom(0, exitCount - 1);
-        var exitRoom;
-        var index = 0;
+    /**
+     * 
+     * @param {type} creep
+     * @param {type} options options is an object containing wantedRooms array and unwatedRooms array
+     * which represent rooms to go preferably and to avoid, if can't match, move randomly
+     * @returns {@var;exitRoom}
+     */
+    moveRandomExitRoom: function (creep, options) {
 
+        var wantedRooms = [];
+        var unwantedRooms = [];
+        if (null != options) {
+            if (null != options.wantedRooms) {
+                wantedRooms = options.wantedRooms;
+            }
+            if (null != options.unwantedRooms) {
+                unwantedRooms = options.unwantedRooms;
+            }
+        }
+
+        var exitRoom;
+
+        exitRoom = this.selectRandomWantedRoom(creep, wantedRooms);
+        if (null == exitRoom) {
+            exitRoom = this.randomNotSelectUnwantedRoom(creep);
+        }
+        if (null == exitRoom) { // should be useless to call this
+            exitRoom = this.selectRandomRoom(creep);
+        }
+//TODO : factorise unreachable rooms to other move rooms methods
         var roomFromTo = {};
         roomFromTo.from = creep.room.name;
 
-        if (null == creep.memory.unreachableRooms) {
-            creep.memory.unreachableRooms = [];
+        if (null == Memory.unreachableRooms) {
+            Memory.unreachableRooms = [];
         }
 
-        if (null == exitRoom && null == creep.memory.exitRoom) {
-            for (var roomKey in exits) {
-                if (randomSelected === index) {
-                    exitRoom = exits[roomKey];
-                    break;
-                }
-                index++;
-            }
-
+        if (null == creep.memory.exitRoom) {
             roomFromTo.to = exitRoom;
-            if (null != exitRoom && Game.map.isRoomAvailable(exitRoom) && creep.memory.unreachableRooms.indexOf(roomFromTo) === -1) {
+            if (null != exitRoom && Game.map.isRoomAvailable(exitRoom) && Memory.unreachableRooms.indexOf(roomFromTo) === -1) {
                 creep.memory.exitRoom = exitRoom;
             } else {
                 creep.memory.exitRoom = null;
@@ -176,13 +207,74 @@ var helperCreep = {
             var moveExit = this.moveToAnOtherRoom(creep, creep.memory.exitRoom);
 
             if (moveExit === ERR_NO_PATH || moveExit === ERR_INVALID_TARGET) {
-                console.log("No path found for room " + moveExit + " re-init target claimer room");
-                if (creep.memory.unreachableRooms.indexOf(roomFromTo) === -1) {
-                    creep.memory.unreachableRooms.push(roomFromTo);
+                console.log("No path found for room " + moveExit + " re-init target exitRoom");
+                if (Memory.unreachableRooms.indexOf(roomFromTo) === -1) {
+                    Memory.unreachableRooms.push(roomFromTo);
                 }
                 creep.memory.exitRoom = null;
             }
         }
+        return creep.memory.exitRoom; // returns exit room
+    },
+
+    selectRandomRoom: function (creep) {
+        var exitRoom;
+        var index = 0;
+        var randomSelected = Math.myRandom(0, exitCount - 1);
+        var exits = Game.map.describeExits(creep.room.name);
+        var exitCount = Object.keys(exits).length;
+        for (var roomKey in exits) {
+            if (randomSelected === index) {
+                exitRoom = exits[roomKey];
+                break;
+            }
+            index++;
+        }
+        return exitRoom;
+    },
+
+    selectRandomWantedRoom: function (creep, rooms) {
+        var exitRoom;
+        if (rooms.length > 0) {
+            var index = 0;
+            var randomSelected = Math.myRandom(0, rooms.length - 1);
+            var exits = Game.map.describeExits(creep.room.name);
+            for (var roomKey in exits) {
+                if (randomSelected === index) {
+                    exitRoom = exits[roomKey];
+                    break;
+                }
+                index++;
+            }
+        }
+        return exitRoom;
+    },
+
+    randomNotSelectUnwantedRoom: function (creep, rooms) {
+        var exitRoom;
+        var index = 0;
+        var randomSelected = Math.myRandom(0, exitCount - 1);
+        var exits = Game.map.describeExits(creep.room.name);
+        var exitCount = Object.keys(exits).length;
+        for (var roomKey in exits) {
+            if (rooms.indexOf(exits[roomKey]) === -1
+                    && randomSelected === index) {
+                exitRoom = exits[roomKey];
+                break;
+            }
+            index++;
+        }
+        index = 0;
+        if (null == exitRoom) {
+            for (var roomKey in exits) {
+                if (rooms.indexOf(exits[roomKey]) === -1) { // takes the first valid, not really random
+                    exitRoom = exits[roomKey];
+                    break;
+                }
+                index++;
+            }
+        }
+        return exitRoom;
     }
 
 };
