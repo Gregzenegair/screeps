@@ -22,13 +22,14 @@ var helperRoom = {
         return null;
     },
 
+    /**
+     * Returns 1 spawn
+     * @param {type} room
+     * @returns {nm$_helper.room.helperRoom.findSpawn.targets|helperRoom.findSpawn.target}
+     */
     findSpawn: function (room) {
 
-        var targets = room.find(FIND_STRUCTURES, {
-            filter: (structure) => {
-                return (structure.structureType == STRUCTURE_SPAWN);
-            }
-        });
+        var targets = this.findSpawns(room);
 
         if (targets.length > 0) {
             for (var i = 0; i < targets.length; i++) {
@@ -38,7 +39,18 @@ var helperRoom = {
         }
         return null;
     },
-    
+
+    findSpawns: function (room) {
+
+        var targets = room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.structureType == STRUCTURE_SPAWN);
+            }
+        });
+
+        return targets;
+    },
+
     /**
      * For building purposes
      * @param {type} room
@@ -59,7 +71,7 @@ var helperRoom = {
 
         return paths;
     },
-    
+
     /**
      * For building purposes
      * @param {type} room
@@ -110,17 +122,57 @@ var helperRoom = {
 
         return paths;
     },
-    
+
     activateSafeMode: function (room) {
         var controller = this.getMyRoomController(room);
-        
+
         //safeMode
         //safeModeAvailable
         //safeModeCooldown
     },
-    
-    getMyRoomController: function(room){
-        
+
+    getMyRoomController: function (room) {
+        if ((null != room.controller
+                && room.controller.my)
+                || (null != room.controller
+                        && room.controller.reservation
+                        && room.controller.reservation.username === "Gregzenegair")) {
+            return room.controller;
+        }
+        return null;
+    },
+
+    /**
+     * coords as a staro, not full squares
+     * @param {type} x
+     * @param {type} y
+     * @param {type} range
+     * @returns {Array|helperRoom.getCoordsAround.array|nm$_helper.room.helperRoom.getCoordsAround.array}
+     */
+    getCoordsAround: function (x, y, range) {
+        var array = [];
+        if (null == range) {
+            range = 1;
+        }
+
+        for (var i = 1; i <= range; i++) {
+            var xA = x + i;
+            var xR = x - i;
+            var yA = y + i;
+            var yR = y - i;
+            array.push({"x": xA, "y": y});
+            array.push({"x": xR, "y": y});
+            array.push({"x": x, "y": yA});
+            array.push({"x": x, "y": yR});
+            array.push({"x": xA, "y": yA});
+            array.push({"x": xR, "y": yA});
+            array.push({"x": xR, "y": yR});
+            array.push({"x": xA, "y": yR});
+
+        }
+
+
+        return array;
     }
 
 };

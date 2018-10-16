@@ -14,7 +14,9 @@ var rolesSetup = require('roles.setup');
 
 var helperRoom = require('helper.room');
 
-var energyHelper = require('helper.energy');
+var helperEnergy = require('helper.energy');
+
+var helperBuild = require('helper.build');
 
 module.exports.loop = function () {
 
@@ -147,7 +149,7 @@ module.exports.loop = function () {
                                     && room.controller.reservation
                                     && room.controller.reservation.username === "Gregzenegair"
                                     && room.controller.reservation.ticksToEnd > 1024));
-                            
+
                     if ((canBuildPaths && !Memory.pathBuilt[room.name])) {
                         var pathsSources = helperRoom.findPathToSources(room);
                         var pathsMyStructures = helperRoom.findPathMyStructures(room);
@@ -186,7 +188,7 @@ module.exports.loop = function () {
                 avX = Math.floor(avX / sources.length);
                 avY = Math.floor(avY / sources.length);
 
-                var coords = energyHelper.getCoordsAround(avX, avY);
+                var coords = helperRoom.getCoordsAround(avX, avY);
 
                 for (var i = 0; i < coords.length; i++) {
                     var coord = coords[i];
@@ -209,25 +211,7 @@ module.exports.loop = function () {
                 /**
                  * For each source build roads around
                  */
-                if (!Memory.pathBuiltAroundSources[room.name]) {
-                    for (var j = 0; j < sources.length; j++) {
-                        var source = sources[j];
-                        var coords = energyHelper.getCoordsAround(source.pos.x, source.pos.y);
-                        for (var i = 0; i < coords.length; i++) {
-                            var coord = coords[i];
-                            if (TERRAIN_MASK_WALL !== Game.map.getRoomTerrain(room.name).get(coord.x, coord.y)) {
-                                var buildRoad = room.createConstructionSite(coord.x, coord.y, STRUCTURE_ROAD);
-                                console.log("Build road around source resulted=" + buildRoad);
-                                // should be somehow built only if  Memory.pathBuilt[room] = false
-                                // this build roads around  each ressource
-
-                            }
-
-                        }
-                    }
-
-                    Memory.pathBuiltAroundSources[room.name] = true;
-                }
+                helperBuild.buildRoutesAround(room, sources);
 
 
             } else {
@@ -243,7 +227,7 @@ module.exports.loop = function () {
             // in each possible room with creep or building, try to build a container
             for (var j = 0; j < sources.length; j++) {
                 var source = sources[j];
-                var constructResult = energyHelper.buildContainerToSource(source, room);
+                var constructResult = helperEnergy.buildContainerToSource(source, room);
                 console.log("building container resulted=" + constructResult);
             }
         }

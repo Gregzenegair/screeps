@@ -235,7 +235,7 @@ var helperCreep = {
 
     selectRandomWantedRoom: function (creep, rooms) {
         var exitRoom;
-        if (rooms.length > 0) {
+        if (null != rooms && rooms.length > 0) {
             var index = 0;
             var randomSelected = Math.myRandom(0, rooms.length - 1);
             var exits = Game.map.describeExits(creep.room.name);
@@ -252,26 +252,29 @@ var helperCreep = {
 
     randomNotSelectUnwantedRoom: function (creep, rooms) {
         var exitRoom;
-        var index = 0;
-        var randomSelected = Math.myRandom(0, exitCount - 1);
-        var exits = Game.map.describeExits(creep.room.name);
-        var exitCount = Object.keys(exits).length;
-        for (var roomKey in exits) {
-            if (rooms.indexOf(exits[roomKey]) === -1
-                    && randomSelected === index) {
-                exitRoom = exits[roomKey];
-                break;
-            }
-            index++;
-        }
-        index = 0;
-        if (null == exitRoom) {
+
+        if (null != rooms && rooms.length > 0) {
+            var index = 0;
+            var randomSelected = Math.myRandom(0, exitCount - 1);
+            var exits = Game.map.describeExits(creep.room.name);
+            var exitCount = Object.keys(exits).length;
             for (var roomKey in exits) {
-                if (rooms.indexOf(exits[roomKey]) === -1) { // takes the first valid, not really random
+                if (rooms.indexOf(exits[roomKey]) === -1
+                        && randomSelected === index) {
                     exitRoom = exits[roomKey];
                     break;
                 }
                 index++;
+            }
+            index = 0;
+            if (null == exitRoom) {
+                for (var roomKey in exits) {
+                    if (rooms.indexOf(exits[roomKey]) === -1) { // takes the first valid, not really random
+                        exitRoom = exits[roomKey];
+                        break;
+                    }
+                    index++;
+                }
             }
         }
         return exitRoom;

@@ -213,8 +213,12 @@ var helperEnergy = {
         var moveResult = helperCreep.moveTo(creep, energySource, true);
 
         if (moveResult === ERR_NO_PATH || creep.memory.alternativePath) {
+            helperCreep.moveTo(creep, energySource);
+        }
+
+        if (moveResult === ERR_NO_PATH || creep.memory.alternativePath) {
             energySource = this.setEnergySource(creep, true);
-            helperCreep.moveTo(creep, energySource, false);
+            helperCreep.moveTo(creep, energySource);
         }
 
 //        creep.say("Moved=" + moveResult);
@@ -245,6 +249,7 @@ var helperEnergy = {
             }
 
             if (energySource) {
+                creep.memory.alternativePath = false; // prevent the creep to go back to another source if it is blocked only once
                 creep.memory.energySourceId = energySource.target.id;
                 creep.memory.energySourceType = energySource.energySourceType;
                 energySource = energySource.target;
@@ -445,7 +450,7 @@ var helperEnergy = {
         for (var i = 0; i < sources.length; i++) {
             var source = sources[i];
 
-            var coords = this.getCoordsAround(source.pos.x, source.pos.y);
+            var coords = helperRoom.getCoordsAround(source.pos.x, source.pos.y);
 
             for (var i = 0; i < coords.length; i++) {
                 var coord = coords[i];
@@ -457,24 +462,6 @@ var helperEnergy = {
         return result;
     },
 
-    getCoordsAround: function (x, y) { // should be in helper.room
-        var xA = x + 1;
-        var xR = x - 1;
-        var yA = y + 1;
-        var yR = y - 1;
-        var array = [
-            {"x": xA, "y": y},
-            {"x": xR, "y": y},
-            {"x": x, "y": yA},
-            {"x": x, "y": yR},
-            {"x": xA, "y": yA},
-            {"x": xR, "y": yA},
-            {"x": xR, "y": yR},
-            {"x": xA, "y": yR}
-        ];
-        return array;
-    },
-
     /**
      * @param {type} energySource
      * @param {type} room
@@ -482,7 +469,7 @@ var helperEnergy = {
      */
     hasAContainerAround: function (energySource, room) { // should be in helper.room ?
 
-        var coordsAround = this.getCoordsAround(energySource.pos.x, energySource.pos.y);
+        var coordsAround = helperRoom.getCoordsAround(energySource.pos.x, energySource.pos.y);
         for (var i = 0; i < coordsAround.length; i++) {
             var coord = coordsAround[i];
             var containers = room.find(FIND_STRUCTURES, {
@@ -516,8 +503,8 @@ var helperEnergy = {
     },
 
     buildContainerToSource: function (energySource, room) {
-        if (room.controller && room.controller.level < 3) {
-            return "Not building container, too low controller (< 3) or inexistant";
+        if (room.controller && room.controller.level < 2) {
+            return "Not building container, too low controller (< 2) or inexistant";
         }
         var coords = this.hasAContainerAround(energySource, room);
         if (coords instanceof Array) {
