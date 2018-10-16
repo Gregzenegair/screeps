@@ -114,9 +114,11 @@ module.exports.loop = function () {
 
             if (null != room && null == helperRoom.findDeposit(room)) {
                 var spawn = helperRoom.findSpawn(room);
+                var depositRange = Math.floor(room.controller.level * 4 / 3);
+                depositRange = depositRange < 4 ? 4 : depositRange;
                 if (spawn) {// TODO: move random positionner to a class helper
-                    var newPosX = spawn.pos.x + Math.myRandom(-8, 8);
-                    var newPosY = spawn.pos.y + Math.myRandom(-8, 8);
+                    var newPosX = spawn.pos.x + Math.myRandom(-depositRange, depositRange);
+                    var newPosY = spawn.pos.y + Math.myRandom(-depositRange, depositRange);
                     newPosX = newPosX < 0 ? 0 : newPosX;
                     newPosY = newPosY < 0 ? 0 : newPosY;
                     newPosX = newPosX > 49 ? 49 : newPosX;
