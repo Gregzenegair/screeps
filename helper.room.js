@@ -74,6 +74,33 @@ var helperRoom = {
         return paths;
     },
 
+    findPathSourcesToSources: function (room) {
+        var spawn = this.findSpawn(room);
+        var targets = room.find(FIND_SOURCES);
+        var paths = [];
+        if (targets.length > 1) {
+            // cycling through sources
+            for (var i = 1; i <= targets.length; i++) {
+                if (i === targets.length) {
+                    var target0 = targets[i - 1];
+                    var target1 = targets[0];
+                } else {
+                    var target0 = targets[i - 1];
+                    var target1 = targets[i];
+                }
+                paths.push(target0.pos.findPathTo(target1, {
+                    ignoreCreeps: true,
+                    ignoreDestructibleStructures: false,
+                    ignoreRoads: true,
+                    swampCost: 1,
+                    plainCost: 1
+                }));
+            }
+        }
+
+        return paths;
+    },
+
     /**
      * For building purposes
      * @param {type} room

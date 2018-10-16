@@ -115,8 +115,8 @@ module.exports.loop = function () {
             if (null != room && null == helperRoom.findDeposit(room)) {
                 var spawn = helperRoom.findSpawn(room);
                 if (spawn) {// TODO: move random positionner to a class helper
-                    var newPosX = spawn.pos.x + Math.myRandom(-12, 12);
-                    var newPosY = spawn.pos.y + Math.myRandom(-12, 12);
+                    var newPosX = spawn.pos.x + Math.myRandom(-8, 8);
+                    var newPosY = spawn.pos.y + Math.myRandom(-8, 8);
                     newPosX = newPosX < 0 ? 0 : newPosX;
                     newPosY = newPosY < 0 ? 0 : newPosY;
                     newPosX = newPosX > 49 ? 49 : newPosX;
@@ -151,7 +151,7 @@ module.exports.loop = function () {
                                     && room.controller.reservation.ticksToEnd > 1024));
 
                     if ((canBuildPaths && !Memory.pathBuilt[room.name])) {
-                        var pathsSources = helperRoom.findPathToSources(room);
+                        var pathsSources = helperRoom.findPathSourcesToSources(room);
                         var pathsMyStructures = helperRoom.findPathMyStructures(room);
                         var pathsExits = helperRoom.findPathExits(room);
                         var paths = pathsSources.concat(pathsMyStructures).concat(pathsExits);
@@ -171,6 +171,10 @@ module.exports.loop = function () {
                 }
             }
 
+            /**
+             * For each source build roads around
+             */
+            helperBuild.buildRoutesAround(room, sources);
 
             if (room.controller && null != sources && sources.length > 0) { // ensure there is a controller before trying to build a spawn
                 // calc average between spawn and sources :
@@ -207,12 +211,6 @@ module.exports.loop = function () {
                         }
                     }
                 }
-
-                /**
-                 * For each source build roads around
-                 */
-                helperBuild.buildRoutesAround(room, sources);
-
 
             } else {
                 console.log("No controller or no source found, or nothing to build")

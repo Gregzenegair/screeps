@@ -240,6 +240,11 @@ var helperEnergy = {
                 energySource = helperEnergy.findNearestEnergySource(creep, !creep.memory.filler, canSeekForSources);
             } else {
                 console.log("find a new path for creep=" + creep.name);
+                energySource = helperEnergy.findNearestEnergySource(creep, !creep.memory.filler, !canSeekForSources);
+                creep.memory.alternativePath = true; // may already be true
+            }
+
+            if (null == energySource) {
                 energySource = helperEnergy.findValidPathHarvestSource(creep);
                 creep.memory.alternativePath = true; // may already be true
             }
@@ -249,7 +254,6 @@ var helperEnergy = {
             }
 
             if (energySource) {
-                creep.memory.alternativePath = false; // prevent the creep to go back to another source if it is blocked only once
                 creep.memory.energySourceId = energySource.target.id;
                 creep.memory.energySourceType = energySource.energySourceType;
                 energySource = energySource.target;

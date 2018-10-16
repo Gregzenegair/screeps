@@ -2,21 +2,21 @@ var helperRoom = require('helper.room');
 
 var helperBuild = {
 
-    buildRoutes: function (room, sources) {
+    buildRoutesAround: function (room, sources) {
         if (!Memory.pathBuiltAroundSources[room.name]) {
             var allCoords = [];
             var spawns = helperRoom.findSpawns(room);
             if (null != spawns) {
                 for (var i = 0; i < spawns.length; i++) {
                     var spawn = spawns[i];
-                    var spawnCoords = helperRoom.getCoordsAround(spawn.pos.x, spawn.pos.y, 2);
+                    var spawnCoords = helperRoom.getCoordsAround(spawn.pos.x, spawn.pos.y, 6);
                     allCoords.push(spawnCoords);
                 }
             }
 
             var controller = helperRoom.getMyRoomController(room);
             if (null != controller) {
-                var controllerCoords = helperRoom.getCoordsAround(spawn.pos.x, spawn.pos.y, 2);
+                var controllerCoords = helperRoom.getCoordsAround(controller.pos.x, controller.pos.y, 2);
                 allCoords.push(controllerCoords);
             }
 

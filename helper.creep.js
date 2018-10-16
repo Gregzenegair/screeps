@@ -27,7 +27,7 @@ var helperCreep = {
 
         if (moveResult === ERR_NO_PATH || !didMove) {
             creep.memory.errorPathCount++;
-            if (creep.memory.errorPathCount > 1) {
+            if (creep.memory.errorPathCount > 3) {
                 creep.memory.errorPathCount = 0;
                 creep.memory.alternativePath = true;
             }
