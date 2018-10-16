@@ -65,7 +65,9 @@ var helperRoom = {
             paths[i] = spawn.pos.findPathTo(target, {
                 ignoreCreeps: true,
                 ignoreDestructibleStructures: false,
-                ignoreRoads: true
+                ignoreRoads: true,
+                swampCost: 1,
+                plainCost: 1
             });
         }
 
