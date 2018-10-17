@@ -21,7 +21,11 @@ var roleCombat = {
                         target = targets[0];
                         break;
                     } else {
-                        targets = room.find(FIND_HOSTILE_STRUCTURES);
+                        targets = room.find(FIND_HOSTILE_STRUCTURES, {
+                            filter: (structure) => {
+                                return (structure.structureType !== STRUCTURE_CONTROLLER);
+                            }
+                        });
                         if (null != targets && targets.length > 0) {
                             target = targets[0];
                             break;
