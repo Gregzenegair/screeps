@@ -8,7 +8,7 @@ var helperController = {
                 || (null != room.controller
                         && room.controller.reservation
                         && room.controller.reservation.username === "Gregzenegair"
-//                        && room.controller.reservation.ticksToEnd >= 100
+                        && room.controller.reservation.ticksToEnd >= 4096
                         );
     }
 
