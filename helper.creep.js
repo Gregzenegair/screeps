@@ -54,8 +54,10 @@ var helperCreep = {
             return null;
         }
 
-        if (creep.room.name != creep.memory.previousRoomName) {
+        if (null != creep.memory.previousRoomName && creep.room.name != creep.memory.previousRoomName) {
             creep.memory.targetRoomExit = null;
+            creep.say("New Room");
+            return -9999;
         }
 
         if (null == creep.memory.targetRoomExit) {
@@ -178,6 +180,11 @@ var helperCreep = {
      */
     moveRandomExitRoom: function (creep, options) {
 
+        if (creep.memory.randomExitRoom === creep.room.name) {
+            creep.memory.randomExitRoom = null;
+            return;
+        }
+
         var wantedRooms = [];
         var unwantedRooms = [];
         if (null != options) {
@@ -206,28 +213,29 @@ var helperCreep = {
             Memory.unreachableRooms = [];
         }
 
-        if (null == creep.memory.exitRoom) {
+        if (null == creep.memory.randomExitRoom) {
             roomFromTo.to = exitRoom;
             if (null != exitRoom && Game.map.isRoomAvailable(exitRoom) && Memory.unreachableRooms.indexOf(roomFromTo) === -1) {
-                creep.memory.exitRoom = exitRoom;
+                creep.memory.randomExitRoom = exitRoom;
             } else {
-                creep.memory.exitRoom = null;
+                creep.memory.randomExitRoom = null;
             }
         }
 
-        if (null != creep.memory.exitRoom) {
+        var moveExit;
+        if (null != creep.memory.randomExitRoom) {
 
-            var moveExit = this.moveToAnOtherRoom(creep, creep.memory.exitRoom);
+            moveExit = this.moveToAnOtherRoom(creep, creep.memory.randomExitRoom);
 
             if (moveExit === ERR_NO_PATH || moveExit === ERR_INVALID_TARGET) {
                 console.log("No path found for room " + moveExit + " re-init target exitRoom");
                 if (Memory.unreachableRooms.indexOf(roomFromTo) === -1) {
                     Memory.unreachableRooms.push(roomFromTo);
                 }
-                creep.memory.exitRoom = null;
+                creep.memory.randomExitRoom = null;
             }
         }
-        return creep.memory.exitRoom; // returns exit room
+        return moveExit; // returns movement result
     },
 
     selectRandomRoom: function (creep) {
