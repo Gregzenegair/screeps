@@ -1,3 +1,5 @@
+require('object.extension')();
+
 var helperCreep = {
 
     moveTo: function (creep, target, ignoreCreeps) { // should be into an helper class
@@ -180,7 +182,7 @@ var helperCreep = {
 
         exitRoom = this.selectRandomWantedRoom(creep, wantedRooms);
         if (null == exitRoom) {
-            exitRoom = this.randomNotSelectUnwantedRoom(creep);
+            exitRoom = this.randomNotSelectUnwantedRoom(creep, unwantedRooms);
         }
         if (null == exitRoom) { // should be useless to call this
             exitRoom = this.selectRandomRoom(creep);
@@ -218,11 +220,11 @@ var helperCreep = {
     },
 
     selectRandomRoom: function (creep) {
-        var exitRoom;
+        var exitRoom = null;
         var index = 0;
-        var randomSelected = Math.myRandom(0, exitCount - 1);
         var exits = Game.map.describeExits(creep.room.name);
         var exitCount = Object.keys(exits).length;
+        var randomSelected = Math.myRandom(0, exitCount - 1);
         for (var roomKey in exits) {
             if (randomSelected === index) {
                 exitRoom = exits[roomKey];
@@ -234,7 +236,7 @@ var helperCreep = {
     },
 
     selectRandomWantedRoom: function (creep, rooms) {
-        var exitRoom;
+        var exitRoom = null;
         if (null != rooms && rooms.length > 0) {
             var index = 0;
             var randomSelected = Math.myRandom(0, rooms.length - 1);
@@ -251,13 +253,13 @@ var helperCreep = {
     },
 
     randomNotSelectUnwantedRoom: function (creep, rooms) {
-        var exitRoom;
+        var exitRoom = null;
 
         if (null != rooms && rooms.length > 0) {
             var index = 0;
-            var randomSelected = Math.myRandom(0, exitCount - 1);
             var exits = Game.map.describeExits(creep.room.name);
             var exitCount = Object.keys(exits).length;
+            var randomSelected = Math.myRandom(0, exitCount - 1);
             for (var roomKey in exits) {
                 if (rooms.indexOf(exits[roomKey]) === -1
                         && randomSelected === index) {
