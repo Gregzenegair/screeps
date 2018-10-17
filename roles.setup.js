@@ -14,7 +14,13 @@ var rolesSetup = {
     /** @param {Creep} creep **/
     spawn: function (type) {
         if (Game.time % 16 === 0 || null == Memory.utilityMaxCount) {
-
+            if (null == Memory.utilityMaxCount || null == Memory.minerMaxCount) {
+                Memory.utilityMaxCount = {};
+                Memory.utilityUnitCount = {};
+                Memory.minerMaxCount = {};
+                Memory.minerUnitCount = {};
+            }
+            
             for (var name in Memory.creeps) {
                 if (!Game.creeps[name]) {
                     helperMiner.freedSpot(Memory.creeps[name].containerSpot);
@@ -40,13 +46,6 @@ var rolesSetup = {
                                 && creep.ticksToLive > 32); // replace a dying creep sooner (by not counting it if under 32ttl)
 
                     console.log("spawn=" + spawn.name + ", " + type.name + "=" + seekTypes.length);
-
-                    if (null == Memory.utilityMaxCount || null == Memory.minerMaxCount) {
-                        Memory.utilityMaxCount = {};
-                        Memory.utilityUnitCount = {};
-                        Memory.minerMaxCount = {};
-                        Memory.minerUnitCount = {};
-                    }
 
                     if (null == Memory.utilityMaxCount[room.name] || Game.time % 4096 === 0) {
                         var maxUtility = this.calcMaxUtility(room); //TODO set max utility by room with spawn ?
@@ -144,10 +143,10 @@ var rolesSetup = {
             roomControlerLevel = room.controller.level
         }
 
-        result = Math.round(Math.round(mineSpots * 1.1) - (roomControlerLevel / 2));
-        result += sourcesCount * 2;
+        result = Math.round(Math.round(mineSpots * 0.4) - (roomControlerLevel / 2));
+        result += sourcesCount * 3.2;
         console.log("calcMaxUtility=" + result);
-        return result;
+        return Math.round(result);
     },
 
     calcMaxMiner: function (room) {
