@@ -38,8 +38,8 @@ var roleClaimer = {
                 Memory.noControllerRooms.push(room.name);
             }
 
-            var exitRoom = helperCreep.moveRandomExitRoom(creep,
-                    {unwatedRooms: Memory.noControllerRooms, wantedRooms: Memory.claimableControllerRooms});
+            var moveResult = helperCreep.moveRandomExitRoom(creep,
+                    {unwantedRooms: Memory.noControllerRooms, wantedRooms: Memory.claimableControllerRooms});
 
         } else {
 
