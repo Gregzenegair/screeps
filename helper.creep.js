@@ -33,13 +33,6 @@ var helperCreep = {
                 creep.memory.errorPathCount = 0;
                 creep.memory.alternativePath = true;
             }
-        } else if (creep.memory.alternativePath && moveResult === ERR_NO_PATH || !didMove) {
-            creep.memory.errorPathCount++;
-            if (creep.memory.errorPathCount > 3) {
-                creep.memory.errorPathCount = 0;
-                //change room, this is blocked
-                this.moveRandomExitRoom(creep);
-            }
         } else {
             creep.memory.alternativePath = false;
         }

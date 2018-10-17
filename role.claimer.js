@@ -27,9 +27,12 @@ var roleClaimer = {
         }
 
 
-        if (null == creep.memory.claimingSpotError) {
+        if (null == creep.memory.claimingSpotError || null == creep.memory.previousPosX || null == creep.memory.previousPosY) {
             creep.memory.claimingSpotError = 0;
+            creep.memory.previousPosX = 0;
+            creep.memory.previousPosY = 0;
         }
+
 
 
         if (helperController.isNotClaimable(creep)) {
