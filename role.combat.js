@@ -5,6 +5,9 @@ var roleCombat = {
 
     /** @param {Creep} creep **/
     run: function (creep, hasBeenUnderAttack, maxCombatUnit) {
+        
+        helperCreep.initMoveToRoomAssigned(creep);
+        
         var target = null;
 
         if (Game.time % 64 === 0 || (null == Memory.combatTarget && hasBeenUnderAttack) || maxCombatUnit) {
@@ -71,6 +74,11 @@ var roleCombat = {
 
             if (null != Memory.combatExitRoom) {
                 var moveExit = helperCreep.moveToAnOtherRoom(creep, Memory.combatExitRoom);
+
+                if (null == moveExit) {
+                    Memory.combatExitRoom = null;
+                    Memory.combatTarget = null;
+                }
 
                 if (moveExit === ERR_NO_PATH) {
                     console.log("No path found for room " + Memory.combatExitRoom + " re-init target combat room");

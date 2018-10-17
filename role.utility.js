@@ -25,7 +25,9 @@ var roleUtility = {
 
     /** @param {Creep} creep **/
     run: function (creep) {
-
+        
+        helperCreep.initMoveToRoomAssigned(creep);
+        
         if (creep.carry.energy === creep.carryCapacity) {
             creep.memory.isFullResources = true;
             creep.memory.isEmptyResources = false;

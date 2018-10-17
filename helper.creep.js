@@ -226,7 +226,7 @@ var helperCreep = {
         var exitCount = Object.keys(exits).length;
         var randomSelected = Math.myRandom(0, exitCount - 1);
         for (var roomKey in exits) {
-            if (randomSelected === index) {
+            if (randomSelected === index && creep.room.name != exits[roomKey]) {
                 exitRoom = exits[roomKey];
                 break;
             }
@@ -242,7 +242,7 @@ var helperCreep = {
             var randomSelected = Math.myRandom(0, rooms.length - 1);
             var exits = Game.map.describeExits(creep.room.name);
             for (var roomKey in exits) {
-                if (randomSelected === index) {
+                if (randomSelected === index && creep.room.name != exits[roomKey]) {
                     exitRoom = exits[roomKey];
                     break;
                 }
@@ -262,7 +262,8 @@ var helperCreep = {
             var randomSelected = Math.myRandom(0, exitCount - 1);
             for (var roomKey in exits) {
                 if (rooms.indexOf(exits[roomKey]) === -1
-                        && randomSelected === index) {
+                        && randomSelected === index
+                        && creep.room.name != exits[roomKey]) {
                     exitRoom = exits[roomKey];
                     break;
                 }
@@ -280,6 +281,15 @@ var helperCreep = {
             }
         }
         return exitRoom;
+    },
+
+    initMoveToRoomAssigned: function (creep) {
+        if (creep.room.name != creep.memory.roomAssigned && !creep.memory.roomAssignedReached) {
+            creep.say("Go Assigned");
+            helperCreep.moveToAnOtherRoom(creep, creep.memory.roomAssigned);
+        } else if (!creep.memory.roomAssignedReached) {
+            creep.memory.roomAssignedReached = true;
+        }
     }
 
 };

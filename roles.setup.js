@@ -32,12 +32,12 @@ var rolesSetup = {
                     if (room.name != spawn.room.name &&
                             (Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name]
                                     || Memory.minerUnitCount[room.name] < Memory.minerMaxCount[room.name])) {
-                        console.log("Not spawning for this room yet, current spawn has not yet it's max utility units");
+                        console.log("Not spawning spawn{" + spawn.room.name + "] for this room yet, current spawn has not yet it's max utility units");
                         continue;
                     }
 
                     var seekTypes = _.filter(Game.creeps, (creep) => creep.memory.role == type.name && creep.memory.roomAssigned == room.name
-                                && creep.ticksToLive > 32); // replace a diying creep sooner (by not counting it if under 32)
+                                && creep.ticksToLive > 32); // replace a dying creep sooner (by not counting it if under 32ttl)
 
                     console.log("spawn=" + spawn.name + ", " + type.name + "=" + seekTypes.length);
 

@@ -11,6 +11,8 @@ var roleClaimer = {
     /** @param {Creep} creep **/
     run: function (creep, room) {
 
+        helperCreep.initMoveToRoomAssigned(creep);
+
         if (null == Memory.noControllerRooms || Game.time % 4096 === 0) {
             Memory.noControllerRooms = [];
         }
@@ -37,12 +39,8 @@ var roleClaimer = {
                 Memory.noControllerRooms.push(room.name);
             }
 
-            var exitRoom;
-
-            if (null == exitRoom) {
-                exitRoom = helperCreep.moveRandomExitRoom(creep,
-                        {unwatedRooms: Memory.noControllerRooms, wantedRooms: Memory.claimableControllerRooms});
-            }
+            var exitRoom = helperCreep.moveRandomExitRoom(creep,
+                    {unwatedRooms: Memory.noControllerRooms, wantedRooms: Memory.claimableControllerRooms});
 
         } else {
 
@@ -53,7 +51,7 @@ var roleClaimer = {
             creep.memory.claimingSpot = true;
 
             // claim this room's controller
-            var claimResult;
+            var claimResult = null;
 
             if (room.find(FIND_SOURCES).length > 1) {
                 claimResult = creep.claimController(room.controller);
@@ -63,7 +61,9 @@ var roleClaimer = {
             if (null == claimResult || claimResult === ERR_NOT_IN_RANGE) {
                 helperCreep.moveTo(creep, room.controller, true);
 
-            } else if (null == claimResult || claimResult !== OK) {
+            } 
+            
+            if (null == claimResult || claimResult !== OK) {
                 var claimReserveResult = creep.reserveController(room.controller);
                 creep.say("C R=" + claimReserveResult);
 
