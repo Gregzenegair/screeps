@@ -21,8 +21,9 @@ var roleClaimer = {
             Memory.claimableControllerRooms = [];
         }
 
-        if (creep.room.name === creep.memory.exitRoom) {
-            creep.memory.exitRoom = null;
+        if (creep.memory.claimingSpotError > 3) {
+            creep.memory.claimingSpot = false;
+            creep.memory.claimingSpotError = 0;
         }
 
 
@@ -33,7 +34,7 @@ var roleClaimer = {
         }
 
 
-        if (helperController.isNotClaimable(creep) && !creep.memory.claimingSpot) {
+        if (helperController.isNotClaimable(creep)) {
 
             if (Memory.noControllerRooms.indexOf(room.name) < 0) {
                 Memory.noControllerRooms.push(room.name);
@@ -44,7 +45,8 @@ var roleClaimer = {
 
         } else {
 
-            if (Memory.claimableControllerRooms.indexOf(room.name) < 0) {
+            if (Memory.claimableControllerRooms.indexOf(room.name) < 0
+                    && Memory.noControllerRooms.indexOf(room.name) < 0) {
                 Memory.claimableControllerRooms.push(room.name);
             }
 
@@ -60,9 +62,8 @@ var roleClaimer = {
 
             if (null == claimResult || claimResult === ERR_NOT_IN_RANGE) {
                 helperCreep.moveTo(creep, room.controller, true);
+            }
 
-            } 
-            
             if (null == claimResult || claimResult !== OK) {
                 var claimReserveResult = creep.reserveController(room.controller);
                 creep.say("C R=" + claimReserveResult);
@@ -73,6 +74,9 @@ var roleClaimer = {
                 } else if (claimReserveResult === ERR_INVALID_TARGET) {
                     var claimAttackResult = creep.attackController(room.controller);
                     creep.say("C A=" + claimAttackResult);
+                    if (claimAttackResult) {
+                        creep.memory.claimingSpotError++;
+                    }
                 } else {
                     creep.memory.claimingSpotError = 0;
                 }

@@ -5,9 +5,9 @@ var roleCombat = {
 
     /** @param {Creep} creep **/
     run: function (creep, hasBeenUnderAttack, maxCombatUnit) {
-        
+
         helperCreep.initMoveToRoomAssigned(creep);
-        
+
         var target = null;
 
         if (Game.time % 64 === 0 || (null == Memory.combatTarget && hasBeenUnderAttack) || maxCombatUnit) {
@@ -31,6 +31,7 @@ var roleCombat = {
             }
             if (null != target) {
                 Memory.combatTarget = target.id;
+                Memory.combatExitRoom = null;
             }
         } else if (Game.time % 256 === 0) {
             Memory.combatTarget = null;
@@ -58,7 +59,7 @@ var roleCombat = {
                 Memory.combatExitRoom = target.room.name;
             }
         } else {
-            creep.say("�?�", true);
+            creep.say("Nothing", true);
             Memory.combatTarget = null;
         }
 
@@ -77,14 +78,14 @@ var roleCombat = {
 
                 if (null == moveExit) {
                     Memory.combatExitRoom = null;
-                    Memory.combatTarget = null;
+//                    Memory.combatTarget = null;
                 }
 
                 if (moveExit === ERR_NO_PATH) {
                     console.log("No path found for room " + Memory.combatExitRoom + " re-init target combat room");
                     Memory.combatExitRoom = null;
                 }
-                creep.say("�?�", true);
+                creep.say("Move Exit", true);
             }
 
         }

@@ -40,8 +40,12 @@ var helperCreep = {
         return moveResult;
     },
 
-    moveToAnOtherRoom: function (creep, targetRoom) { // should be into an helper class
+    moveToAnOtherRoom: function (creep, targetRoom) {
         var exit;
+
+        if (null == targetRoom) {
+            return null;
+        }
 
         if (creep.room.name != creep.memory.previousRoomName) {
             creep.memory.targetRoomExit = null;
