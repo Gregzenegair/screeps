@@ -27,10 +27,8 @@ var roleClaimer = {
         }
 
 
-        if (null == creep.memory.claimingSpotError || null == creep.memory.previousPosX || null == creep.memory.previousPosY) {
+        if (null == creep.memory.claimingSpotError) {
             creep.memory.claimingSpotError = 0;
-            creep.memory.previousPosX = 0;
-            creep.memory.previousPosY = 0;
         }
 
 
@@ -74,7 +72,7 @@ var roleClaimer = {
                 } else if (claimReserveResult === ERR_INVALID_TARGET) {
                     var claimAttackResult = creep.attackController(room.controller);
                     creep.say("C A=" + claimAttackResult);
-                    if (claimAttackResult) {
+                    if (claimAttackResult != OK) {
                         creep.memory.claimingSpotError++;
                     }
                 } else {
