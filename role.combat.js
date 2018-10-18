@@ -57,7 +57,7 @@ var roleCombat = {
                 maxRooms = 16;
             }
             creep.say("💀", true);
-            if (creep.room.name === target.room.name) {
+//            if (creep.room.name === target.room.name) {
                 if (creep.attack(target) == ERR_NOT_IN_RANGE) {
                     var moveAttack = creep.moveTo(target, {
                         reusePath: 16,
@@ -65,7 +65,7 @@ var roleCombat = {
                         maxRooms: maxRooms // prevent to get out of the room
                     });
                 }
-            }
+//            }
         } else {
             creep.say("NoTarget");
             Memory.combatTarget = null;
