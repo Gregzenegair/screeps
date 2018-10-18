@@ -199,6 +199,7 @@ var helperCreep = {
         }
 
         if (null != exitRoom) {
+            creep.memory.roomAssignedReached = null;
             creep.memory.roomAssigned = exitRoom;
         }
 
