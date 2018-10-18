@@ -44,7 +44,8 @@ var helperRoom = {
 
         var targets = room.find(FIND_STRUCTURES, {
             filter: (structure) => {
-                return (structure.structureType == STRUCTURE_SPAWN);
+                return (structure.structureType == STRUCTURE_SPAWN
+                        && structure.my);
             }
         });
 
