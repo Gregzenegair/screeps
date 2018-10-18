@@ -14,7 +14,7 @@ var rolesSetup = {
     /** @param {Creep} creep **/
     spawn: function (type) {
         if (Game.time % 16 === 0 || null == Memory.utilityMaxCount) {
-            if (null == Memory.utilityMaxCount || null == Memory.minerMaxCount) {
+            if (null == Memory.utilityMaxCount || null == Memory.minerMaxCount || Game.time % 4096 === 0) {
                 Memory.utilityMaxCount = {};
                 Memory.utilityUnitCount = {};
                 Memory.minerMaxCount = {};
@@ -49,7 +49,7 @@ var rolesSetup = {
 
                     console.log("spawn=" + spawn.name + ", " + type.name + "=" + seekTypes.length);
 
-                    if (null == Memory.utilityMaxCount[room.name] || Game.time % 4096 === 0) {
+                    if (null == Memory.utilityMaxCount[room.name]) {
                         var maxUtility = this.calcMaxUtility(room); //TODO set max utility by room with spawn ?
                         Memory.utilityMaxCount[room.name] = maxUtility;
                         Memory.utilityUnitCount[room.name] = 0;
