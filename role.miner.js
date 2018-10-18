@@ -67,9 +67,9 @@ var roleMiner = {
                     && creep.pos.y === containerSpot.pos.y) {
                 creep.memory.mineSpotReached = true;
             }
-            creep.say("GoSpot");
+            creep.say("Go ⚒");
         } else {
-            creep.say("WaitSpot");
+            creep.say("Wait ⚒");
         }
 
     },

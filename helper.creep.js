@@ -283,7 +283,7 @@ var helperCreep = {
 
         if (creep.room.name != creep.memory.roomAssigned && !creep.memory.roomAssignedReached) {
             roomFromTo.to = creep.memory.roomAssigned;
-            creep.say("Go Assigned");
+            creep.say("🏃");
             var moveExit = helperCreep.moveToAnOtherRoom(creep, creep.memory.roomAssigned);
 
             if (moveExit === ERR_NO_PATH || moveExit === ERR_INVALID_TARGET) {
