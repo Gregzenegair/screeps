@@ -14,7 +14,7 @@ var rolesSetup = {
     /** @param {Creep} creep **/
     spawn: function (type) {
         if (Game.time % 16 === 0 || null == Memory.utilityMaxCount) {
-            if (null == Memory.utilityMaxCount || null == Memory.minerMaxCount || Game.time % 4096 === 0) {
+            if (null == Memory.utilityMaxCount || null == Memory.minerMaxCount || Game.time % 1024 === 0) {
                 Memory.utilityMaxCount = {};
                 Memory.utilityUnitCount = {};
                 Memory.minerMaxCount = {};

@@ -16,7 +16,7 @@ var roleClaimer = {
             return;
         }
 
-        if (null == Memory.noControllerRooms || Game.time % 4096 === 0) {
+        if (null == Memory.noControllerRooms || Game.time % 1024 === 0) {
             Memory.noControllerRooms = [];
         }
 
