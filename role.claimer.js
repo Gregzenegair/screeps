@@ -38,7 +38,7 @@ var roleClaimer = {
 
 
 
-        if (helperController.isNotClaimable(creep)) {
+        if (helperController.isNotClaimable(creep.room)) {
 
             if (Memory.noControllerRooms.indexOf(room.name) < 0) {
                 Memory.noControllerRooms.push(room.name);

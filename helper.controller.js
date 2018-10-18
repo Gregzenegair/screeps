@@ -1,16 +1,29 @@
 var helperController = {
 
-    isNotClaimable: function (creep) {
-        var room = creep.room;
+    isNotClaimable: function (room) {
         return null == room.controller
-                || (null != room.controller
-                        && room.controller.my)
-                || (null != room.controller
-                        && room.controller.reservation
-                        && room.controller.reservation.username === "Gregzenegair"
-                        && room.controller.reservation.ticksToEnd >= 4096
-                        );
+                || (this.isMyController(room))
+                || (this.isMyReservedController(room));
+    },
+
+    isMyController: function (room) {
+        return null != room.controller
+                && room.controller.my;
+
+    },
+
+    isMyReservedController: function (room, minTickCheck) {
+        if (null == minTickCheck) {
+            minTickCheck = 4096;
+        }
+        return null != room.controller
+                && room.controller.reservation
+                && room.controller.reservation.username === "Gregzenegair"
+                && room.controller.reservation.ticksToEnd >= minTickCheck;
+
     }
+
+
 
 };
 

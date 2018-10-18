@@ -18,6 +18,8 @@ var helperEnergy = require('helper.energy');
 
 var helperBuild = require('helper.build');
 
+var helperController = require('helper.controller');
+
 module.exports.loop = function () {
 
     if (null == Memory.hasBeenUnderAttack) {
@@ -145,12 +147,9 @@ module.exports.loop = function () {
                         }
                     }
 
-                    var canBuildPaths = (constructResult < 0 && room.controller.level > 2
-                            || (null != room.controller && room.controller.my)
-                            || (null != room.controller
-                                    && room.controller.reservation
-                                    && room.controller.reservation.username === "Gregzenegair"
-                                    && room.controller.reservation.ticksToEnd > 1024));
+                    var canBuildPaths = (constructResult <= 0 && room.controller.level > 2)
+                            || helperController.isMyController(room)
+                            || helperController.isMyReservedController(room, 16);
 
                     if ((canBuildPaths && !Memory.pathBuilt[room.name])) {
                         var pathsSources = helperRoom.findPathSourcesToSources(room);
