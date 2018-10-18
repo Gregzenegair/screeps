@@ -76,13 +76,6 @@ var rolesSetup = {
                     }
 
                     if (room.name != spawn.room.name &&
-                            (Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name]
-                                    || Memory.minerUnitCount[room.name] < Memory.minerMaxCount[room.name])) {
-                        console.log("Not spawning for this room yet, current spawn has not yet it's max utility units");
-                        continue;
-                    }
-
-                    if (room.name != spawn.room.name &&
                             (type.name === this.UTILITY.name
                                     || type.name === this.MINER.name)
                             && room.find(FIND_HOSTILE_CREEPS).length > 0) {

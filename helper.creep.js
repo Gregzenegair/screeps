@@ -47,6 +47,11 @@ var helperCreep = {
             return null;
         }
 
+        if (null != creep.memory.targetRoomExit && creep.room.name != creep.memory.targetRoomExit.roomName) {
+            // the targetRoomExit is the exit into the same room
+            creep.memory.targetRoomExit = null;
+        }
+
         if (null != creep.memory.previousRoomName && creep.room.name != creep.memory.previousRoomName) {
             creep.memory.targetRoomExit = null;
             creep.say("New Room");
@@ -171,13 +176,7 @@ var helperCreep = {
      * which represent rooms to go preferably and to avoid, if can't match, move randomly
      * @returns {@var;exitRoom}
      */
-    moveRandomExitRoom: function (creep, options) {
-
-        if (creep.memory.randomExitRoom === creep.room.name) {
-            creep.memory.randomExitRoom = null;
-            return;
-        }
-
+    assigneRandomExitRoom: function (creep, options) {
         var wantedRooms = [];
         var unwantedRooms = [];
         if (null != options) {
@@ -198,37 +197,12 @@ var helperCreep = {
         if (null == exitRoom) { // should be useless to call this
             exitRoom = this.selectRandomRoom(creep);
         }
-//TODO : factorise unreachable rooms to other move rooms methods
-        var roomFromTo = {};
-        roomFromTo.from = creep.room.name;
 
-        if (null == Memory.unreachableRooms) {
-            Memory.unreachableRooms = [];
+        if (null != exitRoom) {
+            creep.memory.roomAssigned = exitRoom;
         }
 
-        if (null == creep.memory.randomExitRoom) {
-            roomFromTo.to = exitRoom;
-            if (null != exitRoom && Game.map.isRoomAvailable(exitRoom) && Memory.unreachableRooms.indexOf(roomFromTo) === -1) {
-                creep.memory.randomExitRoom = exitRoom;
-            } else {
-                creep.memory.randomExitRoom = null;
-            }
-        }
-
-        var moveExit;
-        if (null != creep.memory.randomExitRoom) {
-
-            moveExit = this.moveToAnOtherRoom(creep, creep.memory.randomExitRoom);
-
-            if (moveExit === ERR_NO_PATH || moveExit === ERR_INVALID_TARGET) {
-                console.log("No path found for room " + moveExit + " re-init target exitRoom");
-                if (Memory.unreachableRooms.indexOf(roomFromTo) === -1) {
-                    Memory.unreachableRooms.push(roomFromTo);
-                }
-                creep.memory.randomExitRoom = null;
-            }
-        }
-        return moveExit; // returns movement result
+        return exitRoom; // returns room to exit to
     },
 
     selectRandomRoom: function (creep) {
@@ -295,13 +269,32 @@ var helperCreep = {
         return exitRoom;
     },
 
-    initMoveToRoomAssigned: function (creep) {
+    moveToRoomAssigned: function (creep) {
+        var roomFromTo = {};
+        roomFromTo.from = creep.room.name;
+
+        if (null == Memory.unreachableRooms) {
+            Memory.unreachableRooms = [];
+        }
+
         if (creep.room.name != creep.memory.roomAssigned && !creep.memory.roomAssignedReached) {
+            roomFromTo.to = creep.memory.roomAssigned;
             creep.say("Go Assigned");
-            helperCreep.moveToAnOtherRoom(creep, creep.memory.roomAssigned);
+            var moveExit = helperCreep.moveToAnOtherRoom(creep, creep.memory.roomAssigned);
+
+            if (moveExit === ERR_NO_PATH || moveExit === ERR_INVALID_TARGET) {
+                console.log("No path found for room " + moveExit + " re-init target exitRoom");
+                if (Memory.unreachableRooms.indexOf(roomFromTo) === -1) {
+                    Memory.unreachableRooms.push(roomFromTo);
+                }
+                creep.memory.randomExitRoom = null;
+            }
+
+            return false;
         } else if (!creep.memory.roomAssignedReached) {
             creep.memory.roomAssignedReached = true;
         }
+        return true;
     }
 
 };

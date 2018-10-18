@@ -201,7 +201,7 @@ module.exports.loop = function () {
                     if (TERRAIN_MASK_WALL !== Game.map.getRoomTerrain(room.name).get(coord.x, coord.y)) { //0 is plain
                         var constructResult = room.createConstructionSite(avX, avY, STRUCTURE_SPAWN);
                         console.log("building spawn resulted=" + constructResult);
-                        if (constructResult === ERR_INVALID_TARGET) {
+                        if (constructResult !== OK) {
                             var newPosX = room.controller.pos.x + Math.myRandom(-12, 12);
                             var newPosY = room.controller.pos.y + Math.myRandom(-12, 12);
                             newPosX = newPosX < 0 ? 0 : newPosX;

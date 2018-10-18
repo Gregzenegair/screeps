@@ -250,7 +250,7 @@ var helperEnergy = {
             }
 
             if (null == energySource) {
-                helperCreep.moveRandomExitRoom(creep);
+                helperCreep.assigneRandomExitRoom(creep);
             }
 
             if (energySource) {

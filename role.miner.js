@@ -76,7 +76,10 @@ var roleMiner = {
 
     mineSpot: function (creep) {
 
-        helperCreep.initMoveToRoomAssigned(creep);
+        var reached = helperCreep.moveToRoomAssigned(creep);
+        if (!reached) {
+            return;
+        }
 
         helperMiner.memoryStoreSpot(creep.room);
         if (creep.memory.mineSpotReached) {

@@ -11,7 +11,10 @@ var roleClaimer = {
     /** @param {Creep} creep **/
     run: function (creep, room) {
 
-        helperCreep.initMoveToRoomAssigned(creep);
+        var reached = helperCreep.moveToRoomAssigned(creep);
+        if (!reached) {
+            return;
+        }
 
         if (null == Memory.noControllerRooms || Game.time % 4096 === 0) {
             Memory.noControllerRooms = [];
@@ -41,7 +44,7 @@ var roleClaimer = {
                 Memory.noControllerRooms.push(room.name);
             }
 
-            var moveResult = helperCreep.moveRandomExitRoom(creep,
+            var exitRoom = helperCreep.assigneRandomExitRoom(creep,
                     {unwantedRooms: Memory.noControllerRooms, wantedRooms: Memory.claimableControllerRooms});
 
         } else {

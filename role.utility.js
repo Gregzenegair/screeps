@@ -25,9 +25,12 @@ var roleUtility = {
 
     /** @param {Creep} creep **/
     run: function (creep) {
-        
-        helperCreep.initMoveToRoomAssigned(creep);
-        
+
+        var reached = helperCreep.moveToRoomAssigned(creep);
+        if (!reached) {
+            return;
+        }
+
         if (creep.carry.energy === creep.carryCapacity) {
             creep.memory.isFullResources = true;
             creep.memory.isEmptyResources = false;
@@ -143,7 +146,7 @@ var roleUtility = {
                         helperCreep.moveToAnOtherRoom(creep, creep.memory.roomHome);
                     } else {
                         creep.say('BackR');
-                        helperCreep.moveRandomExitRoom(creep);
+                        helperCreep.assigneRandomExitRoom(creep);
                     }
                 }
             }
