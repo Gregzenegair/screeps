@@ -54,7 +54,8 @@ var roleCombat = {
                 if (creep.attack(target) == ERR_NOT_IN_RANGE) {
                     var moveAttack = creep.moveTo(target, {
                         reusePath: 16,
-                        visualizePathStyle: {stroke: '#ff0500'}
+                        visualizePathStyle: {stroke: '#ff0500'},
+                        maxRooms: 1 // prevent to get out of the room
                     });
                 }
             }

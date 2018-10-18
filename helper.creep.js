@@ -2,7 +2,11 @@ require('object.extension')();
 
 var helperCreep = {
 
-    moveTo: function (creep, target, ignoreCreeps) { // should be into an helper class
+    moveTo: function (creep, target, ignoreCreeps, range) { // should be into an helper class
+
+        if(null == range){
+            range = 0;
+        }
 
         if (null == creep.memory.previousPosX || null == creep.memory.previousPosY) {
             creep.memory.previousPosX = -1;
@@ -16,7 +20,9 @@ var helperCreep = {
         var moveResult = creep.moveTo(target, {
             reusePath: 16,
             visualizePathStyle: {stroke: '#fffd00'},
-            ignoreCreeps: ignoreCreeps
+            ignoreCreeps: ignoreCreeps,
+            maxRooms: 1,
+            range: range // prevent to walk over sources, gain cpu time
         });
 
         var didMove = true;
@@ -47,15 +53,9 @@ var helperCreep = {
             return null;
         }
 
-        if (null != creep.memory.targetRoomExit && creep.room.name != creep.memory.targetRoomExit.roomName) {
-            // the targetRoomExit is the exit into the same room
-            creep.memory.targetRoomExit = null;
-        }
-
         if (null != creep.memory.previousRoomName && creep.room.name != creep.memory.previousRoomName) {
             creep.memory.targetRoomExit = null;
             creep.say("New Room");
-            return -9999;
         }
 
         if (null == creep.memory.targetRoomExit) {
@@ -66,15 +66,18 @@ var helperCreep = {
             exit = new RoomPosition(creep.memory.targetRoomExit.x, creep.memory.targetRoomExit.y, creep.memory.targetRoomExit.roomName);
         }
 
+        creep.memory.previousRoomName = creep.room.name;
+
         var moveExit = null;
         if (null != exit) {
             moveExit = creep.moveTo(exit, {
                 reusePath: 64,
-                visualizePathStyle: {stroke: '#4462ac'}
+                visualizePathStyle: {stroke: '#4462ac'},
+                maxRooms: 1
             });
 
         }
-        creep.memory.previousRoomName = creep.room.name;
+
         return moveExit;
     },
 
@@ -199,7 +202,7 @@ var helperCreep = {
         }
 
         if (null != exitRoom) {
-            creep.memory.roomAssignedReached = null;
+            creep.memory.roomAssignedReached = false;
             creep.memory.roomAssigned = exitRoom;
         }
 
@@ -294,6 +297,7 @@ var helperCreep = {
             return false;
         } else if (!creep.memory.roomAssignedReached) {
             creep.memory.roomAssignedReached = true;
+            return false;
         }
         return true;
     }
