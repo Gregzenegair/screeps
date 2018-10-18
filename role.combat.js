@@ -60,7 +60,7 @@ var roleCombat = {
                 }
             }
         } else {
-            creep.say("NoTarget", true);
+            creep.say("NoTarget");
             Memory.combatTarget = null;
         }
 
@@ -68,7 +68,6 @@ var roleCombat = {
             helperCreep.moveRandomly(creep, 8);
         } else {
             helperCreep.assigneRandomExitRoom(creep);
-            creep.say("Move Exit", true);
         }
 
     },
