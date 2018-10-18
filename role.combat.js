@@ -38,10 +38,11 @@ var roleCombat = {
             }
             if (null != target) {
                 Memory.combatTarget = target.id;
-                Memory.combatExitRoom = null;
+                Memory.combatExitRoom = target.room.name;
             }
         } else if (Game.time % 256 === 0) {
             Memory.combatTarget = null;
+            Memory.combatExitRoom = null;
         }
 
         if (null != Memory.combatTarget) {
@@ -49,25 +50,34 @@ var roleCombat = {
         }
 
         if (target) {
+            var maxRooms;
+            if (null == Memory.combatExitRoom) {
+                maxRooms = 1;
+            } else {
+                maxRooms = 16;
+            }
             creep.say("💀", true);
             if (creep.room.name === target.room.name) {
                 if (creep.attack(target) == ERR_NOT_IN_RANGE) {
                     var moveAttack = creep.moveTo(target, {
                         reusePath: 16,
                         visualizePathStyle: {stroke: '#ff0500'},
-                        maxRooms: 1 // prevent to get out of the room
+                        maxRooms: maxRooms // prevent to get out of the room
                     });
                 }
             }
         } else {
             creep.say("NoTarget");
             Memory.combatTarget = null;
+            Memory.combatExitRoom = null;
         }
 
         if ((!maxCombatUnit && null == target && Game.time % 8 === 0) || null != creep.memory.moveToRandomly) {
             helperCreep.moveRandomly(creep, 8);
         } else {
-            helperCreep.assigneRandomExitRoom(creep);
+            if (null == Memory.combatExitRoom) {
+                helperCreep.assigneRandomExitRoom(creep);
+            }
         }
 
     },
