@@ -4,7 +4,7 @@ var helperCreep = {
 
     moveTo: function (creep, target, ignoreCreeps, range) { // should be into an helper class
 
-        if(null == range){
+        if (null == range) {
             range = 0;
         }
 
@@ -296,12 +296,37 @@ var helperCreep = {
 
             return false;
         } else if (!creep.memory.roomAssignedReached) {
+            var nextStep = this.nextStepIntoRoom(creep.pos, creep.memory.roomAssigned);
+            creep.moveTo(nextStep);
             creep.memory.roomAssignedReached = true;
             return false;
         }
         return true;
+    },
+    /**
+     * FIX a fucking bug with swamps
+     * @param {type} pos
+     * @param {type} nextRoom
+     * @returns {RoomPosition}
+     */
+    nextStepIntoRoom: function (pos, nextRoom) {
+        var x = pos.x;
+        var y = pos.y;
+        if (pos.x == 0) {
+            x = 25;
+        }
+        if (pos.x == 49) {
+            x = 25;
+        }
+        if (pos.y == 0) {
+            y = 25;
+        }
+        if (pos.y == 49) {
+            y = 25;
+        }
+        return new RoomPosition(x, y, nextRoom);
     }
-
+    
 };
 
 module.exports = helperCreep;
