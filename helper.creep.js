@@ -287,7 +287,7 @@ var helperCreep = {
                 if (Memory.unreachableRooms.indexOf(roomFromTo) === -1) {
                     Memory.unreachableRooms.push(roomFromTo);
                 }
-                creep.memory.randomExitRoom = null;
+                creep.memory.roomAssigned = null;
             }
 
             return false;
