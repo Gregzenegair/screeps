@@ -20,7 +20,7 @@ var rolesSetup = {
                 Memory.minerMaxCount = {};
                 Memory.minerUnitCount = {};
             }
-            
+
             for (var name in Memory.creeps) {
                 if (!Game.creeps[name]) {
                     helperMiner.freedSpot(Memory.creeps[name].containerSpot);
@@ -28,7 +28,9 @@ var rolesSetup = {
                     console.log('Clearing non-existing creep memory:', name);
                 }
             }
-
+            
+            Memory.totalSpawnCount = Game.spawns.length;
+            
             for (var key in Game.spawns) {
                 var spawn = Game.spawns[key];
 
