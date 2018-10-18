@@ -91,7 +91,7 @@ var helperRoom = {
                 paths.push(target0.pos.findPathTo(target1, {
                     ignoreCreeps: true,
                     ignoreDestructibleStructures: false,
-                    ignoreRoads: true,
+                    ignoreRoads: false,
                     swampCost: 1,
                     plainCost: 1
                 }));
@@ -115,7 +115,7 @@ var helperRoom = {
             paths[i] = spawn.pos.findPathTo(target, {
                 ignoreCreeps: true,
                 ignoreDestructibleStructures: false,
-                ignoreRoads: true
+                ignoreRoads: false
             });
         }
 
@@ -144,7 +144,7 @@ var helperRoom = {
                 paths.push(spawn.pos.findPathTo(target, {
                     ignoreCreeps: true,
                     ignoreDestructibleStructures: false,
-                    ignoreRoads: true
+                    ignoreRoads: false
                 }));
             }
         }
