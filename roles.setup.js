@@ -1,6 +1,7 @@
 require('object.extension')();
 var helperEnergy = require('helper.energy');
 var helperMiner = require('helper.miner');
+var helperRoom = require('helper.room');
 
 var rolesSetup = {
 
@@ -13,7 +14,7 @@ var rolesSetup = {
 
     /** @param {Creep} creep **/
     spawn: function (type) {
-        if (Game.time % 16 === 0 || null == Memory.utilityMaxCount) {
+        if (Game.time % 1 === 0 || null == Memory.utilityMaxCount) {
             if (null == Memory.utilityMaxCount || null == Memory.minerMaxCount || Game.time % 1024 === 0) {
                 Memory.utilityMaxCount = {};
                 Memory.utilityUnitCount = {};
@@ -28,14 +29,30 @@ var rolesSetup = {
                     console.log('Clearing non-existing creep memory:', name);
                 }
             }
-            
+
             Memory.totalSpawnCount = Game.spawns.length;
-            
+
             for (var key in Game.spawns) {
                 var spawn = Game.spawns[key];
 
-                for (var roomName in Game.rooms) {
+                var assignableRooms = {};
+
+                assignablesRooms = Game.map.describeExits(spawn.room.name);
+
+                for (var roomKey in assignablesRooms) {
+                    var roomName = assignablesRooms[roomKey];
                     var room = Game.rooms[roomName];
+                    if(null == room){
+                        console.log("Not spawning for room {" + roomName + "], no room found, because nothing mine in");
+                        continue;
+                    }
+                    
+                    var spawn = helperRoom.findSpawn(room);
+
+                    if (null == spawn) {
+                        console.log("Not spawning for room {" + roomName + "], no spawn found");
+                        continue;
+                    }
 
                     if (room.name != spawn.room.name &&
                             (Memory.utilityUnitCount[spawn.room.name] < Memory.utilityMaxCount[spawn.room.name]

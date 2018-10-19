@@ -91,6 +91,7 @@ module.exports.loop = function () {
         Memory.pathBuiltAroundSources = {};
         Memory.pathBuilt = {};
         Memory.combatExitRoom = null; //TODO: rework this
+        Memory.unreachableRooms = [];
     }
 
     roleTowers.run();
