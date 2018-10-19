@@ -202,8 +202,8 @@ module.exports.loop = function () {
                         var constructResult = room.createConstructionSite(avX, avY, STRUCTURE_SPAWN);
                         console.log("building spawn resulted=" + constructResult);
                         if (constructResult !== OK) {
-                            var newPosX = room.controller.pos.x + Math.myRandom(-12, 12);
-                            var newPosY = room.controller.pos.y + Math.myRandom(-12, 12);
+                            var newPosX = room.controller.pos.x + Math.myRandom(-6, 6);
+                            var newPosY = room.controller.pos.y + Math.myRandom(-6, 6);
                             newPosX = newPosX < 0 ? 0 : newPosX;
                             newPosY = newPosY < 0 ? 0 : newPosY;
                             newPosX = newPosX > 49 ? 49 : newPosX;
