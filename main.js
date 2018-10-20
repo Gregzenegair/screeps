@@ -149,7 +149,6 @@ module.exports.loop = function () {
                     }
 
                     var canBuildPaths = (constructResult <= 0 && room.controller.level > 2)
-                            || helperController.isMyController(room)
                             || helperController.isMyReservedController(room, 16);
 
                     if ((canBuildPaths && !Memory.pathBuilt[room.name])) {
