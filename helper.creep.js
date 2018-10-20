@@ -20,7 +20,7 @@ var helperCreep = {
         }
 
         var moveResult = creep.moveTo(target, {
-            reusePath: 16,
+            reusePath: 8,
             visualizePathStyle: {stroke: '#fffd00'},
             ignoreCreeps: ignoreCreeps,
             maxRooms: 1,
@@ -28,7 +28,7 @@ var helperCreep = {
         });
 
         var didMove = true;
-        if (creep.memory.previousPosX == creep.pos.x && creep.memory.previousPosY == creep.pos.y) {
+        if (creep.memory.previousPosX === creep.pos.x && creep.memory.previousPosY === creep.pos.y) {
             didMove = false;
         }
 
