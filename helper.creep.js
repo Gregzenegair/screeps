@@ -1,5 +1,7 @@
 require('object.extension')();
 
+var helperRoom = require('helper.room');
+
 var helperCreep = {
 
     moveTo: function (creep, target, ignoreCreeps, range) { // should be into an helper class
@@ -56,6 +58,10 @@ var helperCreep = {
         if (null != creep.memory.previousRoomName && creep.room.name != creep.memory.previousRoomName) {
             creep.memory.targetRoomExit = null;
             creep.say("New Room");
+            var target = helperRoom.findHostile(creep.room);
+            if (null != target) {
+                helperRoom.roomDataSetter(creep.room.name, helperRoom.MEMORY_KEYS.DANGEROUS_ROOM, true);
+            }
         }
 
         if (null == creep.memory.targetRoomExit) {
@@ -325,7 +331,7 @@ var helperCreep = {
         }
         return new RoomPosition(x, y, nextRoom);
     }
-    
+
 };
 
 module.exports = helperCreep;

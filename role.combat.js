@@ -16,26 +16,9 @@ var roleCombat = {
         if (Game.time % 64 === 0 || (null == Memory.combatTarget && hasBeenUnderAttack) || maxCombatUnit) {
             target = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
             if (null == target) {
-                var targets;
-                for (var roomName in Game.rooms) {
-                    var room = Game.rooms[roomName];
-                    targets = room.find(FIND_HOSTILE_CREEPS);
-                    if (null != targets && targets.length > 0) {
-                        target = targets[0];
-                        break;
-                    } else {
-                        targets = room.find(FIND_HOSTILE_STRUCTURES, {
-                            filter: (structure) => {
-                                return (structure.structureType !== STRUCTURE_CONTROLLER);
-                            }
-                        });
-                        if (null != targets && targets.length > 0) {
-                            target = targets[0];
-                            break;
-                        }
-                    }
-                }
+                target = helperCreep.findCombatTarget(creep);
             }
+            
             if (null != target) {
                 Memory.combatTarget = target.id;
                 Memory.combatExitRoom = target.room.name;
@@ -58,13 +41,13 @@ var roleCombat = {
             }
             creep.say("💀", true);
 //            if (creep.room.name === target.room.name) {
-                if (creep.attack(target) == ERR_NOT_IN_RANGE) {
-                    var moveAttack = creep.moveTo(target, {
-                        reusePath: 16,
-                        visualizePathStyle: {stroke: '#ff0500'},
-                        maxRooms: maxRooms // prevent to get out of the room
-                    });
-                }
+            if (creep.attack(target) == ERR_NOT_IN_RANGE) {
+                var moveAttack = creep.moveTo(target, {
+                    reusePath: 16,
+                    visualizePathStyle: {stroke: '#ff0500'},
+                    maxRooms: maxRooms // prevent to get out of the room
+                });
+            }
 //            }
         } else {
             creep.say("NoTarget");

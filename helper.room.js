@@ -1,5 +1,9 @@
 var helperRoom = {
 
+    MEMORY_KEYS: {
+        DANGEROUS_ROOM: "DANGEROUS_ROOM"
+    },
+
     /** @param {Creep} creep **/
     findDeposit: function (room) {
 
@@ -203,6 +207,70 @@ var helperRoom = {
 
 
         return array;
+    },
+
+    findCombatTarget: function () {
+        var target = null;
+        if (null == target) {
+            var targets;
+            for (var roomName in Game.rooms) {
+                var room = Game.rooms[roomName];
+                targets = room.find(FIND_HOSTILE_CREEPS);
+                if (null != targets && targets.length > 0) {
+                    target = targets[0];
+                    break;
+                } else {
+                    targets = room.find(FIND_HOSTILE_STRUCTURES, {
+                        filter: (structure) => {
+                            return (structure.structureType !== STRUCTURE_CONTROLLER);
+                        }
+                    });
+                    if (null != targets && targets.length > 0) {
+                        target = targets[0];
+                        break;
+                    }
+                }
+            }
+        }
+        return target;
+    },
+
+    findHostile: function (room) {
+        var target = null;
+        target = room.find(FIND_HOSTILE_CREEPS);
+        if (null == target) {
+            target = room.find(FIND_HOSTILE_STRUCTURES);
+        }
+        return target;
+    },
+
+    /**
+     * Takes a room name
+     */
+    roomDataSetter: function (roomName, key, value) {
+        this.roomDataMemoryReader(roomName)[key] = value;
+    },
+
+    /**
+     * Takes a room name
+     */
+    roomDataGetter: function (roomName, key) {
+        return this.roomDataMemoryReader(roomName)[key];
+    },
+
+    /**
+     * private method
+     */
+    roomDataMemoryReader: function (roomName) {
+        if (null == Memory.roomDatas || Game.time % 4096 === 0) { // reset every 4096 (if accessed, this will be not often)
+            Memory.roomDatas = {};
+        }
+
+        if (null == Memory.roomDatas[roomName]) {
+            Memory.roomDatas[roomName] = {};
+        }
+
+        return Memory.roomDatas[roomName];
     }
 
 };

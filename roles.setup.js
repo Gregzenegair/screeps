@@ -1,4 +1,5 @@
 require('object.extension')();
+
 var helperEnergy = require('helper.energy');
 var helperMiner = require('helper.miner');
 var helperRoom = require('helper.room');
@@ -44,7 +45,7 @@ var rolesSetup = {
 
                     var roomName = assignableRooms[roomKey];
                     var room = Game.rooms[roomName];
-                    
+
                     if (null == room) {
                         console.log("Not spawning for room {" + roomName + "], no room found, because nothing mine in it");
                         continue;
@@ -120,6 +121,12 @@ var rolesSetup = {
                             console.log('Not spawning claimer yet, reason, not enough utility or room.controller.level <= 3');
                             continue;
                         }
+
+                        if ((type.name === this.UTILITY.name || type.name === this.MINER.name) && helperRoom.roomDataGetter(room.name, helperRoom.MEMORY_KEYS.DANGEROUS_ROOM)) {
+                            console.log('Not spawning utility or miner for room[' + room.name + '], reason, too dangerous');
+                            continue;
+                        }
+
 
 
 
