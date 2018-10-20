@@ -1,9 +1,14 @@
 module.exports = function () {
 
     StructureSpawn.prototype.spawnCustom = function spawnCustom(type, energy, spawn, roomAssigned) {
-
-        var body = type.baseBody;
+        
         var room = spawn.room;
+        var body = type.baseBody;
+        
+        if (null != room.controller && room.controller.level < 2
+                && type.name === "utility") {
+            type.baseBody.push(MOVE);
+        }
 
         var energyLeft = energy;
         var allPartsCost = this.getPartsCosts(type.baseBody);
