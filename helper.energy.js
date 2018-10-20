@@ -507,7 +507,7 @@ var helperEnergy = {
     },
 
     buildContainerToSource: function (energySource, room) {
-        if (room.controller && room.controller.level < 2 && Memory.totalSpawnCount <= 1) {
+        if (room.controller && room.controller.my && room.controller.level < 2 && Game.rooms === 1) {
             return "Not building container, too low controller (< 2) or inexistant";
         }
         var coords = this.hasAContainerAround(energySource, room);
