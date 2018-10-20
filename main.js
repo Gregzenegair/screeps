@@ -115,6 +115,8 @@ module.exports.loop = function () {
                 roomWithCombatUnit++;
             }
 
+            var constructResult = 0;
+
             if (null != room && null == helperRoom.findDeposit(room)) {
                 var spawn = helperRoom.findSpawn(room);
                 var depositRange = Math.floor(room.controller.level * 4 / 3);
@@ -139,7 +141,6 @@ module.exports.loop = function () {
                         }
                     }
 
-                    var constructResult = 0;
                     if (canBuild) {
                         constructResult = room.createConstructionSite(newPosX, newPosY, STRUCTURE_EXTENSION);
 
@@ -147,35 +148,38 @@ module.exports.loop = function () {
                             constructResult = room.createConstructionSite(newPosX, newPosY, STRUCTURE_TOWER);
                         }
                     }
+                }
 
-                    var canBuildPaths = (constructResult <= 0 && room.controller.level > 2)
-                            || helperController.isMyReservedController(room, 16);
+                var canBuildPaths = (constructResult <= 0 && room.controller.level > 2)
+                        || helperController.isMyReservedController(room, 16);
 
-                    if ((canBuildPaths && !Memory.pathBuilt[room.name])) {
-                        var pathsSources = helperRoom.findPathToSources(room);
-                        var pathsMyStructures = helperRoom.findPathMyStructures(room);
-                        var pathsExits = helperRoom.findPathExits(room);
-                        var paths = pathsSources.concat(pathsMyStructures).concat(pathsExits);
+                if ((canBuildPaths && !Memory.pathBuilt[room.name])) {
+                    var pathsSources = helperRoom.findPathToSources(room);
+                    var pathsMyStructures = helperRoom.findPathMyStructures(room);
+                    var pathsExits = helperRoom.findPathExits(room);
+                    var paths = pathsSources.concat(pathsMyStructures).concat(pathsExits);
 
-                        for (var i = 0; i < paths.length; i++) {
-                            var path = paths[i];
-                            for (var j = 0; j < path.length; j++) {
-                                var p = path[j];
-                                if (TERRAIN_MASK_WALL !== Game.map.getRoomTerrain(room.name).get(p.x, p.y)) {
-                                    constructResult = room.createConstructionSite(p.x, p.y, STRUCTURE_ROAD);
-                                }
+                    for (var i = 0; i < paths.length; i++) {
+                        var path = paths[i];
+                        for (var j = 0; j < path.length; j++) {
+                            var p = path[j];
+                            if (TERRAIN_MASK_WALL !== Game.map.getRoomTerrain(room.name).get(p.x, p.y)) {
+                                constructResult = room.createConstructionSite(p.x, p.y, STRUCTURE_ROAD);
                             }
                         }
-
-                        Memory.pathBuilt[room.name] = true;
                     }
+
+                    Memory.pathBuilt[room.name] = true;
+                }
+
+                /**
+                 * For each source build roads around
+                 */
+                if (canBuildPaths) {
+                    helperBuild.buildRoutesAround(room, sources);
                 }
             }
 
-            /**
-             * For each source build roads around
-             */
-            helperBuild.buildRoutesAround(room, sources);
 
             if (room.controller && null != sources && sources.length > 0) { // ensure there is a controller before trying to build a spawn
                 // calc average between spawn and sources :
