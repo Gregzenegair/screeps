@@ -36,14 +36,17 @@ var rolesSetup = {
             for (var key in Game.spawns) {
                 var spawn = Game.spawns[key];
 
-                var assignableRooms = {};
+//                var assignableRooms = {};
+//
+//                assignableRooms = Game.map.describeExits(spawn.room.name);
+//                assignableRooms[spawn.room.name] = spawn.room.name; //add it self
+//
+//                for (var roomKey in assignableRooms) {
 
-                assignableRooms = Game.map.describeExits(spawn.room.name);
-                assignableRooms[spawn.room.name] = spawn.room.name; //add it self
+//                    var roomName = assignableRooms[roomKey];
 
-                for (var roomKey in assignableRooms) {
+                for (var roomName in Game.rooms) {
 
-                    var roomName = assignableRooms[roomKey];
                     var room = Game.rooms[roomName];
 
                     if (null == room) {
@@ -68,7 +71,7 @@ var rolesSetup = {
                     var seekTypes = _.filter(Game.creeps, (creep) => creep.memory.role == type.name && creep.memory.roomAssigned == room.name
                                 && creep.ticksToLive > 32); // replace a dying creep sooner (by not counting it if under 32ttl)
 
-                    console.log("spawn=" + spawn.name + ", " + type.name + "=" + seekTypes.length);
+                    console.log("Current status for spawn=" + spawn.name + ", " + type.name + "=" + seekTypes.length);
 
                     if (null == Memory.utilityMaxCount[room.name]) {
                         var maxUtility = this.calcMaxUtility(room); //TODO set max utility by room with spawn ?
