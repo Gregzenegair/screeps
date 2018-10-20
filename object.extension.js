@@ -5,9 +5,10 @@ module.exports = function () {
         var room = spawn.room;
         var body = type.baseBody;
         
+        var baseBody = JSON.parse(JSON.stringify(type.baseBody));;
         if (null != room.controller && room.controller.level < 2
                 && type.name === "utility") {
-            type.baseBody.push(MOVE);
+            baseBody.push(MOVE);
         }
 
         var energyLeft = energy;
@@ -25,12 +26,12 @@ module.exports = function () {
                 break;
             }
 
-            body = body.concat(type.baseBody);
+            body = body.concat(baseBody);
             maxParts--;
         }
 
         if (type.simpleBody) {
-            body = type.baseBody;
+            body = baseBody;
         }
 
         // create creep with the created body and the given role
