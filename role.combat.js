@@ -18,7 +18,7 @@ var roleCombat = {
             if (null == target) {
                 target = helperCreep.findCombatTarget(creep);
             }
-            
+
             if (null != target) {
                 Memory.combatTarget = target.id;
                 Memory.combatExitRoom = target.room.name;
@@ -59,7 +59,7 @@ var roleCombat = {
             helperCreep.moveRandomly(creep, 8);
         } else {
             if (null == Memory.combatExitRoom) {
-                helperCreep.assigneRandomExitRoom(creep);
+                helperCreep.assigneRandomExitRoom(creep, {unwantedRooms: Memory.noControllerRooms});
             }
         }
 

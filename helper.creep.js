@@ -294,8 +294,11 @@ var helperCreep = {
 
             if (moveExit === ERR_NO_PATH || moveExit === ERR_INVALID_TARGET) {
                 console.log("No path found for room " + moveExit + " re-init target exitRoom");
-                if (Memory.unreachableRooms.indexOf(roomFromTo) === -1) {
-                    Memory.unreachableRooms.push(roomFromTo);
+                for (var i = 0; i < Memory.unreachableRooms.length; i++) {
+                    if (unreachableRoom[i].to != roomFromTo.to
+                            && unreachableRoom[i].from != roomFromTo.from) {
+                        Memory.unreachableRooms.push(roomFromTo);
+                    }
                 }
             }
 

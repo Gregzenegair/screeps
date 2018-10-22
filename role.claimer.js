@@ -43,7 +43,7 @@ var roleClaimer = {
             if (Memory.noControllerRooms.indexOf(room.name) < 0) {
                 Memory.noControllerRooms.push(room.name);
             }
-
+//TODO : add {unwantedRooms: Memory.noControllerRooms}
             var exitRoom = helperCreep.assigneRandomExitRoom(creep,
                     {unwantedRooms: Memory.noControllerRooms, wantedRooms: Memory.claimableControllerRooms});
 
