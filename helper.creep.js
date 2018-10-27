@@ -42,6 +42,7 @@ var helperCreep = {
                 creep.memory.alternativePath = true;
             }
         } else {
+            creep.memory.errorPathCount = 0;
             creep.memory.alternativePath = false;
         }
 
