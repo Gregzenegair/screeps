@@ -1,4 +1,5 @@
 var helperCreep = require('helper.creep');
+var helperRoom = require('helper.room');
 
 
 var roleCombat = {
@@ -16,7 +17,7 @@ var roleCombat = {
         if (Game.time % 64 === 0 || (null == Memory.combatTarget && hasBeenUnderAttack) || maxCombatUnit) {
             target = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
             if (null == target) {
-                target = helperCreep.findCombatTarget(creep);
+                target = helperRoom.findCombatTarget();
             }
 
             if (null != target) {
