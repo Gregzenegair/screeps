@@ -69,7 +69,7 @@ var helperCreep = {
             exit = creep.pos.findClosestByRange(exitDir);
             creep.memory.targetRoomExit = exit;
         } else {
-            exit = new RoomPosition(creep.memory.targetRoomExit.x, creep.memory.targetRoomExit.y, creep.memory.targetRoomExit.roomName);
+            exit = new RoomPosition(parseInt(creep.memory.targetRoomExit.x), parseInt(creep.memory.targetRoomExit.y), creep.memory.targetRoomExit.roomName);
         }
 
         creep.memory.previousRoomName = creep.room.name;
@@ -294,11 +294,15 @@ var helperCreep = {
 
             if (moveExit === ERR_NO_PATH || moveExit === ERR_INVALID_TARGET) {
                 console.log("No path found for room " + moveExit + " re-init target exitRoom");
+                var roomFound = false;
                 for (var i = 0; i < Memory.unreachableRooms.length; i++) {
-                    if (unreachableRoom[i].to != roomFromTo.to
-                            && unreachableRoom[i].from != roomFromTo.from) {
-                        Memory.unreachableRooms.push(roomFromTo);
+                    if (Memory.unreachableRooms[i].to == roomFromTo.to
+                            && Memory.unreachableRooms[i].from == roomFromTo.from) {
+                        roomFound = true;
                     }
+                }
+                if (!roomFound) {
+                    Memory.unreachableRooms.push(roomFromTo);
                 }
             }
 
