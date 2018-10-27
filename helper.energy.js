@@ -242,11 +242,13 @@ var helperEnergy = {
                 console.log("find a new path for creep=" + creep.name);
                 energySource = helperEnergy.findNearestEnergySource(creep, !creep.memory.filler, !canSeekForSources);
                 creep.memory.alternativePath = true; // may already be true
+                creep.memory.errorPathCount = 0;
             }
 
             if (null == energySource) {
                 energySource = helperEnergy.findValidPathHarvestSource(creep);
                 creep.memory.alternativePath = true; // may already be true
+                creep.memory.errorPathCount = 0;
             }
 
             if (null == energySource) {
