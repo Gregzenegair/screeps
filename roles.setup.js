@@ -110,7 +110,7 @@ var rolesSetup = {
                     }
 
                     if (seekTypes.length < type.maxCount) {
-                        if ((type.name === this.COMBAT.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name] && Memory.hasBeenUnderAttack <= 0) || (type.name === this.COMBAT.name && null != room.controller && room.controller.level <= 3 && Memory.hasBeenUnderAttack <= 0)) {
+                        if ((type.name === this.COMBAT.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name]) || (type.name === this.COMBAT.name && null != room.controller && room.controller.level <= 3)) {
                             console.log('Not spawning combat yet, reason, not enough utility or room.controller.level <= 3');
                             continue;
                         }
@@ -133,11 +133,13 @@ var rolesSetup = {
 
 
 
-                        var spawnResult = spawn.spawnCustom(type, spawn.room.energyCapacityAvailable, spawn, room.name);
+                        var spawnResult;
                         if (Memory.utilityUnitCount[spawn.room.name] <= 1) {
                             spawnResult = spawn.spawnCustom(type, spawn.room.energyAvailable, spawn, room.name);
+                        } else {
+                            spawnResult = spawn.spawnCustom(type, spawn.room.energyCapacityAvailable, spawn, room.name);
                         }
-                        if (!(spawnResult < 0)) {
+                        if (spawnResult >= 0) {
                             console.log('Spawned new wanted type : ' + type.name);
                         } else {
                             console.log('Error spawning wanted type : ' + type.name + ' Error=' + spawnResult);
