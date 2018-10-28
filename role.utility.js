@@ -36,7 +36,6 @@ var roleUtility = {
             creep.memory.isEmptyResources = false;
             creep.memory.canWork = true;
             creep.memory.energySourceId = null;
-            creep.say('Use/drop ☢︎');
         }
 
         if (creep.carry.energy === 0) {
@@ -111,6 +110,7 @@ var roleUtility = {
             if (creep.memory.filler && !creep.memory.upgrade
                     && !this.getBuildingPriority(creep)) {
                 target = roleFiller.run(creep);
+                creep.say('Drop ☢︎');
             }
 
             if (null == target && creep.memory.filler) {
@@ -126,14 +126,17 @@ var roleUtility = {
                     && null != creep.room.controller
                     && creep.room.controller && creep.room.controller.my) {
                 target = roleRepairer.run(creep);
+                creep.say('Repair');
             }
 
             if (null == target && !creep.memory.upgrade) {
                 target = roleBuilder.run(creep);
+                creep.say('Build');
             }
 
             if (null == target) {
                 target = roleUpgrader.run(creep);
+                creep.say('Upgrade');
             }
             
             var moveExit = OK;
@@ -144,10 +147,10 @@ var roleUtility = {
                 //TODO : or has movved to an other room, keep it back to home
                 if (creep.memory.roomHome != creep.room.name) {
                     if (null != creep.memory.roomHome) {
-                        creep.say('BackHome');
+                        creep.say('BHome ☢︎');
                         moveExit = helperCreep.moveToAnOtherRoom(creep, creep.memory.roomHome);
                     } else {
-                        creep.say('BackR');
+                        creep.say('BRand ☢︎');
                         moveExit = helperCreep.assigneRandomExitRoom(creep);
                     }
                 }

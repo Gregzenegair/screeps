@@ -231,6 +231,12 @@ var helperRoom = {
                         target = targets[0];
                         break;
                     }
+                    if (null == target) {
+                        targets = room.find(FIND_HOSTILE_CONSTRUCTION_SITES);
+                        if (null != targets && targets.length > 0) {
+                            target = targets[0];
+                        }
+                    }
                 }
             }
         }

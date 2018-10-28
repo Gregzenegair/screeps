@@ -4,7 +4,7 @@ var helperRoom = require('helper.room');
 
 var helperCreep = {
 
-    moveTo: function (creep, target, ignoreCreeps, range) { // should be into an helper class
+    moveTo: function (creep, target, ignoreCreeps, range) {
 
         if (null == range) {
             range = 0;
@@ -16,11 +16,11 @@ var helperCreep = {
         }
 
         if (null == ignoreCreeps || creep.memory.alternativePath) {
-            ignoreCreeps = false;
+            ignoreCreeps = false;            
         }
 
         var moveResult = creep.moveTo(target, {
-            reusePath: 8,
+            reusePath: 16,
             visualizePathStyle: {stroke: '#fffd00'},
             ignoreCreeps: ignoreCreeps,
             maxRooms: 1,
