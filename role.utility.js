@@ -43,7 +43,6 @@ var roleUtility = {
             creep.memory.isFullResources = false;
             creep.memory.canWork = false;
             creep.memory.filler = false;
-            creep.say('Get ☢︎');
         }
 
         if (!creep.memory.canWork) {
@@ -94,7 +93,7 @@ var roleUtility = {
                     creep.memory.filler = true;
                 }
 
-
+            creep.say('Get ☢︎');
             } else {
                 console.log("energySource is null or not found");
                 creep.memory.energySourceId = null;

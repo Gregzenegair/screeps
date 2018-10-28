@@ -35,7 +35,7 @@ var helperCreep = {
         creep.memory.previousPosX = creep.pos.x;
         creep.memory.previousPosY = creep.pos.y;
 
-        if (moveResult === ERR_NO_PATH || !didMove) {
+        if (moveResult === ERR_NO_PATH || !didMove && creep.fatigue === 0) {
             creep.memory.errorPathCount++;
             if (creep.memory.errorPathCount > 3) {
                 creep.memory.errorPathCount = 0;
