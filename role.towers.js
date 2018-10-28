@@ -7,7 +7,7 @@ var roleTowers = {
         for (var name in Game.rooms) {
             var room = Game.rooms[name];
 
-            if (null == Memory.myTowers || Game.time % 2048 === 0) {
+            if (null == Memory.myTowers || Game.time % 1024 === 0) {
                 Memory.myTowers = {};
             }
 
