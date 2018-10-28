@@ -63,19 +63,20 @@ var helperRoom = {
      */
     findPathToSources: function (room) {
         var spawn = this.findSpawn(room);
-        var targets = room.find(FIND_SOURCES);
         var paths = [];
-        for (var i = 0; i < targets.length; i++) {
-            var target = targets[i];
-            paths[i] = spawn.pos.findPathTo(target, {
-                ignoreCreeps: true,
-                ignoreDestructibleStructures: false,
-                ignoreRoads: false,
-                swampCost: 1,
-                plainCost: 1
-            });
+        if (null != spawn) {
+            var targets = room.find(FIND_SOURCES);
+            for (var i = 0; i < targets.length; i++) {
+                var target = targets[i];
+                paths[i] = spawn.pos.findPathTo(target, {
+                    ignoreCreeps: true,
+                    ignoreDestructibleStructures: false,
+                    ignoreRoads: false,
+                    swampCost: 1,
+                    plainCost: 1
+                });
+            }
         }
-
         return paths;
     },
 
