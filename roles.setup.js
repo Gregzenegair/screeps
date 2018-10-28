@@ -64,7 +64,7 @@ var rolesSetup = {
                     if (room.name != spawn.room.name &&
                             (Memory.utilityUnitCount[spawn.room.name] < Memory.utilityMaxCount[spawn.room.name]
                                     || Memory.minerUnitCount[spawn.room.name] < Memory.minerMaxCount[spawn.room.name])) {
-                        console.log("Not spawning spawn room [" + spawn.room.name + "] for this room yet, current spawn has not yet it's max utility units");
+                        console.log("Not spawning spawn room [" + spawn.room.name + "] for this room " + room.name + " yet, current spawn has not yet it's max utility units");
                         continue;
                     }
 
@@ -125,7 +125,7 @@ var rolesSetup = {
                             continue;
                         }
 
-                        if ((type.name === this.UTILITY.name || type.name === this.MINER.name) && helperRoom.roomDataGetter(room.name, helperRoom.MEMORY_KEYS.DANGEROUS_ROOM)) {
+                        if ((type.name === this.UTILITY.name || type.name === this.MINER.name) && helperRoom.roomDataGetter(room.name, helperRoom.MEMORY_KEYS.DANGEROUS_ROOM && room.name != spawn.room.name)) {
                             console.log('Not spawning utility or miner for room[' + room.name + '], reason, too dangerous');
                             continue;
                         }
