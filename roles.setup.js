@@ -15,7 +15,7 @@ var rolesSetup = {
 
     /** @param {Creep} creep **/
     spawn: function (type) {
-        if (Game.time % 16 === 0 || null == Memory.utilityMaxCount) {
+        if (Game.time % 32 === 0 || null == Memory.utilityMaxCount) {
             if (null == Memory.utilityMaxCount || null == Memory.minerMaxCount || Game.time % 1024 === 0) {
                 Memory.utilityMaxCount = {};
                 Memory.utilityUnitCount = {};
@@ -69,7 +69,7 @@ var rolesSetup = {
                     }
 
                     var seekTypes = _.filter(Game.creeps, (creep) => creep.memory.role == type.name && creep.memory.roomAssigned == room.name
-                                && creep.ticksToLive > 32); // replace a dying creep sooner (by not counting it if under 32ttl)
+                                && creep.ticksToLive > 48); // replace a dying creep sooner (by not counting it if under 32ttl)
 
                     console.log("Current status for spawn=" + spawn.name + ", " + type.name + "=" + seekTypes.length);
 
@@ -110,17 +110,17 @@ var rolesSetup = {
                     }
 
                     if (seekTypes.length < type.maxCount) {
-                        if ((type.name === this.COMBAT.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name]) || (type.name === this.COMBAT.name && null != room.controller && room.controller.level <= 3)) {
+                        if ((type.name === this.COMBAT.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name]) || (type.name === this.COMBAT.name && null != room.controller && room.controller.my && room.controller.level <= 3)) {
                             console.log('Not spawning combat yet, reason, not enough utility or room.controller.level <= 3');
                             continue;
                         }
 
-                        if ((type.name === this.HEALER.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name]) || (type.name === this.HEALER.name && null != room.controller && room.controller.level <= 3)) {
+                        if ((type.name === this.HEALER.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name]) || (type.name === this.HEALER.name && null != room.controller && room.controller.my && room.controller.level <= 3)) {
                             console.log('Not spawning heal yet, reason, not enough utility or room.controller.level <= 3');
                             continue;
                         }
 
-                        if ((type.name === this.CLAIM.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name]) || (type.name === this.CLAIM.name && null != room.controller && room.controller.level <= 3)) {
+                        if ((type.name === this.CLAIM.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name]) || (type.name === this.CLAIM.name && null != room.controller && room.controller.my && room.controller.level <= 3)) {
                             console.log('Not spawning claimer yet, reason, not enough utility or room.controller.level <= 3');
                             continue;
                         }
