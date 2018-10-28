@@ -110,7 +110,7 @@ var rolesSetup = {
                     }
 
                     if (seekTypes.length < type.maxCount) {
-                        if ((type.name === this.COMBAT.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name]) || (type.name === this.COMBAT.name && null != room.controller && room.controller.my && room.controller.level <= 3)) {
+                        if ((type.name === this.COMBAT.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name]) || (type.name === this.COMBAT.name && null != room.controller && room.controller.my && room.controller.level <= 3) && Memory.hasBeenUnderAttack < 6) {
                             console.log('Not spawning combat yet, reason, not enough utility or room.controller.level <= 3');
                             continue;
                         }
