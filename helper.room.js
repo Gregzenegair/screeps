@@ -176,6 +176,10 @@ var helperRoom = {
         }
 
         return Memory.roomDatas[roomName];
+    },
+
+    scanRoom: function (room) {
+
     }
 
 };

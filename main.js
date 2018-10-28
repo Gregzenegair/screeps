@@ -119,9 +119,15 @@ module.exports.loop = function () {
 
             if (null != room && null == helperRoom.findDeposit(room)) {
                 var spawn = helperRoom.findSpawn(room);
-                var depositRange = Math.floor(room.controller.level * 4 / 3);
-                depositRange = depositRange < 4 ? 4 : depositRange;
+
                 if (spawn) {// TODO: move random positionner to a class helper
+                    var depositRange
+                    if (null != room && null != room.controller) {
+                        depositRange = Math.floor(room.controller.level * 4 / 3);
+                        depositRange = depositRange < 4 ? 4 : depositRange;
+                    } else {
+                        depositRange = 3;
+                    }
                     var newPosX = spawn.pos.x + Math.myRandom(-depositRange, depositRange);
                     var newPosY = spawn.pos.y + Math.myRandom(-depositRange, depositRange);
                     newPosX = newPosX < 0 ? 0 : newPosX;
@@ -150,15 +156,14 @@ module.exports.loop = function () {
                     }
                 }
 
-                var canBuildPaths = (constructResult <= 0 && room.controller.level > 2)
+                var canBuildPaths = (constructResult <= 0 && null != room && null != room.controller && room.controller.level > 2)
                         || helperController.isMyReservedController(room, 16);
 
                 if ((canBuildPaths && !Memory.pathBuilt[room.name])) {
                     var pathsSources = helperBuild.findPathToSources(room);
                     var pathsMyStructures = helperBuild.findPathMyStructures(room);
                     var pathsExits = helperBuild.findPathExits(room);
-                    var pathsExitsToSources = helperBuild.findPathExitsToSources(room);
-                    var paths = pathsSources.concat(pathsMyStructures).concat(pathsExits).concat(pathsExitsToSources);
+                    var paths = pathsSources.concat(pathsMyStructures).concat(pathsExits);
 
                     for (var i = 0; i < paths.length; i++) {
                         var path = paths[i];

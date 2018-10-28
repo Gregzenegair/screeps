@@ -64,19 +64,8 @@ var roleCombat = {
             }
         }
 
-    },
-
-    setExplorationData: function (creep) {
-        var room = creep.room;
-        if (null == Memory.roomData) {
-            Memory.roomData = [];
-        }
-
-        Memory.roomData[room] = {};
-        Memory.roomData[room].sources = room.find(FIND_SOURCES);
     }
-
-}
-;
+    
+};
 
 module.exports = roleCombat;
