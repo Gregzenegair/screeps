@@ -101,9 +101,7 @@ module.exports.loop = function () {
 
     if (Game.time % 64 === 0) {
         Memory.hasBeenUnderAttack--;
-    }
 
-    if (Game.time % 256 === 0) {
         Memory.lastWantedBuild = {};
 
         var roomWithCombatUnit = 0;
