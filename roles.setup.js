@@ -64,7 +64,7 @@ var rolesSetup = {
                     if (room.name != spawn.room.name &&
                             (Memory.utilityUnitCount[spawn.room.name] < Memory.utilityMaxCount[spawn.room.name]
                                     || Memory.minerUnitCount[spawn.room.name] < Memory.minerMaxCount[spawn.room.name])) {
-                        console.log("Not spawning spawn{" + spawn.room.name + "] for this room yet, current spawn has not yet it's max utility units");
+                        console.log("Not spawning spawn room [" + spawn.room.name + "] for this room yet, current spawn has not yet it's max utility units");
                         continue;
                     }
 

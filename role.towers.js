@@ -31,21 +31,34 @@ var roleTowers = {
                 }
 
                 if (Game.time % 32 === 0) {
-                    var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-                        filter: (structure) => structure.hits < structure.hitsMax / 3 && structure.structureType !== STRUCTURE_WALL
-                        && structure.isActive()
-                    });
-                    Memory.myTowers[name][i].closestDamagedStructure = closestDamagedStructure;
 
+                    var closestHostile;
 
-                    var closestDamagedCreep = tower.pos.findClosestByRange(FIND_CREEPS, {
-                        filter: (creep) => creep.hits < creep.hitsMax
-                    });
-                    Memory.myTowers[name][i].closestDamagedCreep = closestDamagedCreep;
-
-
-                    var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+                    closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
                     Memory.myTowers[name][i].closestHostile = closestHostile;
+
+                    if (null == closestHostile) {
+                        var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+                            filter: (structure) => structure.hits < structure.hitsMax / 3 && structure.structureType !== STRUCTURE_WALL
+                                        && structure.isActive()
+                        });
+                        Memory.myTowers[name][i].closestDamagedStructure = closestDamagedStructure;
+                    }
+
+                    var closestDamagedCreep;
+                    if (null == closestDamagedStructure) {
+                        closestDamagedCreep = tower.pos.findClosestByRange(FIND_CREEPS, {
+                            filter: (creep) => creep.hits < creep.hitsMax
+                        });
+                        Memory.myTowers[name][i].closestDamagedCreep = closestDamagedCreep;
+                    }
+
+                }
+
+                if (Memory.myTowers[name][i].closestHostile) {
+                    Memory.hasBeenUnderAttack++; // consider that we are under attack
+                    var resultAttack = tower.attack(Game.getObjectById(Memory.myTowers[name][i].closestHostile.id));
+                    console.log("Towers in room [" + name + "] resultAttack=" + resultAttack);
                 }
 
                 if (Memory.myTowers[name][i].closestDamagedCreep) {
@@ -56,12 +69,6 @@ var roleTowers = {
                 if (null != Memory.myTowers[name][i].closestDamagedStructure) {
                     var resultRepairBuilding = tower.repair(Game.getObjectById(Memory.myTowers[name][i].closestDamagedStructure.id));
 //                    console.log("resultRepairBuilding=" + resultRepairBuilding);
-                }
-
-                if (Memory.myTowers[name][i].closestHostile) {
-                    Memory.hasBeenUnderAttack++; // consider taht we are under attack
-                    var resultAttack = tower.attack(Game.getObjectById(Memory.myTowers[name][i].closestHostile.id));
-                    console.log("resultAttack=" + resultAttack);
                 }
 
 
