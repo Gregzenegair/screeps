@@ -154,10 +154,11 @@ module.exports.loop = function () {
                         || helperController.isMyReservedController(room, 16);
 
                 if ((canBuildPaths && !Memory.pathBuilt[room.name])) {
-                    var pathsSources = helperRoom.findPathToSources(room);
-                    var pathsMyStructures = helperRoom.findPathMyStructures(room);
-                    var pathsExits = helperRoom.findPathExits(room);
-                    var paths = pathsSources.concat(pathsMyStructures).concat(pathsExits);
+                    var pathsSources = helperBuild.findPathToSources(room);
+                    var pathsMyStructures = helperBuild.findPathMyStructures(room);
+                    var pathsExits = helperBuild.findPathExits(room);
+                    var pathsExitsToSources = helperBuild.findPathExitsToSources(room);
+                    var paths = pathsSources.concat(pathsMyStructures).concat(pathsExits).concat(pathsExitsToSources);
 
                     for (var i = 0; i < paths.length; i++) {
                         var path = paths[i];
