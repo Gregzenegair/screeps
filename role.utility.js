@@ -93,7 +93,7 @@ var roleUtility = {
                     creep.memory.filler = true;
                 }
 
-            creep.say('Get ☢︎');
+                creep.say('Get ☢︎');
             } else {
                 console.log("energySource is null or not found");
                 creep.memory.energySourceId = null;
@@ -137,7 +137,7 @@ var roleUtility = {
                 target = roleUpgrader.run(creep);
                 creep.say('Upgrade');
             }
-            
+
             var moveExit = OK;
             if (null == target) {
                 target = -1; // quick fix
@@ -155,7 +155,7 @@ var roleUtility = {
                 }
             }
 
-            if (null == target || moveExit != OK) {
+            if (null == target || moveExit != OK && creep.fatigue === 0) {
                 helperCreep.moveRandomly(creep, 8); // prevent to stay stuck (may block a miner position)
             }
 

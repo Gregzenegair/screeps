@@ -4,7 +4,11 @@ var helperRoom = require('helper.room');
 
 var helperCreep = {
 
-    moveTo: function (creep, target, ignoreCreeps, range) {
+    moveTo: function (creep, target, ignoreCreeps, range, visualizePathStyle) {
+
+        if (null == visualizePathStyle) {
+            visualizePathStyle = {stroke: '#fffd00'};
+        }
 
         if (null == range) {
             range = 0;
@@ -16,28 +20,22 @@ var helperCreep = {
         }
 
         if (null == ignoreCreeps || creep.memory.alternativePath) {
-            ignoreCreeps = false;            
+            ignoreCreeps = false;
         }
 
         var moveResult = creep.moveTo(target, {
             reusePath: 16,
-            visualizePathStyle: {stroke: '#fffd00'},
+            visualizePathStyle: visualizePathStyle,
             ignoreCreeps: ignoreCreeps,
             maxRooms: 1,
             range: range // prevent to walk over sources, gain cpu time
         });
 
-        var didMove = true;
-        if (creep.memory.previousPosX === creep.pos.x && creep.memory.previousPosY === creep.pos.y) {
-            didMove = false;
-        }
+        var isStuck = this.isStuck(creep);
 
-        creep.memory.previousPosX = creep.pos.x;
-        creep.memory.previousPosY = creep.pos.y;
-
-        if ((moveResult === ERR_NO_PATH || !didMove) && creep.fatigue === 0) {
+        if (isStuck) {
             creep.memory.errorPathCount++;
-            if (creep.memory.errorPathCount > 3) {
+            if (creep.memory.errorPathCount > 4) {
                 creep.memory.errorPathCount = 0;
                 creep.memory.alternativePath = true;
             }
@@ -75,17 +73,27 @@ var helperCreep = {
 
         creep.memory.previousRoomName = creep.room.name;
 
-        var moveExit = null;
+        var moveExit = OK;
         if (null != exit) {
-            moveExit = creep.moveTo(exit, {
-                reusePath: 64,
-                visualizePathStyle: {stroke: '#4462ac'},
-                maxRooms: 1
-            });
-
+            moveExit = this.moveTo(creep, exit, null, null, {stroke: '#4462ac'});
         }
 
         return moveExit;
+    },
+
+    isStuck: function (creep) {
+        if (creep.fatigue !== 0) {
+            return false;
+        }
+        var moved = true;
+        if (creep.memory.previousPosX === creep.pos.x && creep.memory.previousPosY === creep.pos.y) {
+            moved = false;
+        }
+
+        creep.memory.previousPosX = creep.pos.x;
+        creep.memory.previousPosY = creep.pos.y;
+
+        return !moved;
     },
 
     /** @param {Creep} creep **/
@@ -291,7 +299,9 @@ var helperCreep = {
         if (creep.room.name != creep.memory.roomAssigned && !creep.memory.roomAssignedReached) {
             roomFromTo.to = creep.memory.roomAssigned;
             creep.say("🏃");
+
             var moveExit = helperCreep.moveToAnOtherRoom(creep, creep.memory.roomAssigned);
+//            var isStuck = this.isStuck(creep);
 
             if (moveExit === ERR_NO_PATH || moveExit === ERR_INVALID_TARGET) {
                 console.log("No path found for room " + moveExit + " re-init target exitRoom");
