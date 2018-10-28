@@ -35,7 +35,7 @@ var helperCreep = {
 
         if (isStuck) {
             creep.memory.errorPathCount++;
-            if (creep.memory.errorPathCount > 4) {
+            if (creep.memory.errorPathCount > 1) {
                 creep.memory.errorPathCount = 0;
                 creep.memory.alternativePath = true;
             }

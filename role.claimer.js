@@ -78,7 +78,7 @@ var roleClaimer = {
                     var claimAttackResult = creep.attackController(room.controller);
                     creep.say("C A=" + claimAttackResult);
                     if (claimAttackResult != OK) {
-                        creep.memory.claimingSpotError++;
+//                        creep.memory.claimingSpotError++;
                     }
                 } else {
                     creep.memory.claimingSpotError = 0;
