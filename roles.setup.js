@@ -115,7 +115,7 @@ var rolesSetup = {
                             continue;
                         }
 
-                        if ((type.name === this.HEALER.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name]) || (type.name === this.HEALER.name && null != room.controller && room.controller.my && room.controller.level <= 3)) {
+                        if ((type.name === this.HEALER.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name]) || (type.name === this.HEALER.name && null != room.controller && room.controller.my && room.controller.level <= 3) && Memory.hasBeenUnderAttack < 9) {
                             console.log('Not spawning heal yet, reason, not enough utility or room.controller.level <= 3');
                             continue;
                         }
