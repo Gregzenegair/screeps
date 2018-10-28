@@ -158,7 +158,7 @@ var roleUtility = {
             }
 
         }
-        if (Game.time % 256 === 0) {
+        if (Game.time % 256 === 0 || null == creep.memory.upgrade) {
             this.mustUpgrade(creep);
         }
     },
