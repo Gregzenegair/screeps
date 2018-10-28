@@ -27,13 +27,12 @@ var roleClaimer = {
         if (creep.memory.claimingSpotError > 3) {
             creep.memory.claimingSpot = false;
             creep.memory.claimingSpotError = 0;
+            helperCreep.assigneRandomExitRoom(creep);
         }
 
 
-        if (null == creep.memory.claimingSpotError || null == creep.memory.previousPosX || null == creep.memory.previousPosY) {
+        if (null == creep.memory.claimingSpotError) {
             creep.memory.claimingSpotError = 0;
-            creep.memory.previousPosX = 0;
-            creep.memory.previousPosY = 0;
         }
 
 
@@ -84,6 +83,12 @@ var roleClaimer = {
                 } else {
                     creep.memory.claimingSpotError = 0;
                 }
+            }
+
+            if (helperCreep.isStuck(creep)) {
+                creep.memory.claimingSpotError++;
+            } else {
+                creep.memory.claimingSpotError = 0;
             }
         }
 
