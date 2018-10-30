@@ -56,6 +56,30 @@ var rolesSetup = {
                         continue;
                     }
 
+                    if (null == Memory.utilityMaxCount[room.name]) {
+                        var maxUtility = this.calcMaxUtility(room); //TODO set max utility by room with spawn ?
+                        Memory.utilityMaxCount[room.name] = maxUtility;
+                        Memory.utilityUnitCount[room.name] = 0;
+                        console.log("calculated maxUtility=" + maxUtility);
+
+                        var maxMiner = this.calcMaxMiner(room);
+                        Memory.minerMaxCount[room.name] = maxMiner;
+                        Memory.minerUnitCount[room.name] = 0;
+                        console.log("calculated maxMiner=" + maxMiner);
+                    }
+
+
+                    var seekTypes = _.filter(Game.creeps, (creep) => creep.memory.role == type.name && creep.memory.roomAssigned == room.name
+                                && creep.ticksToLive > 48); // replace a dying creep sooner (by not counting it if under 32ttl)
+
+                    if (type.name === "utility") {
+                        Memory.utilityUnitCount[room.name] = seekTypes.length;
+                    }
+
+                    if (type.name === "miner") {
+                        Memory.minerUnitCount[room.name] = seekTypes.length;
+                    }
+
 //                    var spawn = helperRoom.findSpawn(room);
 //
 //                    if (null == spawn) {
@@ -70,30 +94,9 @@ var rolesSetup = {
                         continue;
                     }
 
-                    var seekTypes = _.filter(Game.creeps, (creep) => creep.memory.role == type.name && creep.memory.roomAssigned == room.name
-                                && creep.ticksToLive > 48); // replace a dying creep sooner (by not counting it if under 32ttl)
 
 //                    console.log("Current status for spawn=" + spawn.name + ", " + type.name + "=" + seekTypes.length);
 
-                    if (null == Memory.utilityMaxCount[room.name]) {
-                        var maxUtility = this.calcMaxUtility(room); //TODO set max utility by room with spawn ?
-                        Memory.utilityMaxCount[room.name] = maxUtility;
-                        Memory.utilityUnitCount[room.name] = 0;
-                        console.log("calculated maxUtility=" + maxUtility);
-
-                        var maxMiner = this.calcMaxMiner(room);
-                        Memory.minerMaxCount[room.name] = maxMiner;
-                        Memory.minerUnitCount[room.name] = 0;
-                        console.log("calculated maxMiner=" + maxMiner);
-                    }
-
-                    if (type.name === "utility") {
-                        Memory.utilityUnitCount[room.name] = seekTypes.length;
-                    }
-
-                    if (type.name === "miner") {
-                        Memory.minerUnitCount[room.name] = seekTypes.length;
-                    }
 
                     if (type.name === this.UTILITY.name && null != Memory.utilityMaxCount[room.name]) {
                         type.maxCount = Memory.utilityMaxCount[room.name];
@@ -132,7 +135,7 @@ var rolesSetup = {
                             continue;
                         }
 
-                        if (null != Memory.roomSpawnedType[room] && null != Memory.roomSpawnedType[room][type.name] && Memory.roomSpawnedType[room][type.name]) {
+                        if (null != Memory.roomSpawnedType[room.name] && null != Memory.roomSpawnedType[room.name][type.name] && Memory.roomSpawnedType[room.name][type.name]) {
                             console.log('Not spawning [' + type.name + '] for room[' + room.name + '], reason: just already spawned');
                             continue;
                         }
