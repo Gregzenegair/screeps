@@ -102,6 +102,9 @@ module.exports.loop = function () {
     if (Game.time % 64 === 0) {
         Memory.hasBeenUnderAttack--;
 
+    }
+    
+    if (Game.time % 128 === 0) {
         Memory.lastWantedBuild = {};
 
         var roomWithCombatUnit = 0;
@@ -154,7 +157,7 @@ module.exports.loop = function () {
                     }
                 }
 
-                var canBuildPaths = (constructResult <= 0 && null != room && null != room.controller && room.controller.level > 2)
+                var canBuildPaths = (constructResult <= 0 && null != room && null != room.controller && room.controller.level > 1)
                         || helperController.isMyReservedController(room, 16);
 
                 if ((canBuildPaths && !Memory.pathBuilt[room.name])) {

@@ -57,9 +57,9 @@ var helperCreep = {
         if (null != creep.memory.previousRoomName && creep.room.name != creep.memory.previousRoomName) {
             creep.memory.targetRoomExit = null;
             creep.say("New Room");
-            
+
             helperRoom.scanRoom(creep.room);
-            
+
             var target = helperRoom.findHostile(creep.room);
             if (null != target) {
                 helperRoom.roomDataSetter(creep.room.name, helperRoom.MEMORY_KEYS.DANGEROUS_ROOM, true);

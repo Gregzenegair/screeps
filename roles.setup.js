@@ -33,6 +33,8 @@ var rolesSetup = {
 
             Memory.totalSpawnCount = Game.spawns.length;
 
+            Memory.roomSpawnedType = {};
+
             for (var key in Game.spawns) {
                 var spawn = Game.spawns[key];
 
@@ -71,7 +73,7 @@ var rolesSetup = {
                     var seekTypes = _.filter(Game.creeps, (creep) => creep.memory.role == type.name && creep.memory.roomAssigned == room.name
                                 && creep.ticksToLive > 48); // replace a dying creep sooner (by not counting it if under 32ttl)
 
-                    console.log("Current status for spawn=" + spawn.name + ", " + type.name + "=" + seekTypes.length);
+//                    console.log("Current status for spawn=" + spawn.name + ", " + type.name + "=" + seekTypes.length);
 
                     if (null == Memory.utilityMaxCount[room.name]) {
                         var maxUtility = this.calcMaxUtility(room); //TODO set max utility by room with spawn ?
@@ -111,26 +113,29 @@ var rolesSetup = {
 
                     if (seekTypes.length < type.maxCount) {
                         if ((type.name === this.COMBAT.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name]) || (type.name === this.COMBAT.name && null != room.controller && room.controller.my && room.controller.level <= 3) && Memory.hasBeenUnderAttack < 6) {
-                            console.log('Not spawning combat yet, reason, not enough utility or room.controller.level <= 3');
+                            console.log('Not spawning combat yet, reason: not enough utility or room.controller.level <= 3');
                             continue;
                         }
 
                         if ((type.name === this.HEALER.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name]) || (type.name === this.HEALER.name && null != room.controller && room.controller.my && room.controller.level <= 3) && Memory.hasBeenUnderAttack < 9) {
-                            console.log('Not spawning heal yet, reason, not enough utility or room.controller.level <= 3');
+                            console.log('Not spawning heal yet, reason: not enough utility or room.controller.level <= 3');
                             continue;
                         }
 
                         if ((type.name === this.CLAIM.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name]) || (type.name === this.CLAIM.name && null != room.controller && room.controller.my && room.controller.level <= 3)) {
-                            console.log('Not spawning claimer yet, reason, not enough utility or room.controller.level <= 3');
+                            console.log('Not spawning claimer yet, reason: not enough utility or room.controller.level <= 3');
                             continue;
                         }
 
                         if ((type.name === this.UTILITY.name || type.name === this.MINER.name) && helperRoom.roomDataGetter(room.name, helperRoom.MEMORY_KEYS.DANGEROUS_ROOM && room.name != spawn.room.name)) {
-                            console.log('Not spawning utility or miner for room[' + room.name + '], reason, too dangerous');
+                            console.log('Not spawning utility or miner for room[' + room.name + '], reason: too dangerous');
                             continue;
                         }
 
-
+                        if (null != Memory.roomSpawnedType[room] && null != Memory.roomSpawnedType[room][type.name] && Memory.roomSpawnedType[room][type.name]) {
+                            console.log('Not spawning [' + type.name + '] for room[' + room.name + '], reason: just already spawned');
+                            continue;
+                        }
 
 
                         var spawnResult;
@@ -141,6 +146,10 @@ var rolesSetup = {
                         }
                         if (spawnResult >= 0) {
                             console.log('Spawned new wanted type : ' + type.name);
+                            if (null == Memory.roomSpawnedType[room.name]) {
+                                Memory.roomSpawnedType[room.name] = {};
+                            }
+                            Memory.roomSpawnedType[room.name][type.name] = true;
                         } else {
                             console.log('Error spawning wanted type : ' + type.name + ' Error=' + spawnResult);
                         }
@@ -166,14 +175,20 @@ var rolesSetup = {
         console.log("mineSpots=" + mineSpots);
 
         var roomControlerLevel = 0;
-        if (null != room.controller && null != room.controller.level) {
-            roomControlerLevel = room.controller.level
+
+        if (null != room.controller && null != room.controller.level && room.controller.my) {
+            roomControlerLevel = room.controller.level;
+
+            result = Math.round(Math.round(mineSpots * 0.4) - (roomControlerLevel / 2));
+            result += sourcesCount * 3.2;
+            console.log("calcMaxUtility=" + result);
+            return Math.round(result);
+        } else if (mineSpots !== 0) {
+            return 2;
+        } else {
+            return 0;
         }
 
-        result = Math.round(Math.round(mineSpots * 0.4) - (roomControlerLevel / 2));
-        result += sourcesCount * 3.2;
-        console.log("calcMaxUtility=" + result);
-        return Math.round(result);
     },
 
     calcMaxMiner: function (room) {

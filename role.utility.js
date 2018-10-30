@@ -43,6 +43,13 @@ var roleUtility = {
             creep.memory.isFullResources = false;
             creep.memory.canWork = false;
             creep.memory.filler = false;
+            
+            /**
+             * Make external creeps go back to their working room
+             */
+            if (creep.memory.roomHome == creep.room.name) {
+                creep.memory.roomAssignedReached = false;
+            }
         }
 
         if (!creep.memory.canWork) {
