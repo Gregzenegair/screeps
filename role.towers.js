@@ -55,18 +55,23 @@ var roleTowers = {
 
                 }
 
+                var resultAttack = null;
                 if (Memory.myTowers[name][i].closestHostile) {
                     Memory.hasBeenUnderAttack++; // consider that we are under attack
-                    var resultAttack = tower.attack(Game.getObjectById(Memory.myTowers[name][i].closestHostile.id));
+                    resultAttack = tower.attack(Game.getObjectById(Memory.myTowers[name][i].closestHostile.id));
                     console.log("Towers in room [" + name + "] resultAttack=" + resultAttack);
                 }
 
-                if (Memory.myTowers[name][i].closestDamagedCreep) {
-                    var resultRepairCreep = tower.repair(Game.getObjectById(Memory.myTowers[name][i].closestDamagedCreep.id));
+                var resultRepairCreep = null;
+                if (((null != resultAttack && resultAttack != OK) || null == resultAttack)
+                        && Memory.myTowers[name][i].closestDamagedCreep) {
+                    resultRepairCreep = tower.repair(Game.getObjectById(Memory.myTowers[name][i].closestDamagedCreep.id));
 //                    console.log("resultRepairCreep=" + resultRepairCreep);
                 }
 
-                if (null != Memory.myTowers[name][i].closestDamagedStructure) {
+                if (((null != resultRepairCreep && resultRepairCreep != OK) || null == resultRepairCreep
+                        && (null != resultAttack && resultAttack != OK) || null == resultAttack)
+                        && null != Memory.myTowers[name][i].closestDamagedStructure) {
                     var resultRepairBuilding = tower.repair(Game.getObjectById(Memory.myTowers[name][i].closestDamagedStructure.id));
 //                    console.log("resultRepairBuilding=" + resultRepairBuilding);
                 }
