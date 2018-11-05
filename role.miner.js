@@ -63,7 +63,8 @@ var roleMiner = {
         if (null != creep.memory.containerSpot) {
             var containerSpot = Game.getObjectById(creep.memory.containerSpot);
             helperCreep.moveTo(creep, containerSpot, true);
-            if (creep.pos.x === containerSpot.pos.x
+            if (null != creep && null != containerSpot
+                    && creep.pos.x === containerSpot.pos.x
                     && creep.pos.y === containerSpot.pos.y) {
                 creep.memory.mineSpotReached = true;
             }
