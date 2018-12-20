@@ -104,6 +104,9 @@ var helperBuild = {
         var spawn = helperRoom.findSpawn(room);
         var targets = room.find(FIND_MY_STRUCTURES);
         var paths = [];
+        if (null == spawn) {
+            return paths;
+        }
         for (var i = 0; i < targets.length; i++) {
             var target = targets[i];
             paths[i] = spawn.pos.findPathTo(target, {
