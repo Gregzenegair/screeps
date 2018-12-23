@@ -196,16 +196,23 @@ var rolesSetup = {
 
         if (null != room.controller && room.controller.my && room.controller.level > 3
                 && null != Memory.previousUtilityMaxCount[room.name]) {
-
+            var result = 0;
             var droppedResources = room.find(FIND_DROPPED_RESOURCES);
 
             for (var i = 0; i < droppedResources.length; i++) {
                 var droppedResource = droppedResources[i];
                 if (droppedResource.amount > 400) {
-                    return Memory.previousUtilityMaxCount[room.name] + 1;
+                    result = Memory.previousUtilityMaxCount[room.name] + 1;
                 }
             }
-            return Memory.previousUtilityMaxCount[room.name] - 1;
+
+
+            result = Memory.previousUtilityMaxCount[room.name] - 1;
+
+            result = result < 2 ? 2 : result;
+            result = result > 10 ? 10 : result;
+
+            return result;
 
         } else {
 
