@@ -1,11 +1,12 @@
 module.exports = function () {
 
-    StructureSpawn.prototype.spawnCustom = function spawnCustom(type, energy, spawn, roomAssigned) {
-        
+    StructureSpawn.prototype.spawnCustom = function spawnCustom(type, energy, spawn, roomAssigned, spawnForItself) {
+
         var room = spawn.room;
         var body = type.baseBody;
-        
-        var baseBody = JSON.parse(JSON.stringify(type.baseBody));;
+
+        var baseBody = JSON.parse(JSON.stringify(type.baseBody));
+        ;
         if (null != room.controller && room.controller.level < 2
                 && type.name === "utility") {
             baseBody.push(MOVE);
@@ -16,7 +17,12 @@ module.exports = function () {
         var cost = allPartsCost;
         var maxParts = Math.floor(MAX_CREEP_SIZE / baseBody.length) - baseBody.length; // secured
 
-        if (room.find(FIND_SOURCES).length === 1) { // do smaller unis if only one source
+        /**
+         * Do smaller unis if only one source
+         * Or
+         * If if not spawning for itself
+         */
+        if (room.find(FIND_SOURCES).length === 1 || !spawnForItself) {
             maxParts = Math.round(maxParts / 3);
         }
 
