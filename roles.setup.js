@@ -17,6 +17,7 @@ var rolesSetup = {
     spawn: function (type) {
         if (Game.time % 32 === 0 || null == Memory.utilityMaxCount) {
             if (null == Memory.utilityMaxCount || null == Memory.minerMaxCount || Game.time % 1024 === 0) {
+                Memory.previousUtilityUnitCount = JSON.parse(JSON.stringify(Memory.utilityUnitCount));
                 Memory.utilityMaxCount = {};
                 Memory.utilityUnitCount = {};
                 Memory.minerMaxCount = {};
@@ -188,19 +189,34 @@ var rolesSetup = {
 
         var roomControlerLevel = 0;
 
-        if (null != room.controller && null != room.controller.level && room.controller.my) {
-            roomControlerLevel = room.controller.level;
+        if (null != room.controller && room.controller.my && room.controller.level > 3
+                && null != Memory.previousUtilityUnitCount[room.name]) {
 
-            result = Math.round(Math.round(mineSpots * 0.4) - (roomControlerLevel / 2));
-            result += sourcesCount * 3.2;
-            console.log("calcMaxUtility=" + result);
-            return Math.round(result);
-        } else if (mineSpots !== 0) {
-            return 2;
+            var droppedResources = room.find(FIND_DROPPED_RESOURCES);
+
+            for (var i = 0; i < droppedResources.length; i++) {
+                var droppedResource = droppedResources[i];
+                if (droppedResource.amount > 400) {
+                    return Memory.previousUtilityUnitCount[room.name] + 1;
+                }
+            }
+            return Memory.previousUtilityUnitCount[room.name] - 1;
+
         } else {
-            return 0;
-        }
 
+            if (null != room.controller && null != room.controller.level && room.controller.my) {
+                roomControlerLevel = room.controller.level;
+
+                result = Math.round(Math.round(mineSpots * 0.4) - (roomControlerLevel / 2));
+                result += sourcesCount * 3.2;
+                console.log("calcMaxUtility=" + result);
+                return Math.round(result);
+            } else if (mineSpots !== 0) {
+                return 2;
+            } else {
+                return 0;
+            }
+        }
     },
 
     calcMaxMiner: function (room) {
