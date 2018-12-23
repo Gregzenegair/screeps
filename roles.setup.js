@@ -17,7 +17,7 @@ var rolesSetup = {
     spawn: function (type) {
         if (Game.time % 32 === 0 || null == Memory.utilityMaxCount) {
             if (null == Memory.utilityMaxCount || null == Memory.minerMaxCount || Game.time % 1024 === 0) {
-                Memory.previousUtilityUnitCount = JSON.parse(JSON.stringify(Memory.utilityUnitCount));
+                Memory.previousUtilityMaxCount = JSON.parse(JSON.stringify(Memory.utilityMaxCount));
                 Memory.utilityMaxCount = {};
                 Memory.utilityUnitCount = {};
                 Memory.minerMaxCount = {};
@@ -190,17 +190,17 @@ var rolesSetup = {
         var roomControlerLevel = 0;
 
         if (null != room.controller && room.controller.my && room.controller.level > 3
-                && null != Memory.previousUtilityUnitCount[room.name]) {
+                && null != Memory.previousUtilityMaxCount[room.name]) {
 
             var droppedResources = room.find(FIND_DROPPED_RESOURCES);
 
             for (var i = 0; i < droppedResources.length; i++) {
                 var droppedResource = droppedResources[i];
                 if (droppedResource.amount > 400) {
-                    return Memory.previousUtilityUnitCount[room.name] + 1;
+                    return Memory.previousUtilityMaxCount[room.name] + 1;
                 }
             }
-            return Memory.previousUtilityUnitCount[room.name] - 1;
+            return Memory.previousUtilityMaxCount[room.name] - 1;
 
         } else {
 
