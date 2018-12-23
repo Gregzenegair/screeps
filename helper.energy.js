@@ -91,26 +91,29 @@ var helperEnergy = {
     },
 
     findClosestContainerOperatorMoreFilledThanCreep: function (creep) {
+        var method = function () {
+            var target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.structureType === STRUCTURE_CONTAINER
+                            && structure.store[RESOURCE_ENERGY] > creep.carryCapacity
 
-        var target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-            filter: (structure) => {
-                return (structure.structureType === STRUCTURE_CONTAINER
-                        && structure.store[RESOURCE_ENERGY] > creep.carryCapacity
+                            );
+                }
+            });
+            return target;
+        };
 
-                        );
-            }
-        });
+        var target = this.getTargetFromCache(creep, "findClosestContainerOperatorMoreFilledThanCreep", method);
 
         return target;
     },
 
     findMostFilledContainerOperator: function (creep) {
-
-        var targets = creep.room.find(FIND_STRUCTURES, {
-            filter: (structure) => {
-                return (structure.structureType === STRUCTURE_CONTAINER);
-            }
-        });
+        var targets = this.getTargetsFromCache(
+                creep,
+                "findMostFilledContainerOperatorTargetMethod",
+                this.findMostFilledContainerOperatorTargetMethod
+                );
 
         var result = null;
         for (var i = 0; i < targets.length; i++) {
@@ -128,14 +131,11 @@ var helperEnergy = {
     },
 
     findMostFilledContainerOperatorMoreFilledThanCreep: function (creep) {
-
-        var targets = creep.room.find(FIND_STRUCTURES, {
-            filter: (structure) => {
-                return (structure.structureType === STRUCTURE_CONTAINER
-                        && structure.store[RESOURCE_ENERGY] > creep.carryCapacity
-                        );
-            }
-        });
+        var targets = this.getTargetsFromCache(
+                creep,
+                "findMostFilledContainerOperatorMoreFilledThanCreepTargetMethod",
+                this.findMostFilledContainerOperatorMoreFilledThanCreepTargetMethod
+                );
 
         var result = null;
         for (var i = 0; i < targets.length; i++) {
@@ -150,6 +150,75 @@ var helperEnergy = {
         }
 
         return result;
+    },
+
+    findMostFilledContainerOperatorTargetMethod: function (creep) {
+        return creep.room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.structureType === STRUCTURE_CONTAINER);
+            }
+        });
+    },
+
+    findMostFilledContainerOperatorMoreFilledThanCreepTargetMethod: function (creep) {
+        return creep.room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.structureType === STRUCTURE_CONTAINER
+                        && structure.store[RESOURCE_ENERGY] > creep.carryCapacity);
+            }
+        });
+    },
+
+    getTargetFromCache: function (creep, cacheRule, method) {
+        var room = creep.room;
+
+        if (Game.time % 64 === 0 || null == Memory.energyHelper) {
+            Memory.energyHelper = {};
+        }
+
+        if (null == Memory.energyHelper[room.name]) {
+            Memory.energyHelper[room.name] = {};
+        }
+
+        if (null != Memory.energyHelper[room.name][cacheRule]) {
+            if (null != Memory.energyHelper[room.name][cacheRule]) {
+                Game.getObjectById(Memory.energyHelper[room.name][cacheRule]);
+            }
+        } else {
+            target = method(creep);
+            if (null != target) {
+                Memory.energyHelper[room.name][cacheRule] = target.id;
+            }
+        }
+        return target;
+    },
+
+    getTargetsFromCache: function (creep, cacheRule, method) {
+        var room = creep.room;
+
+        if (Game.time % 64 === 0 || null == Memory.energyHelper) {
+            Memory.energyHelper = {};
+        }
+
+        if (null == Memory.energyHelper[room.name]) {
+            Memory.energyHelper[room.name] = {};
+        }
+
+        if (null != Memory.energyHelper[room.name][cacheRule]) {
+            var targets = [];
+            for (var i = 0; i < Memory.energyHelper[room.name][cacheRule].length; i++) {
+                var target = Memory.energyHelper[room.name][cacheRule][i];
+                targets.push(Game.getObjectById(target));
+            }
+        } else {
+            targets = method(creep);
+            Memory.energyHelper[room.name][cacheRule] = [];
+            for (var i = 0; i < targets.length; i++) {
+                var target = targets[i];
+                Memory.energyHelper[room.name][cacheRule].push(target.id);
+            }
+        }
+        return targets;
     },
 
     findNotFullDeposit: function (room) {
