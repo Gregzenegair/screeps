@@ -201,7 +201,7 @@ var rolesSetup = {
 
             for (var i = 0; i < droppedResources.length; i++) {
                 var droppedResource = droppedResources[i];
-                if (droppedResource.amount > 400) {
+                if (droppedResource.amount > 200) {
                     result = Memory.previousUtilityMaxCount[room.name] + 1;
                 }
             }
