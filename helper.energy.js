@@ -582,6 +582,13 @@ var helperEnergy = {
         if (room.controller && room.controller.my && room.controller.level < 2 && Game.rooms === 1) {
             return "Not building container, too low controller (< 2) or inexistant";
         }
+        
+        var enemyStructures = room.find(FIND_HOSTILE_STRUCTURES);
+        
+        if (null != enemyStructures && enemyStructures.length > 0) {
+            return "Not building container, enemy buildings there";
+        }
+        
         var coords = this.hasAContainerAround(energySource, room);
         if (coords instanceof Array) {
             for (var i = 0; i < coords.length; i++) {
