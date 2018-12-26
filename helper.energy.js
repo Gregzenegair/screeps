@@ -171,7 +171,8 @@ var helperEnergy = {
 
     getTargetFromCache: function (creep, cacheRule, method) {
         var room = creep.room;
-
+        var target = null;
+        
         if (Game.time % 64 === 0 || null == Memory.energyHelper) {
             Memory.energyHelper = {};
         }
@@ -182,7 +183,7 @@ var helperEnergy = {
 
         if (null != Memory.energyHelper[room.name][cacheRule]) {
             if (null != Memory.energyHelper[room.name][cacheRule]) {
-                Game.getObjectById(Memory.energyHelper[room.name][cacheRule]);
+                target = Game.getObjectById(Memory.energyHelper[room.name][cacheRule]);
             }
         } else {
             target = method(creep);
