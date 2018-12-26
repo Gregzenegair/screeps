@@ -83,7 +83,7 @@ var helperCreep = {
 
         return moveExit;
     },
-
+    
     isStuck: function (creep) {
         if (creep.fatigue !== 0) {
             return false;
@@ -322,8 +322,9 @@ var helperCreep = {
 
             return false;
         } else if (!creep.memory.roomAssignedReached) {
-            var nextStep = this.nextStepIntoRoom(creep.pos, creep.memory.roomAssigned);
-            creep.moveTo(nextStep);
+            var nextStep = this.nextStepIntoRoom(creep.pos, creep.room.name);
+            console.log("nextStep="+nextStep);
+            this.moveTo(creep, nextStep);
             creep.memory.roomAssignedReached = true;
             return false;
         }
@@ -335,7 +336,7 @@ var helperCreep = {
      * @param {type} nextRoom
      * @returns {RoomPosition}
      */
-    nextStepIntoRoom: function (pos, nextRoom) {
+    nextStepIntoRoom: function (pos, room) {
         var x = pos.x;
         var y = pos.y;
         if (pos.x == 0) {
@@ -350,7 +351,7 @@ var helperCreep = {
         if (pos.y == 49) {
             y = 25;
         }
-        return new RoomPosition(x, y, nextRoom);
+        return new RoomPosition(x, y, room);
     }
 
 };
