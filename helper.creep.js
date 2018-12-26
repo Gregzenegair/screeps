@@ -323,7 +323,11 @@ var helperCreep = {
             return false;
         } else if (!creep.memory.roomAssignedReached) {
             var nextStep = this.nextStepIntoRoom(creep.pos, creep.room.name);
-            console.log("nextStep="+nextStep);
+
+            creep.say("Enter NR");
+            creep.memory.energySourceId = null;
+            creep.memory.energySourceType = null;
+
             this.moveTo(creep, nextStep);
             creep.memory.roomAssignedReached = true;
             return false;
