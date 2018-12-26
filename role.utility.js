@@ -47,7 +47,7 @@ var roleUtility = {
             /**
              * Make external creeps go back to their working room
              */
-            if (creep.memory.roomHome == creep.room.name) {
+            if (creep.memory.roomAssigned != creep.room.name) {
                 creep.memory.roomAssignedReached = false;
             }
         }
