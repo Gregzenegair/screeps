@@ -149,7 +149,7 @@ var rolesSetup = {
                         }
 
                         if ((type.name === this.UTILITY.name || type.name === this.MINER.name)
-                                && helperRoom.roomDataGetter(room.name, helperRoom.MEMORY_KEYS.DANGEROUS_ROOM && room.name != spawn.room.name)) {
+                                && helperRoom.roomDataGetter(room.name, helperRoom.MEMORY_KEYS.DANGEROUS_ROOM && !spawnForItself)) {
                             console.log('Not spawning utility or miner for room[' + room.name + '], reason: too dangerous');
                             continue;
                         }
@@ -208,17 +208,17 @@ var rolesSetup = {
             for (var i = 0; i < droppedResources.length; i++) {
                 var droppedResource = droppedResources[i];
                 if (droppedResource.amount > 200) {
-                    result = Memory.previousUtilityMaxCount[room.name] + 1;
+                    result = parseInt(Memory.previousUtilityMaxCount[room.name]) + 1;
                     upgraded = true;
                 }
             }
 
             if (!upgraded) {
-                result = Memory.previousUtilityMaxCount[room.name] - 1;
+                result = parseInt(Memory.previousUtilityMaxCount[room.name]) - 1;
             }
 
             result = result < 2 ? 2 : result;
-            result = result > 10 ? 10 : result;
+            result = result > 7 ? 7 : result;
 
             return result;
 
