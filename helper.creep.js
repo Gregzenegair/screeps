@@ -78,7 +78,7 @@ var helperCreep = {
 
         var moveExit = OK;
         if (null != exit) {
-            moveExit = this.moveTo(creep, exit, null, null, {stroke: '#4462ac'});
+            moveExit = this.moveTo(creep, exit, null, null, {stroke: '#0ff6ff'});
         }
 
         return moveExit;

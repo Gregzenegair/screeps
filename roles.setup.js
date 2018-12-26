@@ -77,6 +77,11 @@ var rolesSetup = {
                     }
 
 
+                    if (!spawnForItself && null != room.spawn && room.spawn.my) {
+                        console.log("Not spawning spawn room [" + spawn.room.name + "] for this room " + room.name + " it has its own spawn, will spanwn for itself");
+                        continue;
+                    }
+
                     var seekTypes = _.filter(Game.creeps, (creep) => creep.memory.role == type.name && creep.memory.roomAssigned == room.name
                                 && creep.ticksToLive > 48); // replace a dying creep sooner (by not counting it if under 32ttl)
 
@@ -211,7 +216,7 @@ var rolesSetup = {
             if (!upgraded) {
                 result = Memory.previousUtilityMaxCount[room.name] - 1;
             }
-            
+
             result = result < 2 ? 2 : result;
             result = result > 10 ? 10 : result;
 
