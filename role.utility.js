@@ -36,6 +36,7 @@ var roleUtility = {
             creep.memory.isEmptyResources = false;
             creep.memory.canWork = true;
             creep.memory.energySourceId = null;
+            creep.memory.energySourceType = null;
         }
 
         if (creep.carry.energy === 0) {
