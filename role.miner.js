@@ -41,11 +41,25 @@ var roleMiner = {
             }
         }
 
+        var miners = _.filter(Game.creeps, (creep) => creep.memory.role == "miner");
+
         for (var i = 0; i < containerSources.length; i++) {
             var containerSource = containerSources[i];
+            var container = Game.getObjectById(containerSource.container);
             if (containerSource.free == true) {
-                Memory.containerSources[room.name][i].free = false;
-                return containerSource.container;
+                var minerAlreadyOn = false;
+                for (var j = 0; j < miners.length; j++) {
+                    var miner = miners[j];
+                    if (miner.pos.x === container.pos.x
+                            && miner.pos.y === container.pos.y) {
+                        minerAlreadyOn = true;
+                    }
+                }
+
+                if (!minerAlreadyOn) {
+                    Memory.containerSources[room.name][i].free = false;
+                    return containerSource.container;
+                }
             }
         }
 
