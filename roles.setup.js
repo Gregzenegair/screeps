@@ -16,7 +16,7 @@ var rolesSetup = {
     /** @param {Creep} creep **/
     spawn: function (type) {
         if (Game.time % 32 === 0 || null == Memory.utilityMaxCount) {
-            if (null == Memory.utilityMaxCount || null == Memory.minerMaxCount || Game.time % 1024 === 0
+            if (null == Memory.utilityMaxCount || null == Memory.minerMaxCount || Game.time % 256 === 0
                     || null == Memory.previousUtilityMaxCount) {
 
                 if (null != Memory.utilityMaxCount) {
@@ -197,7 +197,7 @@ var rolesSetup = {
         console.log("sourcesCount=" + sourcesCount);
         console.log("mineSpots=" + mineSpots);
 
-        var roomControlerLevel  = room.controller.level;
+        var roomControlerLevel = room.controller.level;
 
         if (null != room.controller && room.controller.my && roomControlerLevel > 3
                 && null != Memory.previousUtilityMaxCount[room.name]) {
@@ -207,7 +207,7 @@ var rolesSetup = {
 
             for (var i = 0; i < droppedResources.length; i++) {
                 var droppedResource = droppedResources[i];
-                if (droppedResource.amount > 200) {
+                if (droppedResource.amount > 400) {
                     result = parseInt(Memory.previousUtilityMaxCount[room.name]) + 1;
                     upgraded = true;
                     break;
@@ -220,7 +220,9 @@ var rolesSetup = {
 
             result = result < 2 ? 2 : result;
             result = result > 7 ? 7 : result;
-
+            
+            Memory.previousUtilityMaxCount[room.name] = result;
+            
             return result;
 
         } else {
