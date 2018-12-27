@@ -197,9 +197,9 @@ var rolesSetup = {
         console.log("sourcesCount=" + sourcesCount);
         console.log("mineSpots=" + mineSpots);
 
-        var roomControlerLevel = 0;
+        var roomControlerLevel  = room.controller.level;
 
-        if (null != room.controller && room.controller.my && room.controller.level > 3
+        if (null != room.controller && room.controller.my && roomControlerLevel > 3
                 && null != Memory.previousUtilityMaxCount[room.name]) {
             var result = 0;
             var upgraded = false;
@@ -210,6 +210,7 @@ var rolesSetup = {
                 if (droppedResource.amount > 200) {
                     result = parseInt(Memory.previousUtilityMaxCount[room.name]) + 1;
                     upgraded = true;
+                    break;
                 }
             }
 
@@ -225,7 +226,6 @@ var rolesSetup = {
         } else {
 
             if (null != room.controller && null != room.controller.level && room.controller.my) {
-                roomControlerLevel = room.controller.level;
 
                 result = Math.round(Math.round(mineSpots * 0.4) - (roomControlerLevel / 2));
                 result += sourcesCount * 3.2;
