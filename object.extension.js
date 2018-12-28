@@ -70,7 +70,7 @@ module.exports = function () {
             for (var option in options) {
                 sOptions += option + options[option].toString();
             }
-            sOptions=sOptions.replace(/\s/g, "").replace("\r\n", "");
+            sOptions = sOptions.replace(/\s/g, "").replace("\r\n", "");
         }
         var key = "name=" + this.name + "_type=" + type + "_options=" + sOptions;
         var results = [];
@@ -83,7 +83,10 @@ module.exports = function () {
                     results.push(memObject);
                 }
             }
-        } else {
+        }
+
+        if (null == Memory.findInMemory[key] || Memory.findInMemory[key].length > 0
+                || results.length == 0) {
             results = this.find(type, options);
             var memResults = [];
             for (var i = 0; i < results.length; i++) {
