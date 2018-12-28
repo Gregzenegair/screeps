@@ -497,7 +497,7 @@ var helperEnergy = {
                 var otherRoom = Game.rooms[exits[name]];
                 if (otherRoom) {
                     energySourceType = this.ENERGY_SOURCE_TYPES.SOURCE;
-                    target = otherRoom.find(FIND_SOURCES, {
+                    target = otherRoom.findInMemory(FIND_SOURCES, {
                         filter: function (source) {
                             return source.energy > 0;
                         }

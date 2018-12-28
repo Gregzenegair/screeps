@@ -206,7 +206,7 @@ var rolesSetup = {
                 && null != Memory.previousUtilityMaxCount[room.name]) {
             var result = 0;
             var upgraded = false;
-            var droppedResources = room.find(FIND_DROPPED_RESOURCES);
+            var droppedResources = room.findInMemory(FIND_DROPPED_RESOURCES);
 
             for (var i = 0; i < droppedResources.length; i++) {
                 var droppedResource = droppedResources[i];
