@@ -2,6 +2,7 @@ var helperRoom = require('helper.room');
 var helperEnergy = require('helper.energy');
 var helperCreep = require('helper.creep');
 
+require('object.extension')();
 
 var helperMiner = {
 
@@ -18,7 +19,7 @@ var helperMiner = {
         }
 
         if (Game.time % 256 === 0 || null == Memory.containerSources[room.name]) {
-            var sources = room.find(FIND_SOURCES);
+            var sources = room.findInMemory(FIND_SOURCES);
 
             Memory.containerSources[room.name] = [];
 

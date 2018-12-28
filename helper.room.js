@@ -1,3 +1,5 @@
+require('object.extension')();
+
 var helperRoom = {
 
     MEMORY_KEYS: {
@@ -7,7 +9,7 @@ var helperRoom = {
     /** @param {Creep} creep **/
     findDeposit: function (room) {
 
-        var targets = room.find(FIND_STRUCTURES, {
+        var targets = room.findInMemory(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_EXTENSION ||
                         structure.structureType == STRUCTURE_SPAWN ||
@@ -46,7 +48,7 @@ var helperRoom = {
 
     findSpawns: function (room) {
 
-        var targets = room.find(FIND_STRUCTURES, {
+        var targets = room.findInMemory(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_SPAWN
                         && structure.my);
@@ -119,7 +121,7 @@ var helperRoom = {
                     target = targets[0];
                     break;
                 } else {
-                    targets = room.find(FIND_HOSTILE_STRUCTURES, {
+                    targets = room.findInMemory(FIND_HOSTILE_STRUCTURES, {
                         filter: (structure) => {
                             return (structure.structureType !== STRUCTURE_CONTROLLER);
                         }
@@ -129,7 +131,7 @@ var helperRoom = {
                         break;
                     }
                     if (null == target) {
-                        targets = room.find(FIND_HOSTILE_CONSTRUCTION_SITES);
+                        targets = room.findInMemory(FIND_HOSTILE_CONSTRUCTION_SITES);
                         if (null != targets && targets.length > 0) {
                             target = targets[0];
                         }
@@ -142,9 +144,9 @@ var helperRoom = {
 
     findHostile: function (room) {
         var target = null;
-        target = room.find(FIND_HOSTILE_CREEPS);
+        target = room.findInMemory(FIND_HOSTILE_CREEPS);
         if (null == target) {
-            target = room.find(FIND_HOSTILE_STRUCTURES);
+            target = room.findInMemory(FIND_HOSTILE_STRUCTURES);
         }
         return target;
     },

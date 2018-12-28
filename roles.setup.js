@@ -1,8 +1,8 @@
-require('object.extension')();
-
 var helperEnergy = require('helper.energy');
 var helperMiner = require('helper.miner');
 var helperRoom = require('helper.room');
+
+require('object.extension')();
 
 var rolesSetup = {
 
@@ -56,6 +56,7 @@ var rolesSetup = {
                 for (var roomName in Game.rooms) {
 
                     var room = Game.rooms[roomName];
+                    var roomSpawns = room.findInMemory(FIND_MY_SPAWNS);
 
                     var spawnForItself = room.name == spawn.room.name;
 
@@ -77,7 +78,7 @@ var rolesSetup = {
                     }
 
 
-                    if (!spawnForItself && null != room.spawn && room.spawn.my) {
+                    if (!spawnForItself && roomSpawns.length > 0) {
                         console.log("Not spawning spawn room [" + spawn.room.name + "] for this room " + room.name + " it has its own spawn, will spanwn for itself");
                         continue;
                     }
@@ -192,13 +193,15 @@ var rolesSetup = {
             // ^ Not used yet
         }
 
-        var sourcesCount = room.find(FIND_SOURCES).length;
+        var sourcesCount = room.findInMemory(FIND_SOURCES).length;
         var mineSpots = helperEnergy.countEnergyMineSpots(room);
         console.log("sourcesCount=" + sourcesCount);
         console.log("mineSpots=" + mineSpots);
 
-        var roomControlerLevel = room.controller.level;
-
+        var roomControlerLevel = -1;
+        if (null != room.controller) {
+            roomControlerLevel = room.controller.level;
+        }
         if (null != room.controller && room.controller.my && roomControlerLevel > 3
                 && null != Memory.previousUtilityMaxCount[room.name]) {
             var result = 0;
@@ -220,9 +223,9 @@ var rolesSetup = {
 
             result = result < 2 ? 2 : result;
             result = result > 7 ? 7 : result;
-            
+
             Memory.previousUtilityMaxCount[room.name] = result;
-            
+
             return result;
 
         } else {

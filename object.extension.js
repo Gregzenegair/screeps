@@ -22,7 +22,7 @@ module.exports = function () {
          * Or
          * If if not spawning for itself
          */
-        if (room.find(FIND_SOURCES).length === 1 || !spawnForItself) {
+        if (room.findInMemory(FIND_SOURCES).length === 1 || !spawnForItself) {
             maxParts = Math.round(maxParts / 3);
         }
 
@@ -57,6 +57,35 @@ module.exports = function () {
                 roomAssigned: roomAssigned
             });
         }
+    };
+
+    Room.prototype.findInMemory = function findInMemory(type, options) {
+        if (Memory.findInMemory == null || Game.time % 4096 === 0) {
+            Memory.findInMemory = {};
+        }
+        var key = "type_" + type + "_option_" + JSON.stringify(options);
+        var results = [];
+        if (null != Memory.findInMemory[key]) {
+            var memResults = Memory.findInMemory[key];
+            results = [];
+            for (var i = 0; i < memResults.length; i++) {
+                var memObject = Game.getObjectById(memResults[i]);
+                if (null != memObject) {
+                    results.push(memObject);
+                }
+            }
+        } else {
+            results = this.find(type, options);
+            var memResults = [];
+            for (var i = 0; i < results.length; i++) {
+                var memObject = results[i].id;
+                if (null != memObject) {
+                    memResults.push(memObject);
+                }
+                Memory.findInMemory[key] = memResults;
+            }
+        }
+        return results;
     };
 
     StructureSpawn.prototype.getPartsCosts = function getPartsCosts(bodies) {

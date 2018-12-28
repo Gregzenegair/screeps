@@ -1,24 +1,16 @@
 var roleUtility = require('role.utility');
-
 var roleCombat = require('role.combat');
-
 var roleClaimer = require('role.claimer');
-
 var roleHealer = require('role.healer');
-
 var roleMiner = require('role.miner');
-
 var roleTowers = require('role.towers');
-
 var rolesSetup = require('roles.setup');
-
 var helperRoom = require('helper.room');
-
 var helperEnergy = require('helper.energy');
-
 var helperBuild = require('helper.build');
-
 var helperController = require('helper.controller');
+
+require('object.extension')();
 
 module.exports.loop = function () {
 
@@ -110,7 +102,7 @@ module.exports.loop = function () {
         var roomWithCombatUnit = 0;
         for (var name in Game.rooms) {
             var room = Game.rooms[name];
-            var sources = room.find(FIND_SOURCES);
+            var sources = room.findInMemory(FIND_SOURCES);
 
             if (room.controller && room.controller.level > 2) {
                 roomWithCombatUnit++;

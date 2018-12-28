@@ -1,7 +1,7 @@
-require('object.extension')();
-
 var helperCreep = require('helper.creep');
 var helperController = require('helper.controller');
+
+require('object.extension')();
 
 var roleClaimer = {
 
@@ -57,7 +57,7 @@ var roleClaimer = {
             // claim this room's controller
             var claimResult = null;
 
-            if (room.find(FIND_SOURCES).length > 1) {
+            if (room.findInMemory(FIND_SOURCES).length > 1) {
                 claimResult = creep.claimController(room.controller);
                 creep.say("C=" + claimResult);
             }

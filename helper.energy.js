@@ -1,3 +1,5 @@
+require('object.extension')();
+
 var helperRoom = require('helper.room');
 var helperCreep = require('helper.creep');
 
@@ -53,7 +55,7 @@ var helperEnergy = {
      */
     findDepositOperator: function (room, operator, a, b) {
 
-        var targets = room.find(FIND_MY_STRUCTURES, {
+        var targets = room.findInMemory(FIND_MY_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType !== STRUCTURE_CONTROLLER &&
                         this.operators[operator](a(structure), b(structure)
@@ -153,7 +155,7 @@ var helperEnergy = {
     },
 
     findMostFilledContainerOperatorTargetMethod: function (creep) {
-        return creep.room.find(FIND_STRUCTURES, {
+        return creep.room.findInMemory(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType === STRUCTURE_CONTAINER);
             }
@@ -161,7 +163,7 @@ var helperEnergy = {
     },
 
     findMostFilledContainerOperatorMoreFilledThanCreepTargetMethod: function (creep) {
-        return creep.room.find(FIND_STRUCTURES, {
+        return creep.room.findInMemory(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType === STRUCTURE_CONTAINER
                         && structure.store[RESOURCE_ENERGY] > creep.carryCapacity);
@@ -407,7 +409,7 @@ var helperEnergy = {
         var targets = [];
         for (var name in Game.rooms) {
             var room = Game.rooms[name];
-            targets = targets.concat(room.find(FIND_SOURCES, {
+            targets = targets.concat(room.findInMemory(FIND_SOURCES, {
                 filter: function (source) {
                     return source.energy > 0;
                 }
@@ -432,7 +434,7 @@ var helperEnergy = {
                 var otherRoom = Game.rooms[exits[name]];
                 if (otherRoom) {
                     energySourceType = this.ENERGY_SOURCE_TYPES.SOURCE;
-                    target = otherRoom.find(FIND_SOURCES, {
+                    target = otherRoom.findInMemory(FIND_SOURCES, {
                         filter: function (source) {
                             return source.energy > 0;
                         }
@@ -461,7 +463,7 @@ var helperEnergy = {
         var targets = [];
         for (var name in Game.rooms) {
             var room = Game.rooms[name];
-            targets = targets.concat(room.find(FIND_SOURCES, {
+            targets = targets.concat(room.findInMemory(FIND_SOURCES, {
                 filter: function (source) {
 
                     for (var i = 0; i < Memory.miners.length; i++) {
@@ -513,7 +515,7 @@ var helperEnergy = {
     },
 
     findAllRoomEnergySources: function (room) {
-        return room.find(FIND_SOURCES);
+        return room.findInMemory(FIND_SOURCES);
     },
 
     /**
@@ -522,7 +524,7 @@ var helperEnergy = {
      */
     countEnergyMineSpots: function (room) {
         var result = 0;
-        var sources = room.find(FIND_SOURCES);
+        var sources = room.findInMemory(FIND_SOURCES);
         for (var i = 0; i < sources.length; i++) {
             var source = sources[i];
 
@@ -548,13 +550,13 @@ var helperEnergy = {
         var coordsAround = helperRoom.getCoordsAround(energySource.pos.x, energySource.pos.y);
         for (var i = 0; i < coordsAround.length; i++) {
             var coord = coordsAround[i];
-            var containers = room.find(FIND_STRUCTURES, {
+            var containers = room.findInMemory(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return structure.structureType === STRUCTURE_CONTAINER;
                 }
             });
 
-            var constructionSites = room.find(FIND_CONSTRUCTION_SITES, {
+            var constructionSites = room.findInMemory(FIND_CONSTRUCTION_SITES, {
                 filter: (structure) => {
                     return structure.structureType === STRUCTURE_CONTAINER;
                 }
@@ -583,7 +585,7 @@ var helperEnergy = {
             return "Not building container, too low controller (< 2) or inexistant";
         }
         
-        var enemyStructures = room.find(FIND_HOSTILE_STRUCTURES);
+        var enemyStructures = room.findInMemory(FIND_HOSTILE_STRUCTURES);
         
         if (null != enemyStructures && enemyStructures.length > 0) {
             return "Not building container, enemy buildings there";

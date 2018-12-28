@@ -1,5 +1,7 @@
 var helperRoom = require('helper.room');
 
+require('object.extension')();
+
 var roleTowers = {
 
     /** @param {Creep} creep **/
@@ -13,7 +15,7 @@ var roleTowers = {
 
             if (null == Memory.myTowers[name]) {
                 Memory.myTowers[name] = [];
-                var foundTowers = room.find(FIND_MY_STRUCTURES, {
+                var foundTowers = room.findInMemory(FIND_MY_STRUCTURES, {
                     filter: {structureType: STRUCTURE_TOWER}
                 });
 

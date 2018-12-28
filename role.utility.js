@@ -6,6 +6,8 @@ var roleBuilder = require('role.builder');
 var roleUpgrader = require('role.upgrader');
 var roleRepairer = require('role.repairer');
 
+require('object.extension')();
+
 /**
  * If it just harvested, it is tagged as a filler,
  * a filler will try to fill deposits
@@ -182,7 +184,7 @@ var roleUtility = {
     },
 
     getBuildingPriority: function (creep) {
-        var targets = creep.room.find(Game.CONSTRUCTION_SITES);
+        var targets = creep.room.findInMemory(Game.CONSTRUCTION_SITES);
 
         return targets.length > 10 && Memory.utilityUnitCount[creep.room.name] === Memory.utilityMaxCount[creep.room.name];
     }

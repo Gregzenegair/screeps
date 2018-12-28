@@ -139,7 +139,7 @@ var helperCreep = {
         var targets = [];
         for (var name in Game.rooms) {
             var room = Game.rooms[name];
-            targets = targets.concat(room.find(FIND_SOURCES, {
+            targets = targets.concat(room.findInMemory(FIND_SOURCES, {
                 filter: function (source) {
 
                     for (var i = 0; i < Memory.miners.length; i++) {
@@ -169,7 +169,7 @@ var helperCreep = {
                 var otherRoom = Game.rooms[exits[name]];
                 if (otherRoom) {
                     energySourceType = this.ENERGY_SOURCE_TYPES.SOURCE;
-                    target = otherRoom.find(FIND_SOURCES, {
+                    target = otherRoom.findInMemory(FIND_SOURCES, {
                         filter: function (source) {
                             return source.energy > 0;
                         }

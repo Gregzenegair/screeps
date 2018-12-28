@@ -1,5 +1,7 @@
 var helperRoom = require('helper.room');
 
+require('object.extension')();
+
 var helperBuild = {
 
     buildRoutesAround: function (room, sources) {
@@ -54,7 +56,7 @@ var helperBuild = {
         var spawn = helperRoom.findSpawn(room);
         var paths = [];
         if (null != spawn) {
-            var targets = room.find(FIND_SOURCES);
+            var targets = room.findInMemory(FIND_SOURCES);
             for (var i = 0; i < targets.length; i++) {
                 var target = targets[i];
                 paths[i] = spawn.pos.findPathTo(target, {
@@ -70,7 +72,7 @@ var helperBuild = {
     },
 
     findPathSourcesToSources: function (room) {
-        var targets = room.find(FIND_SOURCES);
+        var targets = room.findInMemory(FIND_SOURCES);
         var paths = [];
         if (targets.length > 1) {
             // cycling through sources
@@ -102,7 +104,7 @@ var helperBuild = {
      */
     findPathMyStructures: function (room) {
         var spawn = helperRoom.findSpawn(room);
-        var targets = room.find(FIND_MY_STRUCTURES);
+        var targets = room.findInMemory(FIND_MY_STRUCTURES);
         var paths = [];
         if (null == spawn) {
             return paths;
@@ -137,7 +139,7 @@ var helperBuild = {
                 var targets = [];
                 var otherRoom = Game.rooms[exits[name]];
                 if (otherRoom) {
-                    targets = otherRoom.find(FIND_SOURCES);
+                    targets = otherRoom.findInMemory(FIND_SOURCES);
                 }
 
                 for (var i = 0; i < targets.length; i++) {
