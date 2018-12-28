@@ -174,7 +174,7 @@ var helperEnergy = {
     getTargetFromCache: function (creep, cacheRule, method) {
         var room = creep.room;
         var target = null;
-        
+
         if (Game.time % 64 === 0 || null == Memory.energyHelper) {
             Memory.energyHelper = {};
         }
@@ -339,8 +339,12 @@ var helperEnergy = {
     findNearestEnergySource: function (creep, canSeekIntoDeposits, canSeekForSources) {
         // First check into full containers if exists, to prevent infinie dropped
         // ressources on the floor pushed by miners
-        var energySourceType = this.ENERGY_SOURCE_TYPES.CONTAINER;
+        var energySourceType = null;
         var target = this.findFullClosestContainer(creep);
+
+        if (null != target) {
+            energySourceType = this.ENERGY_SOURCE_TYPES.CONTAINER;
+        }
 
         if (null == target) {
             energySourceType = this.ENERGY_SOURCE_TYPES.DROPPED;
@@ -363,18 +367,18 @@ var helperEnergy = {
         }
 
         if (null == target && !canSeekIntoDeposits) {
-            energySourceType = this.ENERGY_SOURCE_TYPES.CONTAINER;
             target = this.findMostFilledContainerOperatorMoreFilledThanCreep(creep);
             if (null != target) {
+                energySourceType = this.ENERGY_SOURCE_TYPES.CONTAINER;
                 console.log("sourcetarget most full CONTAINER=" + target);
             }
 
         }
 
         if (null == target && !canSeekIntoDeposits) {
-            energySourceType = this.ENERGY_SOURCE_TYPES.CONTAINER;
             target = this.findClosestContainerOperatorMoreFilledThanCreep(creep);
             if (null != target) {
+                energySourceType = this.ENERGY_SOURCE_TYPES.CONTAINER;
                 console.log("sourcetarget CONTAINER=" + target);
             }
 
@@ -584,13 +588,13 @@ var helperEnergy = {
         if (room.controller && room.controller.my && room.controller.level < 2 && Game.rooms === 1) {
             return "Not building container, too low controller (< 2) or inexistant";
         }
-        
+
         var enemyStructures = room.findInMemory(FIND_HOSTILE_STRUCTURES);
-        
+
         if (null != enemyStructures && enemyStructures.length > 0) {
             return "Not building container, enemy buildings there";
         }
-        
+
         var coords = this.hasAContainerAround(energySource, room);
         if (coords instanceof Array) {
             for (var i = 0; i < coords.length; i++) {
