@@ -63,7 +63,16 @@ module.exports = function () {
         if (Memory.findInMemory == null || Game.time % 4096 === 0) {
             Memory.findInMemory = {};
         }
-        var key = "name=" + this.name + "_type=" + type + "_options=" + JSON.stringify(options);
+        var sOptions = "";
+        if (null != options && typeof options === "function") {
+            sOptions = options.toString();
+        } else if (null != options) {
+            for (var option in options) {
+                sOptions += option + options[option].toString();
+            }
+            sOptions=sOptions.replace(/\s/g, "").replace("\r\n", "");
+        }
+        var key = "name=" + this.name + "_type=" + type + "_options=" + sOptions;
         var results = [];
         if (null != Memory.findInMemory[key]) {
             var memResults = Memory.findInMemory[key];
