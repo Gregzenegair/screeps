@@ -63,7 +63,7 @@ module.exports = function () {
         if (Memory.findInMemory == null || Game.time % 4096 === 0) {
             Memory.findInMemory = {};
         }
-        var key = "type_" + type + "_option_" + JSON.stringify(options);
+        var key = "name=" + this.name + "_type=" + type + "_options=" + JSON.stringify(options);
         var results = [];
         if (null != Memory.findInMemory[key]) {
             var memResults = Memory.findInMemory[key];
