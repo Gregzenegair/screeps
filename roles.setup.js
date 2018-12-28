@@ -123,7 +123,7 @@ var rolesSetup = {
                     if (!spawnForItself &&
                             (type.name === this.UTILITY.name
                                     || type.name === this.MINER.name)
-                            && room.find(FIND_HOSTILE_CREEPS).length > 0) {
+                            && room.findInMemory(FIND_HOSTILE_CREEPS).length > 0) {
                         console.log("Not spawning utilities for this room yet, assigned room is dangerous");
                         continue;
                     }
@@ -246,7 +246,7 @@ var rolesSetup = {
 
     calcMaxMiner: function (room) {
         var result = 0;
-        var sources = room.find(FIND_SOURCES);
+        var sources = room.findInMemory(FIND_SOURCES);
         for (var i = 0; i < sources.length; i++) {
             var source = sources[i];
             var container = helperEnergy.hasAContainerAround(source, room);

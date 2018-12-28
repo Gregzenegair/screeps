@@ -64,9 +64,7 @@ module.exports = function () {
             Memory.findInMemory = {};
         }
         var sOptions = "";
-        if (null != options && typeof options === "function") {
-            sOptions = options.toString();
-        } else if (null != options) {
+        if (null != options) {
             for (var option in options) {
                 sOptions += option + options[option].toString();
             }

@@ -116,7 +116,7 @@ var helperRoom = {
             var targets;
             for (var roomName in Game.rooms) {
                 var room = Game.rooms[roomName];
-                targets = room.find(FIND_HOSTILE_CREEPS);
+                targets = room.findInMemory(FIND_HOSTILE_CREEPS);
                 if (null != targets && targets.length > 0) {
                     target = targets[0];
                     break;
