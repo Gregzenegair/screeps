@@ -36,11 +36,11 @@ var roleTowers = {
 
                     var closestHostile;
 
-                    closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+                    closestHostile = tower.pos.findClosestByRangeInMemory(FIND_HOSTILE_CREEPS);
                     Memory.myTowers[name][i].closestHostile = closestHostile;
 
                     if (null == closestHostile) {
-                        var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+                        var closestDamagedStructure = tower.pos.findClosestByRangeInMemory(FIND_STRUCTURES, {
                             filter: (structure) => structure.hits < structure.hitsMax / 3 && structure.structureType !== STRUCTURE_WALL
                                         && structure.isActive()
                         });
@@ -49,7 +49,7 @@ var roleTowers = {
 
                     var closestDamagedCreep;
                     if (null == closestDamagedStructure) {
-                        closestDamagedCreep = tower.pos.findClosestByRange(FIND_CREEPS, {
+                        closestDamagedCreep = tower.pos.findClosestByRangeInMemory(FIND_CREEPS, {
                             filter: (creep) => creep.hits < creep.hitsMax
                         });
                         Memory.myTowers[name][i].closestDamagedCreep = closestDamagedCreep;

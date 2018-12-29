@@ -68,7 +68,7 @@ var helperCreep = {
 
         if (null == creep.memory.targetRoomExit) {
             var exitDir = Game.map.findExit(creep.room, targetRoom);
-            exit = creep.pos.findClosestByRange(exitDir);
+            exit = creep.pos.findClosestByRangeInMemory(exitDir);
             creep.memory.targetRoomExit = exit;
         } else {
             exit = new RoomPosition(parseInt(creep.memory.targetRoomExit.x), parseInt(creep.memory.targetRoomExit.y), creep.memory.targetRoomExit.roomName);
@@ -101,7 +101,7 @@ var helperCreep = {
 
     /** @param {Creep} creep **/
     findNearest: function (creep, endPositions) {
-        var targeted = creep.pos.findClosestByRange(endPositions);
+        var targeted = creep.pos.findClosestByRangeInMemory(endPositions);
         return targeted;
     },
 

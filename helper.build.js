@@ -59,7 +59,7 @@ var helperBuild = {
             var targets = room.findInMemory(FIND_SOURCES);
             for (var i = 0; i < targets.length; i++) {
                 var target = targets[i];
-                paths[i] = spawn.pos.findPathTo(target, {
+                paths[i] = spawn.pos.findPathToInMemory(target, {
                     ignoreCreeps: true,
                     ignoreDestructibleStructures: false,
                     ignoreRoads: false,
@@ -84,7 +84,7 @@ var helperBuild = {
                     var target0 = targets[i - 1];
                     var target1 = targets[i];
                 }
-                paths.push(target0.pos.findPathTo(target1, {
+                paths.push(target0.pos.findPathToInMemory(target1, {
                     ignoreCreeps: true,
                     ignoreDestructibleStructures: false,
                     ignoreRoads: false,
@@ -111,7 +111,7 @@ var helperBuild = {
         }
         for (var i = 0; i < targets.length; i++) {
             var target = targets[i];
-            paths[i] = spawn.pos.findPathTo(target, {
+            paths[i] = spawn.pos.findPathToInMemory(target, {
                 ignoreCreeps: true,
                 ignoreDestructibleStructures: false,
                 ignoreRoads: false,
@@ -144,7 +144,7 @@ var helperBuild = {
 
                 for (var i = 0; i < targets.length; i++) {
                     var target = targets[i];
-                    paths.push(spawn.pos.findPathTo(target, {
+                    paths.push(spawn.pos.findPathToInMemory(target, {
                         ignoreCreeps: true,
                         ignoreDestructibleStructures: false,
                         ignoreRoads: false

@@ -15,7 +15,7 @@ var roleCombat = {
         var target = null;
 
         if (Game.time % 64 === 0 || (null == Memory.combatTarget && hasBeenUnderAttack) || maxCombatUnit) {
-            target = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+            target = creep.pos.findClosestByRangeInMemory(FIND_HOSTILE_CREEPS);
             if (null == target) {
                 target = helperRoom.findCombatTarget();
             }

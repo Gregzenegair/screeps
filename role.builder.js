@@ -4,7 +4,7 @@ var roleBuilder = {
 
     /** @param {Creep} creep **/
     run: function (creep) {
-        var target = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES, {
+        var target = creep.pos.findClosestByPathInMemory(FIND_CONSTRUCTION_SITES, {
             filter: (structure) => {
                 return structure.my;
             }

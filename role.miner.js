@@ -98,7 +98,7 @@ var roleMiner = {
 
         helperMiner.memoryStoreSpot(creep.room);
         if (creep.memory.mineSpotReached) {
-            var source = creep.pos.findClosestByRange(FIND_SOURCES);
+            var source = creep.pos.findClosestByRangeInMemory(FIND_SOURCES);
             creep.harvest(source);
         } else {
             this.moveToFreeSpot(creep);

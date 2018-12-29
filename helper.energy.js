@@ -68,7 +68,7 @@ var helperEnergy = {
 
     findClosestDepositOperator: function (creep, operator, a, b) {
 
-        var target = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
+        var target = creep.pos.findClosestByRangeInMemory(FIND_MY_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType !== STRUCTURE_CONTROLLER &&
                         this.operators[operator](a(structure), b(structure)
@@ -81,7 +81,7 @@ var helperEnergy = {
 
     findClosestContainerOperator: function (creep, operator, a, b) {
 
-        var target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+        var target = creep.pos.findClosestByRangeInMemory(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType === STRUCTURE_CONTAINER &&
                         this.operators[operator](a(structure), b(structure)
@@ -94,7 +94,7 @@ var helperEnergy = {
 
     findClosestContainerOperatorMoreFilledThanCreep: function (creep) {
         var method = function () {
-            var target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+            var target = creep.pos.findClosestByRangeInMemory(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType === STRUCTURE_CONTAINER
                             && structure.store[RESOURCE_ENERGY] > creep.carryCapacity
@@ -142,9 +142,9 @@ var helperEnergy = {
         var result = null;
         for (var i = 0; i < targets.length; i++) {
             var target = targets[i];
-            if (null == result) {
+            if (null == result && null != target) {
                 result = target;
-            } else {
+            } else if (null != target) {
                 if (target.store > result.store) {
                     result = target;
                 }
@@ -348,7 +348,7 @@ var helperEnergy = {
 
         if (null == target) {
             energySourceType = this.ENERGY_SOURCE_TYPES.DROPPED;
-            target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES);
+            target = creep.pos.findClosestByRangeInMemory(FIND_DROPPED_RESOURCES);
         }
 
         // If not at maximum, keep feeling deposits, we ensure to have them always filled at priority
@@ -386,7 +386,7 @@ var helperEnergy = {
 
         if (null == target && canSeekForSources) {
             energySourceType = this.ENERGY_SOURCE_TYPES.SOURCE;
-            target = creep.pos.findClosestByRange(FIND_SOURCES, {
+            target = creep.pos.findClosestByRangeInMemory(FIND_SOURCES, {
                 filter: function (source) {
                     return source.energy > 0;
                 }

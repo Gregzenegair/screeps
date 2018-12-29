@@ -15,14 +15,14 @@ var roleRepairer = {
             return null;// prevento to repair any not a minimum controlloed by me
         }
 
-        var target = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+        var target = creep.pos.findClosestByPathInMemory(FIND_MY_STRUCTURES, {
             filter: function (structure) {
                 return (structure.hits < structure.hitsMax / 4 && structure.isActive());
             }
         });
 
         if (null == target) {
-            target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+            target = creep.pos.findClosestByPathInMemory(FIND_STRUCTURES, {
                 filter: function (structure) {
                     return structure.structureType === STRUCTURE_ROAD && (structure.hits < structure.hitsMax / 4 && structure.isActive());
                 }
