@@ -14,6 +14,12 @@ require('object.extension')();
 
 module.exports.loop = function () {
 
+    if (Game.cpu.bucket < 200) {
+        console.log("Game.cpu.bucket=" + Game.cpu.bucket);
+        console.log("Game.cpu.tickLimit=" + Game.cpu.tickLimit);
+        return;
+    }
+
     if (null == Memory.hasBeenUnderAttack) {
         Memory.hasBeenUnderAttack = 0;
     }
@@ -95,7 +101,7 @@ module.exports.loop = function () {
         Memory.hasBeenUnderAttack--;
 
     }
-    
+
     if (Game.time % 128 === 0) {
         Memory.lastWantedBuild = {};
 

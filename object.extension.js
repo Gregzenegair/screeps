@@ -176,7 +176,7 @@ module.exports = function () {
 
         var context = {
             that: that,
-            type: target,
+            target: target,
             options: options
         };
 
