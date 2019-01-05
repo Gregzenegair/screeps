@@ -8,7 +8,7 @@ var roleFiller = {
 
         var target;
         // First try to fill empty things, then fill other things
-        if (creep.memory.role !== "FILLER") {
+        if (creep.memory.role !== "filler") {
             target = helperEnergy.findEmptyClosestDeposit(creep);
         }
         // NO MORE FILL CONTAINERS

@@ -131,7 +131,7 @@ var roleUtility = {
                 }
             }
 
-            if (creep.memory.role !== "FILLER") {
+            if (creep.memory.role !== "filler") {
                 if (null == target && !creep.memory.upgrade && null != creep.room
                         && null != creep.room.controller
                         && creep.room.controller && creep.room.controller.my) {
@@ -179,7 +179,7 @@ var roleUtility = {
     },
 
     mustUpgrade: function (creep) {
-        if (creep.memory.role === "FILLER") {
+        if (creep.memory.role === "filler") {
             return false;
         }
 
@@ -191,7 +191,7 @@ var roleUtility = {
     },
 
     getBuildingPriority: function (creep) {
-        if (creep.memory.role === "FILLER") {
+        if (creep.memory.role === "filler") {
             return false;
         }
         var targets = creep.room.findInMemory(Game.CONSTRUCTION_SITES);
