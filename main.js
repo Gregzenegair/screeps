@@ -51,6 +51,8 @@ module.exports.loop = function () {
     rolesSetup.spawn(rolesSetup.COMBAT);
 //    }
 
+    rolesSetup.spawn(rolesSetup.FILLER);
+
     rolesSetup.spawn(rolesSetup.MINER);
 
     var spawnUtilityResult = rolesSetup.spawn(rolesSetup.UTILITY);
