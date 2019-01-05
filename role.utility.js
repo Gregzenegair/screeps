@@ -46,7 +46,7 @@ var roleUtility = {
             creep.memory.isFullResources = false;
             creep.memory.canWork = false;
             creep.memory.filler = false;
-            
+
             /**
              * Make external creeps go back to their working room
              */
@@ -131,21 +131,23 @@ var roleUtility = {
                 }
             }
 
-            if (null == target && !creep.memory.upgrade && null != creep.room
-                    && null != creep.room.controller
-                    && creep.room.controller && creep.room.controller.my) {
-                target = roleRepairer.run(creep);
-                creep.say('Repair');
-            }
+            if (creep.memory.role !== "FILLER") {
+                if (null == target && !creep.memory.upgrade && null != creep.room
+                        && null != creep.room.controller
+                        && creep.room.controller && creep.room.controller.my) {
+                    target = roleRepairer.run(creep);
+                    creep.say('Repair');
+                }
 
-            if (null == target && !creep.memory.upgrade) {
-                target = roleBuilder.run(creep);
-                creep.say('Build');
-            }
+                if (null == target && !creep.memory.upgrade) {
+                    target = roleBuilder.run(creep);
+                    creep.say('Build');
+                }
 
-            if (null == target) {
-                target = roleUpgrader.run(creep);
-                creep.say('Upgrade');
+                if (null == target) {
+                    target = roleUpgrader.run(creep);
+                    creep.say('Upgrade');
+                }
             }
 
             var moveExit = OK;
@@ -170,12 +172,17 @@ var roleUtility = {
             }
 
         }
+        
         if (Game.time % 256 === 0 || null == creep.memory.upgrade) {
             this.mustUpgrade(creep);
         }
     },
 
     mustUpgrade: function (creep) {
+        if (creep.memory.role === "FILLER") {
+            return false;
+        }
+
         if (creep.room.controller && creep.room.controller.ticksToDowngrade < 4096) {
             creep.memory.upgrade = true;
         } else {
@@ -184,6 +191,9 @@ var roleUtility = {
     },
 
     getBuildingPriority: function (creep) {
+        if (creep.memory.role === "FILLER") {
+            return false;
+        }
         var targets = creep.room.findInMemory(Game.CONSTRUCTION_SITES);
 
         return targets.length > 10 && Memory.utilityUnitCount[creep.room.name] === Memory.utilityMaxCount[creep.room.name];

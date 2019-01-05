@@ -6,8 +6,9 @@ require('object.extension')();
 
 var rolesSetup = {
 
-    UTILITY: {name: "utility", maxCount: 0, baseBody: [WORK, CARRY, MOVE], filler: true},
-    MINER: {name: "miner", maxCount: 0, baseBody: [MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK], simpleBody: true},
+    UTILITY: {name: "utility", maxCount: -1, baseBody: [WORK, CARRY, MOVE], filler: true},
+    FILLER: {name: "filler", maxCount: -1, baseBody: [CARRY, MOVE], filler: true},
+    MINER: {name: "miner", maxCount: -1, baseBody: [MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK], simpleBody: true},
     CLAIM: {name: "claim", maxCount: 2, baseBody: [CLAIM, MOVE], simpleBody: false},
     COMBAT: {name: "combat", maxCount: 1, baseBody: [ATTACK, MOVE, MOVE, TOUGH, TOUGH]},
     COMBAT2: {name: "combat", maxCount: 1, baseBody: [ATTACK, MOVE, TOUGH]},
@@ -108,11 +109,18 @@ var rolesSetup = {
                         continue;
                     }
 
-
+                    if (!spawnForItself && type.name === this.FILLER.name) {
+                        console.log("Not filler for an other room");
+                        continue;
+                    }
 //                    console.log("Current status for spawn=" + spawn.name + ", " + type.name + "=" + seekTypes.length);
 
 
                     if (type.name === this.UTILITY.name && null != Memory.utilityMaxCount[room.name]) {
+                        type.maxCount = Memory.utilityMaxCount[room.name];
+                    }
+
+                    if (type.name === this.FILLER.name && null != Memory.utilityMaxCount[room.name]) {
                         type.maxCount = Memory.utilityMaxCount[room.name];
                     }
 
@@ -221,7 +229,7 @@ var rolesSetup = {
                 result = parseInt(Memory.previousUtilityMaxCount[room.name]) - 1;
             }
 
-            result = result < 2 ? 2 : result;
+            result = result < 1 ? 1 : result;
             result = result > 7 ? 7 : result;
 
             Memory.previousUtilityMaxCount[room.name] = result;

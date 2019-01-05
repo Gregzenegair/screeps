@@ -65,6 +65,10 @@ module.exports.loop = function () {
             roleUtility.run(creep);
         }
 
+        if (creep.memory.role === rolesSetup.FILLER.name) {
+            roleUtility.run(creep);
+        }
+
         if (creep.memory.role === rolesSetup.MINER.name) {
             roleMiner.run(creep);
         }
