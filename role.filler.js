@@ -6,8 +6,11 @@ var roleFiller = {
     /** @param {Creep} creep **/
     run: function (creep) {
 
+        var target;
         // First try to fill empty things, then fill other things
-        var target = helperEnergy.findEmptyClosestDeposit(creep);
+        if (creep.memory.role !== "FILLER") {
+            target = helperEnergy.findEmptyClosestDeposit(creep);
+        }
         // NO MORE FILL CONTAINERS
         if (null == target) {
             target = helperEnergy.findNotFullClosestDeposit(creep);
