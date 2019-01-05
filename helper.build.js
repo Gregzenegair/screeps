@@ -47,6 +47,38 @@ var helperBuild = {
         }
     },
 
+    buildStorage: function (room) {
+        if (!Memory.storageBuilt[room.name]) {
+            var allCoords = [];
+            var spawns = helperRoom.findSpawns(room);
+            if (null != spawns) {
+                for (var i = 0; i < spawns.length; i++) {
+                    var spawn = spawns[i];
+                    var spawnCoords = helperRoom.getCoordsAround(spawn.pos.x, spawn.pos.y, 3);
+                    allCoords.push(spawnCoords);
+                }
+            }
+
+            for (var i = 0; i < allCoords.length; i++) {
+                var coords = allCoords[i];
+                for (var j = 0; j < coords.length; j++) {
+                    var coord = coords[j];
+                    if (TERRAIN_MASK_WALL !== Game.map.getRoomTerrain(room.name).get(coord.x, coord.y)) {
+                        var buildStorage = room.createConstructionSite(coord.x, coord.y, STRUCTURE_STORAGE);
+                        console.log("Build storage resulted=" + buildStorage);
+                        if (buildStorage === OK) {
+                            Memory.storageBuilt[room.name] = true;
+                            return;
+                        }
+
+                    }
+
+                }
+
+            }
+        }
+    },
+
     /**
      * For building purposes
      * @param {type} room

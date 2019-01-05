@@ -114,7 +114,7 @@ module.exports.loop = function () {
             var room = Game.rooms[name];
             var sources = room.findInMemory(FIND_SOURCES);
 
-            if (room.controller && room.controller.level > 2) {
+            if (room.controller && room.controller.level >= 3) {
                 roomWithCombatUnit++;
             }
 
@@ -159,7 +159,7 @@ module.exports.loop = function () {
                     }
                 }
 
-                var canBuildPaths = (constructResult <= 0 && null != room && null != room.controller && room.controller.level > 1)
+                var canBuildPaths = (constructResult <= 0 && null != room && null != room.controller && room.controller.level >= 2)
                         || helperController.isMyReservedController(room, 16);
 
                 if ((canBuildPaths && !Memory.pathBuilt[room.name])) {
@@ -235,6 +235,9 @@ module.exports.loop = function () {
                 // rolesSetup.spawn(rolesSetup.COMBAT);
             }
 
+            if (room.controller && room.controller.level >= 6) {
+                helperBuild.buildStorage(room);
+            }
 
             // in each possible room with creep or building, try to build a container
             for (var j = 0; j < sources.length; j++) {
