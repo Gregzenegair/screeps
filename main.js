@@ -51,11 +51,11 @@ module.exports.loop = function () {
     rolesSetup.spawn(rolesSetup.COMBAT);
 //    }
 
+    rolesSetup.spawn(rolesSetup.UTILITY);
+
     rolesSetup.spawn(rolesSetup.FILLER);
 
     rolesSetup.spawn(rolesSetup.MINER);
-
-    rolesSetup.spawn(rolesSetup.UTILITY);
 
     var elapsed = Game.cpu.getUsed() - startCpu;
 //    console.log('Spawns used ' + elapsed + ' CPU time');
