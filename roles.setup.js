@@ -142,8 +142,8 @@ var rolesSetup = {
                     }
 
                     if (type.name === this.FILLER.name
-                            && Memory.minerUnitCount[room.name] < Memory.minerMaxCount[room.name]
-                            && Memory.minerMaxCount[room.name] !== 0) {
+                            && (Memory.minerUnitCount[room.name] < Memory.minerMaxCount[room.name]
+                                    || Memory.minerMaxCount[room.name] === 0)) {
                         console.log("Not spawning fillers for this room yet, miners still not exists");
                         continue;
                     }
