@@ -92,9 +92,10 @@ module.exports.loop = function () {
 
     Memory.combatUnitCount = combatUnitCount;
 
-    if (null == Memory.pathBuiltAroundSources || null == Memory.pathBuilt || Game.time % 2048 === 0) {
+    if (null == Memory.pathBuiltAroundSources || null == Memory.pathBuilt || null == Memory.storageBuilt || Game.time % 2048 === 0) {
         Memory.pathBuiltAroundSources = {};
         Memory.pathBuilt = {};
+        Memory.storageBuilt = {};
         Memory.combatExitRoom = null; //TODO: rework this
         Memory.unreachableRooms = [];
     }
