@@ -299,12 +299,14 @@ var helperEnergy = {
     setEnergySource: function (creep, seekOtherPath) {
         var energySource = null;
 
+        var isRoleFiller = creep.memory.role === "filler";
+        
         var canSeekForSources = Memory.minerMaxCount[creep.room.name] === 0
                 || (null == Memory.minerMaxCount[creep.room.name]
                         || null == Memory.minerUnitCount[creep.room.name])
                 || Memory.minerMaxCount[creep.room.name] != Memory.minerUnitCount[creep.room.name];
 
-        if (creep.memory.role === "filler") {
+        if (isRoleFiller) {
             canSeekForSources = false;
         }
 
@@ -314,20 +316,20 @@ var helperEnergy = {
             if (!seekOtherPath && !creep.memory.alternativePath) {
                 // a filler can not pretend to seek into deposits
                 energySource = helperEnergy.findNearestEnergySource(creep, !creep.memory.filler, canSeekForSources);
-            } else if (creep.memory.role !== "filler") {
+            } else if (!isRoleFiller) {
                 console.log("find a new path for creep=" + creep.name);
                 energySource = helperEnergy.findNearestEnergySource(creep, !creep.memory.filler, !canSeekForSources);
                 creep.memory.alternativePath = true; // may already be true
                 creep.memory.errorPathCount = 0;
             }
 
-            if (null == energySource) {
+            if (null == energySource && !isRoleFiller) {
                 energySource = helperEnergy.findValidPathHarvestSource(creep);
                 creep.memory.alternativePath = true; // may already be true
                 creep.memory.errorPathCount = 0;
             }
 
-            if (null == energySource) {
+            if (null == energySource && !isRoleFiller) {
                 helperCreep.assigneRandomExitRoom(creep);
             }
 
