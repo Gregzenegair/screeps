@@ -128,7 +128,11 @@ var rolesSetup = {
                     }
 //                    console.log("Current status for spawn=" + spawn.name + ", " + type.name + "=" + seekTypes.length);
 
-
+                    if (type.name === this.COMBAT.name && Game.cpu.bucket < 2000) {
+                        console.log("Not building combat, bucket is under 2000");
+                        continue;
+                    }
+                    
                     if (type.name === this.UTILITY.name && null != Memory.utilityMaxCount[room.name]) {
                         type.maxCount = Memory.utilityMaxCount[room.name];
                     }
