@@ -122,17 +122,13 @@ var rolesSetup = {
                         continue;
                     }
 
-                    if (!spawnForItself && type.name === this.FILLER.name) {
-                        console.log("Not building filler for an other room");
-                        continue;
-                    }
 //                    console.log("Current status for spawn=" + spawn.name + ", " + type.name + "=" + seekTypes.length);
 
                     if (type.name === this.COMBAT.name && Game.cpu.bucket < 2000) {
                         console.log("Not building combat, bucket is under 2000");
                         continue;
                     }
-                    
+
                     if (type.name === this.UTILITY.name && null != Memory.utilityMaxCount[room.name]) {
                         type.maxCount = Memory.utilityMaxCount[room.name];
                     }
@@ -146,8 +142,8 @@ var rolesSetup = {
                     }
 
                     if (type.name === this.FILLER.name
-                            && Memory.minerUnitCount[spawn.room.name] < Memory.minerMaxCount[spawn.room.name]
-                            && Memory.minerMaxCount[spawn.room.name] !== 0) {
+                            && Memory.minerUnitCount[room.name] < Memory.minerMaxCount[room.name]
+                            && Memory.minerMaxCount[room.name] !== 0) {
                         console.log("Not spawning fillers for this room yet, miners still not exists");
                         continue;
                     }
