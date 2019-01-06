@@ -15,7 +15,7 @@ module.exports = function () {
         var energyLeft = energy;
         var allPartsCost = this.getPartsCosts(baseBody);
         var cost = allPartsCost;
-        var maxParts = Math.floor(MAX_CREEP_SIZE / baseBody.length);
+        var maxParts = Math.floor(MAX_CREEP_SIZE / baseBody.length) - baseBody.length; // secured
 
         /**
          * Do smaller unis if only one source
@@ -86,12 +86,8 @@ module.exports = function () {
     /**
      * Glbals usages
      */
-    console.log("Creating source memory...");
-    if (Memory.sources == undefined) {
-        Memory.sources = {};
-    }
-    Source.prototype.memory = Memory.sources[this.id];
-
+    console.log("Loading object.extension.js ...");
+    console.log("current bucket=" + Game.cpu.bucket);
 
     /**
      * Caches in Memory

@@ -17,7 +17,8 @@ var rolesSetup = {
     /** @param {Creep} creep **/
     spawn: function (type) {
         if (Game.time % 64 === 0 || null == Memory.utilityMaxCount) {
-            if (null == Memory.utilityMaxCount || null == Memory.minerMaxCount || Game.time % 512 === 0
+            if (null == Memory.utilityMaxCount || null == Memory.minerMaxCount || null == Memory.fillerUnitCount
+                    || Game.time % 512 === 0
                     || null == Memory.previousUtilityMaxCount) {
 
                 if (null != Memory.utilityMaxCount) {
@@ -28,6 +29,9 @@ var rolesSetup = {
                 Memory.utilityUnitCount = {};
                 Memory.minerMaxCount = {};
                 Memory.minerUnitCount = {};
+
+//                Memory.fillerMaxCount = {};
+                Memory.fillerUnitCount = {};
             }
 
             for (var name in Memory.creeps) {
@@ -80,7 +84,7 @@ var rolesSetup = {
 
 
                     if (Game.cpu.bucket < 4000 && !spawnForItself) {
-                        console.log("Not spawning spawn room [" + spawn.room.name + "] for this room " + room.name + " it bucket is under 1000");
+                        console.log("Not spawning spawn room [" + spawn.room.name + "] for this room " + room.name + " bucket is under 1000");
                         continue;
                     }
 
@@ -94,6 +98,10 @@ var rolesSetup = {
 
                     if (type.name === "utility") {
                         Memory.utilityUnitCount[room.name] = seekTypes.length;
+                    }
+
+                    if (type.name === "filler") {
+                        Memory.fillerUnitCount[room.name] = seekTypes.length;
                     }
 
                     if (type.name === "miner") {
@@ -115,7 +123,7 @@ var rolesSetup = {
                     }
 
                     if (!spawnForItself && type.name === this.FILLER.name) {
-                        console.log("Not filler for an other room");
+                        console.log("Not building filler for an other room");
                         continue;
                     }
 //                    console.log("Current status for spawn=" + spawn.name + ", " + type.name + "=" + seekTypes.length);

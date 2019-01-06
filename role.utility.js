@@ -120,7 +120,9 @@ var roleUtility = {
             var target = null;
 
             if (creep.memory.filler && !creep.memory.upgrade
-                    && !this.getBuildingPriority(creep)) {
+                    && !this.getBuildingPriority(creep)
+                    && ((Memory.fillerUnitCount[creep.room.name] === Memory.utilityMaxCount[creep.room.name]
+                        && creep.memory.role !== "filler") || creep.memory.role === "filler")) {
                 target = roleFiller.run(creep);
                 creep.say('Drop ☢︎');
             }
