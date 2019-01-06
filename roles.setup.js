@@ -16,7 +16,7 @@ var rolesSetup = {
 
     /** @param {Creep} creep **/
     spawn: function (type) {
-        if (Game.time % 32 === 0 || null == Memory.utilityMaxCount) {
+        if (Game.time % 64 === 0 || null == Memory.utilityMaxCount) {
             if (null == Memory.utilityMaxCount || null == Memory.minerMaxCount || Game.time % 512 === 0
                     || null == Memory.previousUtilityMaxCount) {
 
@@ -78,6 +78,11 @@ var rolesSetup = {
                         console.log("calculated maxMiner=" + maxMiner);
                     }
 
+
+                    if (Game.cpu.bucket < 1000 && !spawnForItself) {
+                        console.log("Not spawning spawn room [" + spawn.room.name + "] for this room " + room.name + " it bucket is under 1000");
+                        continue;
+                    }
 
                     if (!spawnForItself && roomSpawns.length > 0) {
                         console.log("Not spawning spawn room [" + spawn.room.name + "] for this room " + room.name + " it has its own spawn, will spanwn for itself");
