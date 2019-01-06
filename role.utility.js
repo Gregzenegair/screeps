@@ -56,6 +56,14 @@ var roleUtility = {
             if (creep.memory.roomAssigned != creep.room.name) {
                 creep.memory.roomAssignedReached = false;
             }
+
+            if (creep.memory.role === "filler") {
+                creep.memory.filler = true;
+            }
+        }
+
+        if (creep.memory.role === "filler") {
+            creep.memory.alternativePath = false;
         }
 
         if (!creep.memory.canWork) {
@@ -122,7 +130,7 @@ var roleUtility = {
             if (creep.memory.filler && !creep.memory.upgrade
                     && !this.getBuildingPriority(creep)
                     && ((Memory.fillerUnitCount[creep.room.name] !== Memory.utilityMaxCount[creep.room.name]
-                        && creep.memory.role !== "filler") || creep.memory.role === "filler")) {
+                            && creep.memory.role !== "filler") || creep.memory.role === "filler")) {
                 target = roleFiller.run(creep);
                 creep.say('Drop ☢︎');
             }
