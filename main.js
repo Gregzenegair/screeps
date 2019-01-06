@@ -53,10 +53,10 @@ module.exports.loop = function () {
 
     rolesSetup.spawn(rolesSetup.MINER);
 
-    var spawnUtilityResult = rolesSetup.spawn(rolesSetup.UTILITY);
-    
+    rolesSetup.spawn(rolesSetup.UTILITY);
+
     rolesSetup.spawn(rolesSetup.FILLER);
-    
+
     var elapsed = Game.cpu.getUsed() - startCpu;
 //    console.log('Spawns used ' + elapsed + ' CPU time');
     var combatUnitCount = 0;
@@ -235,7 +235,7 @@ module.exports.loop = function () {
             }
 
 
-            if (constructResult !== OK && spawnUtilityResult !== OK) { // if nothing to build, make an army TODO: improve algorithm to determine if there is really nothing to build
+            if (constructResult !== OK) { // if nothing to build, make an army TODO: improve algorithm to determine if there is really nothing to build
                 // rolesSetup.spawn(rolesSetup.COMBAT);
             }
 
