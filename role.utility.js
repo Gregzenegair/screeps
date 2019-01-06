@@ -39,6 +39,9 @@ var roleUtility = {
             creep.memory.canWork = true;
             creep.memory.energySourceId = null;
             creep.memory.energySourceType = null;
+            if (creep.memory.role === "filler") {
+                creep.memory.filler = true;
+            }
         }
 
         if (creep.carry.energy === 0) {
@@ -122,7 +125,7 @@ var roleUtility = {
                 creep.say('Drop ☢︎');
             }
 
-            if (null == target && creep.memory.filler) {
+            if (null == target && creep.memory.filler && creep.memory.role !== "filler") {
                 creep.memory.filler = false;
                 // if he was a filler, has emptied his load but is not full now,
                 // make if get full again before going to work
@@ -172,7 +175,7 @@ var roleUtility = {
             }
 
         }
-        
+
         if (Game.time % 256 === 0 || null == creep.memory.upgrade) {
             this.mustUpgrade(creep);
         }
