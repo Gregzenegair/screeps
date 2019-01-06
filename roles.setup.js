@@ -9,7 +9,7 @@ var rolesSetup = {
     UTILITY: {name: "utility", maxCount: -1, baseBody: [WORK, CARRY, MOVE], filler: true},
     FILLER: {name: "filler", maxCount: -1, baseBody: [CARRY, MOVE], filler: true},
     MINER: {name: "miner", maxCount: -1, baseBody: [MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK], simpleBody: true},
-    CLAIM: {name: "claim", maxCount: 2, baseBody: [CLAIM, MOVE], simpleBody: false},
+    CLAIMER: {name: "claimer", maxCount: 2, baseBody: [CLAIM, MOVE], simpleBody: false},
     COMBAT: {name: "combat", maxCount: 1, baseBody: [ATTACK, MOVE, MOVE, TOUGH, TOUGH]},
     COMBAT2: {name: "combat", maxCount: 1, baseBody: [ATTACK, MOVE, TOUGH]},
     HEALER: {name: "heal", maxCount: 1, baseBody: [HEAL, MOVE, MOVE, TOUGH]},
@@ -162,8 +162,8 @@ var rolesSetup = {
                             continue;
                         }
 
-                        if ((type.name === this.CLAIM.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name])
-                                || (type.name === this.CLAIM.name && null != room.controller && room.controller.my && room.controller.level <= 3)) {
+                        if ((type.name === this.CLAIMER.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name])
+                                || (type.name === this.CLAIMER.name && null != room.controller && room.controller.my && room.controller.level <= 3)) {
                             console.log('Not spawning claimer yet, reason: not enough utility or room.controller.level <= 3');
                             continue;
                         }

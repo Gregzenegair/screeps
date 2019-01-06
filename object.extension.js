@@ -36,6 +36,10 @@ module.exports = function () {
             maxParts--;
         }
 
+        if (type.name === "claimer" && body.length < 4) {
+            return null;
+        }
+
         if (type.simpleBody) {
             body = baseBody;
         }

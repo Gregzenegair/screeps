@@ -45,7 +45,7 @@ module.exports.loop = function () {
 
     rolesSetup.spawn(rolesSetup.COMBAT2);
 
-    rolesSetup.spawn(rolesSetup.CLAIM);
+    rolesSetup.spawn(rolesSetup.CLAIMER);
 
 //    if (hasBeenUnderAttack) {
     rolesSetup.spawn(rolesSetup.COMBAT);
@@ -76,7 +76,7 @@ module.exports.loop = function () {
             roleMiner.run(creep);
         }
 
-        if (creep.memory.role === rolesSetup.CLAIM.name) {
+        if (creep.memory.role === rolesSetup.CLAIMER.name) {
             roleClaimer.run(creep, creep.room);
         }
 
