@@ -314,7 +314,7 @@ var helperEnergy = {
             if (!seekOtherPath && !creep.memory.alternativePath) {
                 // a filler can not pretend to seek into deposits
                 energySource = helperEnergy.findNearestEnergySource(creep, !creep.memory.filler, canSeekForSources);
-            } else {
+            } else if (creep.memory.role !== "filler") {
                 console.log("find a new path for creep=" + creep.name);
                 energySource = helperEnergy.findNearestEnergySource(creep, !creep.memory.filler, !canSeekForSources);
                 creep.memory.alternativePath = true; // may already be true
