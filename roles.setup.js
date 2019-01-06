@@ -79,7 +79,7 @@ var rolesSetup = {
                     }
 
 
-                    if (Game.cpu.bucket < 1000 && !spawnForItself) {
+                    if (Game.cpu.bucket < 4000 && !spawnForItself) {
                         console.log("Not spawning spawn room [" + spawn.room.name + "] for this room " + room.name + " it bucket is under 1000");
                         continue;
                     }
