@@ -15,7 +15,7 @@ module.exports = function () {
         var energyLeft = energy;
         var allPartsCost = this.getPartsCosts(baseBody);
         var cost = allPartsCost;
-        var maxParts = Math.floor(MAX_CREEP_SIZE / baseBody.length);
+        var maxParts = Math.floor(MAX_CREEP_SIZE / baseBody.length) - baseBody.length; // secured
 
         /**
          * Do smaller unis if only one source
