@@ -28,7 +28,7 @@ var roleClaimer = {
             creep.memory.claimingSpotError = 0;
         }
 
-        if (creep.memory.claimingSpotError > 16) {
+        if (creep.memory.claimingSpotError > 16 && creep.memory.errorPathCount > 3) {
             creep.memory.claimingSpot = false;
             creep.memory.claimingSpotError = 0;
             helperCreep.assigneRandomExitRoom(creep);
