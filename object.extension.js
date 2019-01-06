@@ -7,7 +7,7 @@ module.exports = function () {
 
         var baseBody = JSON.parse(JSON.stringify(type.baseBody));
         ;
-        if (null != room.controller && room.controller.level < 2
+        if (!spawnForItself
                 && type.name === "utility") {
             baseBody.push(MOVE);
         }
