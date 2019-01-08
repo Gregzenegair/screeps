@@ -82,7 +82,7 @@ var helperBuild = {
     buildContainersController: function (room) {
         this.memoryStoreContainersController(room);
 
-        if (null != Memory.containerSources[room.name]) {
+        if (null == Memory.containerSources[room.name]) {
             return;
         }
 
@@ -100,9 +100,9 @@ var helperBuild = {
                     var coord = coords[j];
                     if (TERRAIN_MASK_WALL !== Game.map.getRoomTerrain(room.name).get(coord.x, coord.y)) {
                         var buildContainer = room.createConstructionSite(coord.x, coord.y, STRUCTURE_CONTAINER);
-                        console.log("Build storage for controller resulted=" + buildStorage);
+                        console.log("Build container controller resulted=" + buildContainer);
                         if (buildContainer === OK) {
-
+                            return;
                         }
                     }
                 }
