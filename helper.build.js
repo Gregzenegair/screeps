@@ -79,6 +79,64 @@ var helperBuild = {
         }
     },
 
+    buildContainersController: function (room) {
+        this.memoryStoreContainersController(room);
+
+        if (null != Memory.containerSources[room.name]) {
+            return;
+        }
+
+        var controller = (room.controller != null && room.controller.my) ? controller : null;
+
+        if (null != controller) {
+            var allCoords = [];
+
+            var controllerCoords = helperRoom.getCoordsAround(controller.pos.x, controller.pos.y, 1); // must be 1
+            allCoords.push(controllerCoords);
+
+            for (var i = 0; i < allCoords.length; i++) {
+                var coords = allCoords[i];
+                for (var j = 0; j < coords.length; j++) {
+                    var coord = coords[j];
+                    if (TERRAIN_MASK_WALL !== Game.map.getRoomTerrain(room.name).get(coord.x, coord.y)) {
+                        var buildContainer = room.createConstructionSite(coord.x, coord.y, STRUCTURE_CONTAINER);
+                        console.log("Build storage for controller resulted=" + buildStorage);
+                        if (buildContainer === OK) {
+
+                        }
+                    }
+                }
+            }
+        }
+    },
+
+    memoryStoreContainersController: function (room) {
+
+        if (null == Memory.containersControllers || Game.time % 2048 === 0) {
+            Memory.containersControllers = {};
+        }
+
+        if (Game.time % 256 === 0 || null == Memory.containersControllers[room.name]) {
+            var controller = (room.controller != null && room.controller.my) ? controller : null;
+
+            if (null != controller) {
+                Memory.containersControllers[room.name] = null;
+
+                var structure = helperRoom.hasAContainerAround(controller, room);
+
+                /**
+                 * Check if container is built
+                 */
+                if (structure.structureType === STRUCTURE_CONTAINER) {
+                    Memory.containersControllers[room.name] = {
+                        "container": structure.id,
+                        "built": (null != structure.hitsMax && null == structure.progress)
+                    };
+                }
+            }
+        }
+    },
+
     /**
      * For building purposes
      * @param {type} room

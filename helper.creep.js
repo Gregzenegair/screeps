@@ -24,7 +24,7 @@ var helperCreep = {
         }
 
         var moveResult = creep.moveTo(target, {
-            reusePath: 16,
+            reusePath: 32,
             visualizePathStyle: visualizePathStyle,
             ignoreCreeps: ignoreCreeps,
             maxRooms: 1,
@@ -32,10 +32,10 @@ var helperCreep = {
         });
 
         var isStuck = this.isStuck(creep);
-
+        
         if (isStuck) {
             creep.memory.errorPathCount++;
-            if (creep.memory.errorPathCount > 1) {
+            if (creep.memory.errorPathCount > 2) {
                 creep.memory.errorPathCount = 0;
                 creep.memory.alternativePath = true;
             }

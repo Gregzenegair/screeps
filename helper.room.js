@@ -77,6 +77,34 @@ var helperRoom = {
         return null;
     },
 
+    countFreeSpots: function (roomObject) {
+        var result = 0;
+
+        var coords = helperRoom.getCoordsAround(roomObject.pos.x, roomObject.pos.y);
+
+        for (var i = 0; i < coords.length; i++) {
+            var coord = coords[i];
+            if (TERRAIN_MASK_WALL !== Game.map.getRoomTerrain(roomObject.room.name).get(coord.x, coord.y)) {
+                result++;
+            }
+        }
+        return result;
+    },
+
+    getFreeSpots: function (roomObject) {
+        var array = [];
+
+        var coords = helperRoom.getCoordsAround(roomObject.pos.x, roomObject.pos.y);
+
+        for (var i = 0; i < coords.length; i++) {
+            var coord = coords[i];
+            if (TERRAIN_MASK_WALL !== Game.map.getRoomTerrain(roomObject.room.name).get(coord.x, coord.y)) {
+                array.push({"x": coord.x, "y": coord.y});
+            }
+        }
+        return array;
+    },
+
     /**
      * coords as a staro, not full squares
      * @param {type} x
@@ -182,7 +210,48 @@ var helperRoom = {
 
     scanRoom: function (room) {
 
+    },
+
+    /**
+     * @param {type} energySource
+     * @param {type} room
+     * @returns x/y coords Objects Array, or a construcitonSite Object or a structure Object
+     */
+    hasAContainerAround: function (roomObject, room) { // should be in helper.room ?
+
+        var coordsAround = helperRoom.getCoordsAround(roomObject.pos.x, roomObject.pos.y);
+        for (var i = 0; i < coordsAround.length; i++) {
+            var coord = coordsAround[i];
+            var containers = room.findInMemory(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return structure.structureType === STRUCTURE_CONTAINER;
+                }
+            });
+
+            var constructionSites = room.findInMemory(FIND_CONSTRUCTION_SITES, {
+                filter: (structure) => {
+                    return structure.structureType === STRUCTURE_CONTAINER;
+                }
+            });
+
+            for (var j = 0; j < containers.length; j++) {
+                var container = containers[j];
+                if (container.pos.x === coord.x && container.pos.y === coord.y) {
+                    return container;
+                }
+            }
+
+            for (var j = 0; j < constructionSites.length; j++) {
+                var constructionSite = constructionSites[j];
+                if (constructionSite.pos.x === coord.x && constructionSite.pos.y === coord.y) {
+                    return constructionSite;
+                }
+            }
+        }
+
+        return coordsAround;
     }
+
 
 };
 

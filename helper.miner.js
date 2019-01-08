@@ -1,6 +1,4 @@
 var helperRoom = require('helper.room');
-var helperEnergy = require('helper.energy');
-var helperCreep = require('helper.creep');
 
 require('object.extension')();
 
@@ -26,7 +24,7 @@ var helperMiner = {
             for (var i = 0; i < sources.length; i++) {
                 var source = sources[i];
 
-                var structure = helperEnergy.hasAContainerAround(source, room);
+                var structure = helperRoom.hasAContainerAround(source, room);
 
                 /**
                  * Check if container is built

@@ -62,9 +62,6 @@ var roleUtility = {
             }
         }
 
-        if (creep.memory.role === "filler") {
-            creep.memory.alternativePath = false;
-        }
 
         if (!creep.memory.canWork) {
             var energySource = helperEnergy.setEnergySource(creep, false);
@@ -129,7 +126,7 @@ var roleUtility = {
 
             if (creep.memory.filler && !creep.memory.upgrade
                     && !this.getBuildingPriority(creep)
-                    && ((Memory.fillerUnitCount[creep.room.name] !== Memory.utilityMaxCount[creep.room.name]
+                    && ((Memory.fillerUnitCount[creep.room.name] < Memory.utilityMaxCount[creep.room.name]
                             && creep.memory.role !== "filler") || creep.memory.role === "filler")) {
                 target = roleFiller.run(creep);
                 creep.say('Drop ☢︎');
@@ -178,6 +175,10 @@ var roleUtility = {
                         moveExit = helperCreep.assigneRandomExitRoom(creep);
                     }
                 }
+            }
+
+            if (null == target && creep.memory.role === "filler") {
+                target = this.findContainerController(creep.room, false);
             }
 
             if (null == target || moveExit != OK && creep.fatigue === 0) {

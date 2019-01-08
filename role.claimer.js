@@ -1,4 +1,5 @@
 var helperCreep = require('helper.creep');
+var helperRoom = require('helper.room');
 var helperController = require('helper.controller');
 
 require('object.extension')();
@@ -28,10 +29,25 @@ var roleClaimer = {
             creep.memory.claimingSpotError = 0;
         }
 
-        if (creep.memory.claimingSpotError > 16 && creep.memory.errorPathCount > 3) {
-            creep.memory.claimingSpot = false;
-            creep.memory.claimingSpotError = 0;
-            helperCreep.assigneRandomExitRoom(creep);
+        if (creep.memory.claimingSpotError > 16) {
+            var claimSpotCoords = helperRoom.getFreeSpots(room.controller);
+            var freeSpot = false;
+            for (var i = 0; i < claimSpotCoords.length; i++) {
+                var claimSpotCoord = claimSpotCoords[i];
+                var lookAts = creep.room.lookAt(new RoomPosition(claimSpotCoord.x, claimSpotCoord.y, creep.room.name));
+                for (var j = 0; j < lookAts.length; j++) {
+                    var lookAt = lookAts[j];
+                    if (null != lookAt.type && lookAt.type === "creep") {
+                        freeSpot = false;
+                    }
+                }
+            }
+
+            if (!freeSpot) {
+                creep.memory.claimingSpot = false;
+                creep.memory.claimingSpotError = 0;
+                helperCreep.assigneRandomExitRoom(creep);
+            }
         }
 
 
@@ -72,13 +88,13 @@ var roleClaimer = {
 
                 if (claimReserveResult === ERR_NOT_IN_RANGE) {
                     helperCreep.moveTo(creep, room.controller, true);
-                    
+
                     if (helperCreep.isStuck(creep)) {
                         creep.memory.claimingSpotError++;
                     } else {
                         creep.memory.claimingSpotError = 0;
                     }
-                    
+
                 } else if (claimReserveResult === ERR_INVALID_TARGET) {
                     var claimAttackResult = creep.attackController(room.controller);
                     creep.say("C A=" + claimAttackResult);

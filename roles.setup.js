@@ -238,7 +238,7 @@ var rolesSetup = {
 
             for (var i = 0; i < droppedResources.length; i++) {
                 var droppedResource = droppedResources[i];
-                if (droppedResource.amount > 400) {
+                if (droppedResource.amount > 1000) {
                     result = parseInt(Memory.previousUtilityMaxCount[room.name]) + 1;
                     upgraded = true;
                     break;
@@ -250,7 +250,7 @@ var rolesSetup = {
             }
 
             result = result < 1 ? 1 : result;
-            result = result > 7 ? 7 : result;
+            result = result > 5 ? 5 : result;
 
             Memory.previousUtilityMaxCount[room.name] = result;
 
@@ -277,7 +277,7 @@ var rolesSetup = {
         var sources = room.findInMemory(FIND_SOURCES);
         for (var i = 0; i < sources.length; i++) {
             var source = sources[i];
-            var container = helperEnergy.hasAContainerAround(source, room);
+            var container = helperRoom.hasAContainerAround(source, room);
 
             if (container.structureType === STRUCTURE_CONTAINER && container.hitsMax) {
                 result++;

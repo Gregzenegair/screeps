@@ -274,13 +274,27 @@ var helperEnergy = {
             target = this.findClosestContainerOperator(creep, 'sup', this.structureValues.store, this.structureValues.zero);
         }
         return target;
-
-
     },
+
+    findContainerController: function (room, checkNotEmpty) {
+        if (null != Memory.containerSources) {
+            var containerController = Memory.containerSources[room.name];
+            if (null != containerController) {
+                var container = Game.getObjectById(containerController.id);
+                if (containerController.built && null != container) {
+                    if (checkNotEmpty && container.store !== 0) {
+                        return null;
+                    }
+                    return container;
+                }
+            }
+        }
+        return null;
+    },
+
     /**
      * End of generic seek energy source methods
      */
-
     moveToEnergySource: function (creep, energySource) { // should be into an helper class
         var moveResult = helperCreep.moveTo(creep, energySource, true);
 
@@ -300,7 +314,7 @@ var helperEnergy = {
         var energySource = null;
 
         var isRoleFiller = creep.memory.role === "filler";
-        
+
         var canSeekForSources = Memory.minerMaxCount[creep.room.name] === 0
                 || (null == Memory.minerMaxCount[creep.room.name]
                         || null == Memory.minerUnitCount[creep.room.name])
@@ -353,8 +367,17 @@ var helperEnergy = {
         }
 
         if (null == target) {
-            energySourceType = this.ENERGY_SOURCE_TYPES.DROPPED;
             target = creep.pos.findClosestByRangeInMemory(FIND_DROPPED_RESOURCES);
+            if (null != target) {
+                energySourceType = this.ENERGY_SOURCE_TYPES.DROPPED;
+            }
+        }
+
+        if (null == target) {
+            target = this.findContainerController(creep.room, true);
+            if (null != target) {
+                energySourceType = this.ENERGY_SOURCE_TYPES.CONTAINER;
+            }
         }
 
         // If not at maximum, keep feeling deposits, we ensure to have them always filled at priority
@@ -538,56 +561,10 @@ var helperEnergy = {
         for (var i = 0; i < sources.length; i++) {
             var source = sources[i];
 
-            var coords = helperRoom.getCoordsAround(source.pos.x, source.pos.y);
+            result += helperRoom.countFreeSpots(source);
 
-            for (var i = 0; i < coords.length; i++) {
-                var coord = coords[i];
-                if (TERRAIN_MASK_WALL !== Game.map.getRoomTerrain(room.name).get(coord.x, coord.y)) {
-                    result++;
-                }
-            }
         }
         return result;
-    },
-
-    /**
-     * @param {type} energySource
-     * @param {type} room
-     * @returns x/y coords Objects Array, or a construcitonSite Object or a structure Object
-     */
-    hasAContainerAround: function (energySource, room) { // should be in helper.room ?
-
-        var coordsAround = helperRoom.getCoordsAround(energySource.pos.x, energySource.pos.y);
-        for (var i = 0; i < coordsAround.length; i++) {
-            var coord = coordsAround[i];
-            var containers = room.findInMemory(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return structure.structureType === STRUCTURE_CONTAINER;
-                }
-            });
-
-            var constructionSites = room.findInMemory(FIND_CONSTRUCTION_SITES, {
-                filter: (structure) => {
-                    return structure.structureType === STRUCTURE_CONTAINER;
-                }
-            });
-
-            for (var j = 0; j < containers.length; j++) {
-                var container = containers[j];
-                if (container.pos.x === coord.x && container.pos.y === coord.y) {
-                    return container;
-                }
-            }
-
-            for (var j = 0; j < constructionSites.length; j++) {
-                var constructionSite = constructionSites[j];
-                if (constructionSite.pos.x === coord.x && constructionSite.pos.y === coord.y) {
-                    return constructionSite;
-                }
-            }
-        }
-
-        return coordsAround;
     },
 
     buildContainerToSource: function (energySource, room) {
@@ -601,7 +578,7 @@ var helperEnergy = {
             return "Not building container, enemy buildings there";
         }
 
-        var coords = this.hasAContainerAround(energySource, room);
+        var coords = helperRoom.hasAContainerAround(energySource, room);
         if (coords instanceof Array) {
             for (var i = 0; i < coords.length; i++) {
                 var coord = coords[i];

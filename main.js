@@ -92,12 +92,27 @@ module.exports.loop = function () {
 
     Memory.combatUnitCount = combatUnitCount;
 
-    if (null == Memory.pathBuiltAroundSources || null == Memory.pathBuilt || null == Memory.storageBuilt || Game.time % 2048 === 0) {
+    if (null == Memory.pathBuiltAroundSources || null == Memory.pathBuilt || null == Memory.storageBuilt
+            || Game.time % 2048 === 0) {
         Memory.pathBuiltAroundSources = {};
         Memory.pathBuilt = {};
         Memory.storageBuilt = {};
         Memory.combatExitRoom = null; //TODO: rework this
         Memory.unreachableRooms = [];
+
+        // Remove old constructionSites
+        var constructionSites = Game.constructionSites;
+
+        for (var csId in constructionSites) {
+            var constructionSite = Game.getObjectById(csId);
+            if (null != constructionSite
+                    && constructionSite.my &&
+                    (null == constructionSite.room
+                            || null == constructionSite.room.controller
+                            || (null != constructionSite.room.controller && !constructionSite.room.controller.my))) {
+                constructionSite.remove();
+            }
+        }
     }
 
     roleTowers.run();
@@ -241,6 +256,10 @@ module.exports.loop = function () {
 
             if (room.controller && room.controller.level >= 6) {
                 helperBuild.buildStorage(room);
+            }
+
+            if (room.controller && room.controller.level >= 4) {
+                helperBuild.buildContainersController(room);
             }
 
             // in each possible room with creep or building, try to build a container
