@@ -335,6 +335,8 @@ var helperEnergy = {
                 energySource = helperEnergy.findNearestEnergySource(creep, !creep.memory.filler, !canSeekForSources);
                 creep.memory.alternativePath = true; // may already be true
                 creep.memory.errorPathCount = 0;
+            } else {
+                energySource = helperEnergy.findNearestEnergySource(creep, false, false);
             }
 
             if (null == energySource && !isRoleFiller) {
@@ -373,7 +375,7 @@ var helperEnergy = {
             }
         }
 
-        if (null == target) {
+        if (null == target && creep.memory.role !== "filler") {
             target = this.findContainerController(creep.room, true);
             if (null != target) {
                 energySourceType = this.ENERGY_SOURCE_TYPES.CONTAINER;
