@@ -38,7 +38,9 @@ var roleClaimer = {
                 for (var j = 0; j < lookAts.length; j++) {
                     var lookAt = lookAts[j];
                     if (null != lookAt.type && lookAt.type === "creep") {
-                        freeSpot = false;
+                        if (lookAt.creep.id != creep.id) {
+                            freeSpot = false;
+                        }
                     }
                 }
             }
