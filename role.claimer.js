@@ -31,7 +31,7 @@ var roleClaimer = {
 
         if (creep.memory.claimingSpotError > 16) {
             var claimSpotCoords = helperRoom.getFreeSpots(room.controller);
-            var freeSpot = false;
+            var freeSpot = true;
             for (var i = 0; i < claimSpotCoords.length; i++) {
                 var claimSpotCoord = claimSpotCoords[i];
                 var lookAts = creep.room.lookAt(new RoomPosition(claimSpotCoord.x, claimSpotCoord.y, creep.room.name));
