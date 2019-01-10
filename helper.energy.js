@@ -276,13 +276,13 @@ var helperEnergy = {
         return target;
     },
 
-    findContainerController: function (room, checkNotEmpty) {
+    findContainerController: function (creep, checkNotEmpty) {
 
-        var containerController = Memory.containersControllers[room.name];
+        var containerController = Memory.containersControllers[creep.room.name];
         if (null != containerController) {
             var container = Game.getObjectById(containerController.container);
             if (containerController.built && null != container) {
-                if (checkNotEmpty && container.store !== 0) {
+                if (checkNotEmpty && container.store[RESOURCE_ENERGY] < creep.carryCapacity) {
                     return null;
                 }
                 return container;
@@ -362,7 +362,15 @@ var helperEnergy = {
         // First check into full containers if exists, to prevent infinie dropped
         // ressources on the floor pushed by miners
         var energySourceType = null;
-        var target = this.findFullClosestContainer(creep);
+        var target = null;
+
+        if (creep.memory.role !== "filler") {
+            target = this.findContainerController(creep, true);
+        }
+
+        if (null == target) {
+            target = this.findFullClosestContainer(creep);
+        }
 
         if (null != target) {
             energySourceType = this.ENERGY_SOURCE_TYPES.CONTAINER;
@@ -375,14 +383,7 @@ var helperEnergy = {
             }
         }
 
-        if (null == target && creep.memory.role !== "filler") {
-            target = this.findContainerController(creep.room, true);
-            if (null != target) {
-                energySourceType = this.ENERGY_SOURCE_TYPES.CONTAINER;
-            }
-        }
-
-        // If not at maximum, keep feeling deposits, we ensure to have them always filled at priority
+        // If not at maximum, keep filling deposits, we ensure to have them always filled at priority
         if (canSeekIntoDeposits && creep.room.energyAvailable !== creep.room.energyCapacityAvailable) {
             canSeekIntoDeposits = false;
         }
