@@ -277,18 +277,18 @@ var helperEnergy = {
     },
 
     findContainerController: function (room, checkNotEmpty) {
-        if (null != Memory.containerSources) {
-            var containerController = Memory.containerSources[room.name];
-            if (null != containerController) {
-                var container = Game.getObjectById(containerController.id);
-                if (containerController.built && null != container) {
-                    if (checkNotEmpty && container.store !== 0) {
-                        return null;
-                    }
-                    return container;
+
+        var containerController = Memory.containersControllers[room.name];
+        if (null != containerController) {
+            var container = Game.getObjectById(containerController.container);
+            if (containerController.built && null != container) {
+                if (checkNotEmpty && container.store !== 0) {
+                    return null;
                 }
+                return container;
             }
         }
+
         return null;
     },
 

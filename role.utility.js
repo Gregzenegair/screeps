@@ -175,10 +175,19 @@ var roleUtility = {
                         moveExit = helperCreep.assigneRandomExitRoom(creep);
                     }
                 }
+                if (target == -1) {
+                    target = null;
+                }
             }
 
             if (null == target && creep.memory.role === "filler") {
-                target = this.findContainerController(creep.room, false);
+                target = helperEnergy.findContainerController(creep.room, false);
+            }
+
+            if (null != target) {
+                if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    helperCreep.moveTo(creep, target, true);
+                }
             }
 
             if (null == target || moveExit != OK && creep.fatigue === 0) {

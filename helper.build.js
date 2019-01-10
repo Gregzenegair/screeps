@@ -48,7 +48,11 @@ var helperBuild = {
     },
 
     buildStorage: function (room) {
-        if (!Memory.storageBuilt[room.name]) {
+        if (null == Memory.storageBuilt) {
+            Memory.storageBuilt = {};
+        }
+
+        if (null != Memory.storageBuilt[room.name] || !Memory.storageBuilt[room.name]) {
             var allCoords = [];
             var spawns = helperRoom.findSpawns(room);
             if (null != spawns) {
@@ -70,11 +74,8 @@ var helperBuild = {
                             Memory.storageBuilt[room.name] = true;
                             return;
                         }
-
                     }
-
                 }
-
             }
         }
     },
@@ -82,11 +83,12 @@ var helperBuild = {
     buildContainersController: function (room) {
         this.memoryStoreContainersController(room);
 
-        if (null == Memory.containerSources[room.name]) {
+        if (null == Memory.containerSources[room.name] // If no source container yet, no need to build container for controller
+                || null != Memory.containersControllers[room.name]) {
             return;
         }
 
-        var controller = (room.controller != null && room.controller.my) ? controller : null;
+        var controller = (null != room.controller && room.controller.my) ? room.controller : null;
 
         if (null != controller) {
             var allCoords = [];
@@ -117,13 +119,12 @@ var helperBuild = {
         }
 
         if (Game.time % 256 === 0 || null == Memory.containersControllers[room.name]) {
-            var controller = (room.controller != null && room.controller.my) ? controller : null;
+            var controller = (null != room.controller && room.controller.my) ? room.controller : null;
 
             if (null != controller) {
                 Memory.containersControllers[room.name] = null;
 
                 var structure = helperRoom.hasAContainerAround(controller, room);
-
                 /**
                  * Check if container is built
                  */
@@ -132,6 +133,36 @@ var helperBuild = {
                         "container": structure.id,
                         "built": (null != structure.hitsMax && null == structure.progress)
                     };
+                }
+            }
+        }
+    },
+
+    memoryStoreStorage: function (room) {
+
+        if (null == Memory.storageBuilt || Game.time % 2048 === 0) {
+            Memory.storageBuilt = {};
+        }
+
+        if (null == Memory.storageBuilt[room.name]) {
+
+            var spawns = helperRoom.findSpawns(room);
+
+            if (null != spawns) {
+                for (var i = 0; i < spawns.length; i++) {
+                    var spawn = spawns[i];
+
+                    if (null != spawn) {
+                        Memory.containersControllers[room.name] = null;
+
+                        var structure = helperRoom.hasAStorageAround(spawn, room);
+                        /**
+                         * Check if container is built
+                         */
+                        if (structure.structureType === STRUCTURE_STORAGE) {
+                            Memory.containersControllers[room.name] = true;
+                        }
+                    }
                 }
             }
         }

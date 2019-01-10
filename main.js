@@ -125,7 +125,7 @@ module.exports.loop = function () {
 
     }
 
-    if (Game.time % 128 === 0) {
+    if (Game.time % 256 === 0) {
         Memory.lastWantedBuild = {};
 
         var roomWithCombatUnit = 0;

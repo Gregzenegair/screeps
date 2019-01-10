@@ -218,19 +218,27 @@ var helperRoom = {
      * @returns x/y coords Objects Array, or a construcitonSite Object or a structure Object
      */
     hasAContainerAround: function (roomObject, room) { // should be in helper.room ?
+        return this.hasASomethingAround(roomObject, STRUCTURE_CONTAINER, room);
+    },
+
+    hasAStorageAround: function (roomObject, room) { // should be in helper.room ?
+        return this.hasASomethingAround(roomObject, STRUCTURE_STORAGE, room);
+    },
+
+    hasASomethingAround: function (roomObject, somethingType, room) { // should be in helper.room ?
 
         var coordsAround = helperRoom.getCoordsAround(roomObject.pos.x, roomObject.pos.y);
         for (var i = 0; i < coordsAround.length; i++) {
             var coord = coordsAround[i];
             var containers = room.findInMemory(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return structure.structureType === STRUCTURE_CONTAINER;
+                    return structure.structureType === somethingType;
                 }
             });
 
             var constructionSites = room.findInMemory(FIND_CONSTRUCTION_SITES, {
                 filter: (structure) => {
-                    return structure.structureType === STRUCTURE_CONTAINER;
+                    return structure.structureType === somethingType;
                 }
             });
 
