@@ -167,7 +167,7 @@ module.exports = function () {
             sOptions = sOptions.replace(/\s/g, "").replace("\r\n", "");
         }
 
-        var key = "name=" + this.name + "_x=" + this.x + "_y=" + this.y + "_target=" + target + "_options=" + sOptions;
+        var key = "x=" + this.x + "_y=" + this.y + "_target=" + target + "_options=" + sOptions;
         var that = this;
 
         var defaultFunction = function (context) {
