@@ -9,7 +9,7 @@ var rolesSetup = {
     UTILITY: {name: "utility", maxCount: -1, baseBody: [WORK, CARRY, MOVE], filler: true},
     FILLER: {name: "filler", maxCount: -1, baseBody: [CARRY, MOVE], filler: true},
     MINER: {name: "miner", maxCount: -1, baseBody: [MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK], simpleBody: true},
-    CLAIMER: {name: "claimer", maxCount: 2, baseBody: [CLAIM, MOVE], simpleBody: false},
+    CLAIMER: {name: "claimer", maxCount: 1, baseBody: [CLAIM, MOVE], simpleBody: false},
     COMBAT: {name: "combat", maxCount: 1, baseBody: [ATTACK, MOVE, MOVE, TOUGH, TOUGH]},
     COMBAT2: {name: "combat", maxCount: 1, baseBody: [ATTACK, MOVE, TOUGH]},
     HEALER: {name: "heal", maxCount: 1, baseBody: [HEAL, MOVE, MOVE, TOUGH]},
@@ -84,7 +84,7 @@ var rolesSetup = {
 
 
                     if (Game.cpu.bucket < 4000 && !spawnForItself) {
-                        console.log("Not spawning spawn room [" + spawn.room.name + "] for this room " + room.name + " bucket is under 1000");
+                        console.log("Not spawning spawn room [" + spawn.room.name + "] for this room " + room.name + " bucket is under 4000");
                         continue;
                     }
 
