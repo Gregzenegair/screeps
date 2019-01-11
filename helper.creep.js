@@ -1,5 +1,5 @@
 require('object.extension')();
-
+var traveler = require('Traveler');
 var helperRoom = require('helper.room');
 
 var helperCreep = {
@@ -23,7 +23,7 @@ var helperCreep = {
             ignoreCreeps = false;
         }
 
-        var moveResult = creep.moveTo(target, {
+        var moveResult = creep.travelTo(target, {
             reusePath: 32,
             visualizePathStyle: visualizePathStyle,
             ignoreCreeps: ignoreCreeps,
