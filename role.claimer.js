@@ -29,7 +29,7 @@ var roleClaimer = {
             creep.memory.claimingSpotError = 0;
         }
 
-        if (creep.memory.claimingSpotError > 16) {
+        if (creep.memory.claimingSpotError > 4) {
             var claimSpotCoords = helperRoom.getFreeSpots(room.controller);
             var freeSpot = true;
             for (var i = 0; i < claimSpotCoords.length; i++) {

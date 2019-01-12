@@ -7,8 +7,20 @@ var roleFiller = {
     run: function (creep) {
 
         var target;
+
+        if (null != creep.memory.fillTarget) {
+            var memTarget = Game.getObjectById(creep.memory.fillTarget);
+            if (memTarget.structureType === STRUCTURE_CONTAINER
+                    || memTarget.structureType === STRUCTURE_TERMINAL
+                    || memTarget.structureType === STRUCTURE_LINK) {
+                target = _.sum(memTarget.store) != memTarget.storeCapacity ? memTarget : null;
+            } else {
+                target = memTarget.energy != memTarget.energyCapacity ? memTarget : null;
+            }
+        }
+
         // First try to fill empty things, then fill other things
-        if (creep.memory.role !== "filler") {
+        if (creep.memory.role !== "filler" && null == target) {
             target = helperEnergy.findEmptyClosestDeposit(creep);
         }
         // NO MORE FILL CONTAINERS
@@ -16,7 +28,9 @@ var roleFiller = {
             target = helperEnergy.findNotFullClosestDeposit(creep);
             //target = helperEnergy.findNotFullClosestContainer(creep);
         }
+
         if (target) {
+            creep.memory.fillTarget = target.id;
             if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 helperCreep.moveTo(creep, target, true);
             }

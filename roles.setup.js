@@ -83,8 +83,8 @@ var rolesSetup = {
                     }
 
 
-                    if (Game.cpu.bucket < 4000 && !spawnForItself) {
-                        console.log("Not spawning spawn room [" + spawn.room.name + "] for this room " + room.name + " bucket is under 4000");
+                    if (Game.cpu.bucket < 1000 && !spawnForItself) {
+                        console.log("Not spawning spawn room [" + spawn.room.name + "] for this room " + room.name + " bucket is under 1000");
                         continue;
                     }
 
@@ -124,8 +124,8 @@ var rolesSetup = {
 
 //                    console.log("Current status for spawn=" + spawn.name + ", " + type.name + "=" + seekTypes.length);
 
-                    if (type.name === this.COMBAT.name && Game.cpu.bucket < 2000) {
-                        console.log("Not building combat, bucket is under 2000");
+                    if ((type.name === this.COMBAT.name || type.name === this.HEALER.name) && Game.cpu.bucket < 5000) {
+                        console.log("Not building combat, bucket is under 5000");
                         continue;
                     }
 
@@ -250,7 +250,11 @@ var rolesSetup = {
             }
 
             result = result < 1 ? 1 : result;
-            result = result > 5 ? 5 : result;
+            if (roomControlerLevel <= 4) {
+                result = result > 5 ? 5 : result;
+            } else {
+                result = result > 3 ? 3 : result;
+            }
 
             Memory.previousUtilityMaxCount[room.name] = result;
 

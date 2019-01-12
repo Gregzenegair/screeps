@@ -80,10 +80,14 @@ var helperEnergy = {
     },
 
     findClosestContainerOperator: function (creep, operator, a, b) {
-
+        var notWantedContainer = this.findContainerController(creep, false);
+        if (null != notWantedContainer) {
+            notWantedContainer = notWantedContainer.id;
+        }
         var target = creep.pos.findClosestByRangeInMemory(FIND_STRUCTURES, {
             filter: (structure) => {
-                return (structure.structureType === STRUCTURE_CONTAINER &&
+                return (notWantedContainer != structure.id
+                        && structure.structureType === STRUCTURE_CONTAINER &&
                         this.operators[operator](a(structure), b(structure)
                         ));
             }
@@ -93,10 +97,15 @@ var helperEnergy = {
     },
 
     findClosestContainerOperatorMoreFilledThanCreep: function (creep) {
+        var notWantedContainer = this.findContainerController(creep, false);
+        if (null != notWantedContainer) {
+            notWantedContainer = notWantedContainer.id;
+        }
         var method = function () {
             var target = creep.pos.findClosestByRangeInMemory(FIND_STRUCTURES, {
                 filter: (structure) => {
-                    return (structure.structureType === STRUCTURE_CONTAINER
+                    return (notWantedContainer != structure.id
+                            && structure.structureType === STRUCTURE_CONTAINER
                             && structure.store[RESOURCE_ENERGY] > creep.carryCapacity
 
                             );
@@ -111,6 +120,10 @@ var helperEnergy = {
     },
 
     findMostFilledContainerOperator: function (creep) {
+        var notWantedContainer = this.findContainerController(creep, false);
+        if (null != notWantedContainer) {
+            notWantedContainer = notWantedContainer.id;
+        }
         var targets = this.getTargetsFromCache(
                 creep,
                 "findMostFilledContainerOperatorTargetMethod",
@@ -123,7 +136,8 @@ var helperEnergy = {
             if (null == result) {
                 result = target;
             } else {
-                if (target.store > result.store) {
+                if (notWantedContainer != target.id
+                        && target.store > result.store) {
                     result = target;
                 }
             }
@@ -133,6 +147,10 @@ var helperEnergy = {
     },
 
     findMostFilledContainerOperatorMoreFilledThanCreep: function (creep) {
+        var notWantedContainer = this.findContainerController(creep, false);
+        if (null != notWantedContainer) {
+            notWantedContainer = notWantedContainer.id;
+        }
         var targets = this.getTargetsFromCache(
                 creep,
                 "findMostFilledContainerOperatorMoreFilledThanCreepTargetMethod",
@@ -145,7 +163,8 @@ var helperEnergy = {
             if (null == result && null != target) {
                 result = target;
             } else if (null != target) {
-                if (target.store > result.store) {
+                if (notWantedContainer != target.id
+                        && target.store > result.store) {
                     result = target;
                 }
             }
