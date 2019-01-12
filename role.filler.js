@@ -10,12 +10,14 @@ var roleFiller = {
 
         if (null != creep.memory.fillTarget) {
             var memTarget = Game.getObjectById(creep.memory.fillTarget);
-            if (memTarget.structureType === STRUCTURE_CONTAINER
-                    || memTarget.structureType === STRUCTURE_TERMINAL
-                    || memTarget.structureType === STRUCTURE_STORAGE) {
-                target = _.sum(memTarget.store) != memTarget.storeCapacity ? memTarget : null;
-            } else {
-                target = memTarget.energy != memTarget.energyCapacity ? memTarget : null;
+            if (null != memTarget) {
+                if (memTarget.structureType === STRUCTURE_CONTAINER
+                        || memTarget.structureType === STRUCTURE_TERMINAL
+                        || memTarget.structureType === STRUCTURE_STORAGE) {
+                    target = _.sum(memTarget.store) != memTarget.storeCapacity ? memTarget : null;
+                } else {
+                    target = memTarget.energy != memTarget.energyCapacity ? memTarget : null;
+                }
             }
         }
 
