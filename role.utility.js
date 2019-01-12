@@ -60,6 +60,7 @@ var roleUtility = {
 
             if (creep.memory.role === "filler") {
                 creep.memory.filler = true;
+                creep.memory.fillTarget = null;
             }
         }
 
