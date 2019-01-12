@@ -33,7 +33,8 @@ var roleUtility = {
             return;
         }
 
-        if (creep.carry.energy !== 0) { //creep.carryCapacity
+        if ((creep.memory.role === "filler" && creep.carry.energy !== 0)
+                || (creep.memory.role !== "filler" && creep.carry.energy === creep.carryCapacity)) {
             creep.memory.isFullResources = true;
             creep.memory.isEmptyResources = false;
             creep.memory.canWork = true;
