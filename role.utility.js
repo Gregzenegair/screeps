@@ -186,6 +186,7 @@ var roleUtility = {
             }
 
             if (null != target) {
+                creep.memory.fillTarget = target.id;
                 if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     helperCreep.moveTo(creep, target, true);
                 }
