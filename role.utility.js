@@ -33,8 +33,7 @@ var roleUtility = {
             return;
         }
 
-        if ((creep.memory.role === "filler" && creep.carry.energy !== 0)
-                || (creep.memory.role !== "filler" && creep.carry.energy === creep.carryCapacity)) {
+        if (this.canWorkCreep(creep)) {
             creep.memory.isFullResources = true;
             creep.memory.isEmptyResources = false;
             creep.memory.canWork = true;
@@ -202,6 +201,12 @@ var roleUtility = {
         if (Game.time % 256 === 0 || null == creep.memory.upgrade) {
             this.mustUpgrade(creep);
         }
+    },
+
+    canWorkCreep: function (creep) {
+        return (creep.memory.role === "filler" && creep.carry.energy !== 0 && creep.memory.roomHome === creep.room.name)
+                || (creep.memory.role === "filler" && creep.carry.energy === creep.carryCapacity && creep.memory.roomHome !== creep.room.name)
+                || (creep.memory.role !== "filler" && creep.carry.energy === creep.carryCapacity);
     },
 
     mustUpgrade: function (creep) {
