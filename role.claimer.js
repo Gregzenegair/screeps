@@ -14,6 +14,7 @@ var roleClaimer = {
 
         var reached = helperCreep.moveToRoomAssigned(creep);
         if (!reached) {
+            creep.memory.claimingSpot = false;
             return;
         }
 
@@ -46,7 +47,6 @@ var roleClaimer = {
             }
 
             if (!freeSpot) {
-                creep.memory.claimingSpot = false;
                 creep.memory.claimingSpotError = 0;
                 helperCreep.assigneRandomExitRoom(creep);
             }
@@ -70,7 +70,6 @@ var roleClaimer = {
                 Memory.claimableControllerRooms.push(room.name);
             }
 
-            creep.memory.claimingSpot = true;
 
             // claim this room's controller
             var claimResult = null;
@@ -81,7 +80,9 @@ var roleClaimer = {
             }
 
             if (null == claimResult || claimResult === ERR_NOT_IN_RANGE) {
-                helperCreep.moveTo(creep, room.controller, true);
+                if (!creep.memory.claimingSpot) {
+                    helperCreep.moveTo(creep, room.controller, true);
+                }
             }
 
             if (null == claimResult || claimResult !== OK) {
@@ -89,7 +90,9 @@ var roleClaimer = {
                 creep.say("C R=" + claimReserveResult);
 
                 if (claimReserveResult === ERR_NOT_IN_RANGE) {
-                    helperCreep.moveTo(creep, room.controller, true);
+                    if (!creep.memory.claimingSpot) {
+                        helperCreep.moveTo(creep, room.controller, true);
+                    }
 
                     if (helperCreep.isStuck(creep)) {
                         creep.memory.claimingSpotError++;
@@ -104,6 +107,7 @@ var roleClaimer = {
 //                        creep.memory.claimingSpotError++;
                     }
                 } else {
+                    creep.memory.claimingSpot = true;
                     creep.memory.claimingSpotError = 0;
                 }
             }
