@@ -5,6 +5,10 @@ var helperCreep = {
 
     moveTo: function (creep, target, ignoreCreeps, range, visualizePathStyle) {
 
+        if (creep.spawning) {
+            return;
+        }
+
         if (null == visualizePathStyle) {
             visualizePathStyle = {stroke: '#fffd00'};
         }
