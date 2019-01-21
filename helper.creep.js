@@ -34,8 +34,11 @@ var helperCreep = {
 
         if (isStuck) {
             creep.memory.errorPathCount++;
-            this.drawCircle(creep.pos, "magenta", creep.memory.errorPathCount * 0.1);
-            if (creep.memory.errorPathCount > 2) {
+            if (creep.memory.errorPathCount > 1) {
+                this.drawCircle(creep.pos, "magenta", creep.memory.errorPathCount * 0.1);
+            }
+
+            if (creep.memory.errorPathCount > 4) {
                 this.drawCircle(creep.pos, "red", 0.3);
                 creep.memory.errorPathCount = 0;
                 creep.memory.alternativePath = true;
@@ -360,7 +363,7 @@ var helperCreep = {
         }
         return new RoomPosition(x, y, room);
     },
-    
+
     drawCircle: function (pos, color, opacity) {
         new RoomVisual(pos.roomName).circle(pos, {
             radius: .45, fill: "transparent", stroke: color, strokeWidth: .15, opacity: opacity
