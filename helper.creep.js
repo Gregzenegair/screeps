@@ -23,7 +23,7 @@ var helperCreep = {
             ignoreCreeps = false;
         }
 
-        var moveResult = creep.travelTo(target, {
+        var moveResult = creep.moveTo(target, {
             reusePath: 32,
             visualizePathStyle: visualizePathStyle,
             ignoreCreeps: ignoreCreeps,
@@ -32,12 +32,15 @@ var helperCreep = {
         });
 
         var isStuck = this.isStuck(creep);
-        
+
         if (isStuck) {
             creep.memory.errorPathCount++;
+            this.drawCircle(creep.pos, "magenta", creep.memory.errorPathCount * 0.1);
             if (creep.memory.errorPathCount > 2) {
+                this.drawCircle(creep.pos, "red", 0.3);
                 creep.memory.errorPathCount = 0;
                 creep.memory.alternativePath = true;
+                creep.memory._move = null;
             }
         } else {
             creep.memory.errorPathCount = 0;
@@ -83,9 +86,10 @@ var helperCreep = {
 
         return moveExit;
     },
-    
+
     isStuck: function (creep) {
         if (creep.fatigue !== 0) {
+            this.drawCircle(creep.pos, "cyan", 0.3);
             return false;
         }
         var moved = true;
@@ -356,6 +360,12 @@ var helperCreep = {
             y = 25;
         }
         return new RoomPosition(x, y, room);
+    },
+    
+    drawCircle: function (pos, color, opacity) {
+        new RoomVisual(pos.roomName).circle(pos, {
+            radius: .45, fill: "transparent", stroke: color, strokeWidth: .15, opacity: opacity
+        });
     }
 
 };
