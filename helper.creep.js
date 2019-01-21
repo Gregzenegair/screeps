@@ -1,5 +1,4 @@
 require('object.extension')();
-var traveler = require('Traveler');
 var helperRoom = require('helper.room');
 
 var helperCreep = {
