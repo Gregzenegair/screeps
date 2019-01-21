@@ -120,7 +120,7 @@ module.exports = function () {
                 || results.length == 0) {
             results = accessDefaultFunction(context);
             var memResults = [];
-            if (null != results) {
+            if (null != results && results instanceof Array) {
                 for (var i = 0; i < results.length; i++) {
                     var memObject = results[i].id;
                     if (null != memObject) {
@@ -128,6 +128,9 @@ module.exports = function () {
                     }
                     Memory[memoryName][key] = memResults;
                 }
+            } else if (null != results && null != results.id) {
+                Memory[memoryName][key] = [];
+                Memory[memoryName][key].push(results.id);
             }
         }
         return results;
@@ -185,6 +188,11 @@ module.exports = function () {
 
     RoomPosition.prototype.findClosestByPathInMemory = function findClosestByPathInMemory(type, options) {
         var sOptions = "";
+
+        if (null == options) {
+            options = {};
+        }
+
         if (null != options) {
             for (var option in options) {
                 sOptions += option + options[option].toString();
@@ -192,7 +200,7 @@ module.exports = function () {
             sOptions = sOptions.replace(/\s/g, "").replace("\r\n", "");
         }
 
-        var key = "name=" + this.name + "_x=" + this.x + "_y=" + this.y + "_type=" + type + "_options=" + sOptions;
+        var key = "roomName=" + this.roomName + "_x=" + this.x + "_y=" + this.y + "_type=" + type + "_options=" + sOptions;
         var that = this;
 
         var defaultFunction = function (context) {
@@ -210,6 +218,11 @@ module.exports = function () {
 
     RoomPosition.prototype.findClosestByRangeInMemory = function findClosestByRangeInMemory(type, options) {
         var sOptions = "";
+
+        if (null == options) {
+            options = {};
+        }
+
         if (null != options) {
             for (var option in options) {
                 sOptions += option + options[option].toString();
@@ -217,7 +230,7 @@ module.exports = function () {
             sOptions = sOptions.replace(/\s/g, "").replace("\r\n", "");
         }
 
-        var key = "name=" + this.name + "_x=" + this.x + "_y=" + this.y + "_type=" + type + "_options=" + sOptions;
+        var key = "roomName=" + this.roomName + "_x=" + this.x + "_y=" + this.y + "_type=" + type + "_options=" + sOptions;
         var that = this;
 
         var defaultFunction = function (context) {
