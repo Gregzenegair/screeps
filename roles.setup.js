@@ -130,11 +130,11 @@ var rolesSetup = {
                     }
 
                     if (type.name === this.UTILITY.name && null != Memory.utilityMaxCount[room.name]) {
-                        type.maxCount = Memory.utilityMaxCount[room.name];
+                        type.maxCount = Math.floor(Memory.utilityMaxCount[room.name]);
                     }
 
                     if (type.name === this.FILLER.name && null != Memory.utilityMaxCount[room.name]) {
-                        type.maxCount = Memory.utilityMaxCount[room.name];
+                        type.maxCount = Math.ceil(Memory.utilityMaxCount[room.name]);
                     }
 
                     if (type.name === this.MINER.name && null != Memory.minerMaxCount[room.name]) {
@@ -159,7 +159,9 @@ var rolesSetup = {
                     if (seekTypes.length < type.maxCount) {
                         if ((type.name === this.COMBAT.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name])
                                 || (type.name === this.COMBAT.name && null != room.controller && room.controller.my && room.controller.level <= 3)
-                                && Memory.hasBeenUnderAttack < 6) {
+                                && Memory.hasBeenUnderAttack < 6
+                                || (null != room.controller && !room.controller.my)
+                                || null == room.controller) {
                             console.log('Not spawning combat yet, reason: not enough utility or room.controller.level <= 3');
                             continue;
                         }
@@ -241,7 +243,7 @@ var rolesSetup = {
             for (var i = 0; i < droppedResources.length; i++) {
                 var droppedResource = droppedResources[i];
                 if (droppedResource.amount > 1000) {
-                    result = parseInt(Memory.previousUtilityMaxCount[room.name]) + 1;
+                    result = parseInt(Memory.previousUtilityMaxCount[room.name]) + 0.5;
                     upgraded = true;
                     break;
                 }
