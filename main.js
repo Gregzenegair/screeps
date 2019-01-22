@@ -185,7 +185,13 @@ module.exports.loop = function () {
                     var pathsSources = helperBuild.findPathToSources(room);
                     var pathsMyStructures = helperBuild.findPathMyStructures(room);
                     var pathsExits = helperBuild.findPathExits(room);
-                    var paths = pathsSources.concat(pathsMyStructures).concat(pathsExits);
+                    var paths = pathsSources.concat(pathsExits);
+
+                    if (pathsMyStructures.length > 0) {
+                        // Select one path, paths are now build slowly, on at a time to prevent many many paths
+                        var onePathMyStructures = Math.myRandom(0, pathsMyStructures.length - 1);
+                        paths.push(onePathMyStructures);
+                    }
 
                     for (var i = 0; i < paths.length; i++) {
                         var path = paths[i];
