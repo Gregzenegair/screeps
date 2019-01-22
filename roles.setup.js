@@ -172,7 +172,9 @@ var rolesSetup = {
                         }
 
                         if ((type.name === this.CLAIMER.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name])
-                                || (type.name === this.CLAIMER.name && null != room.controller && room.controller.my && room.controller.level <= 3)) {
+                                || (type.name === this.CLAIMER.name && null != room.controller && room.controller.my && room.controller.level <= 5)
+                                || (null != room.controller && !room.controller.my)
+                                || null == room.controller) {
                             console.log('Not spawning claimer yet, reason: not enough utility or room.controller.level <= 3');
                             continue;
                         }
