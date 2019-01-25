@@ -184,8 +184,8 @@ var helperBuild = {
                     ignoreCreeps: true,
                     ignoreDestructibleStructures: false,
                     ignoreRoads: false,
-                    swampCost: 1,
-                    plainCost: 1
+                    swampCost: 2,
+                    plainCost: 2
                 });
             }
         }
@@ -209,8 +209,8 @@ var helperBuild = {
                     ignoreCreeps: true,
                     ignoreDestructibleStructures: false,
                     ignoreRoads: false,
-                    swampCost: 1,
-                    plainCost: 1
+                    swampCost: 2,
+                    plainCost: 2
                 }));
             }
         }
@@ -237,8 +237,8 @@ var helperBuild = {
                 ignoreDestructibleStructures: false,
                 ignoreRoads: false,
                 range: 1,
-                swampCost: 1,
-                plainCost: 1
+                swampCost: 2,
+                plainCost: 2
             });
         }
 
