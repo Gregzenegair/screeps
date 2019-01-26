@@ -225,11 +225,6 @@ var rolesSetup = {
             // ^ Not used yet
         }
 
-        var sourcesCount = room.findInMemory(FIND_SOURCES).length;
-        var mineSpots = helperEnergy.countEnergyMineSpots(room);
-        console.log("sourcesCount=" + sourcesCount);
-        console.log("mineSpots=" + mineSpots);
-
         var roomControlerLevel = -1;
         if (null != room.controller) {
             roomControlerLevel = room.controller.level;
@@ -268,6 +263,11 @@ var rolesSetup = {
 
         } else {
 
+            var sourcesCount = room.findInMemory(FIND_SOURCES).length;
+            var mineSpots = helperEnergy.countEnergyMineSpots(room);
+            console.log("sourcesCount=" + sourcesCount);
+            console.log("mineSpots=" + mineSpots);
+            
             if (null != room.controller && null != room.controller.level && room.controller.my) {
 
                 result = Math.round(Math.round(mineSpots * 0.4) - (roomControlerLevel / 2));
