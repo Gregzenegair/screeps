@@ -110,7 +110,7 @@ var helperEnergy = {
                         );
             }
         });
-        
+
         return target;
 
     },
@@ -232,6 +232,7 @@ var helperEnergy = {
     },
 
     findContainerController: function (creep, checkNotEmpty) {
+        helperRoom.memoryStoreContainersController(creep.room);
         if (null != Memory.containersControllers) {
             var containerController = Memory.containersControllers[creep.room.name];
             if (null != containerController) {

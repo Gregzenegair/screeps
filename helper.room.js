@@ -258,7 +258,41 @@ var helperRoom = {
         }
 
         return coordsAround;
+    },
+    memoryStoreContainersController: function (room) {
+
+        if (null == Memory.containersControllers) {
+            Memory.containersControllers = {};
+        }
+
+
+        if (null == Memory.containersControllers[room.name]) {
+            var controller = (null != room.controller && room.controller.my) ? room.controller : null;
+
+            if (null != controller) {
+                Memory.containersControllers[room.name] = null;
+
+                var structure = helperRoom.hasAContainerAround(controller, room);
+                /**
+                 * Check if container is built
+                 */
+                if (structure.structureType === STRUCTURE_CONTAINER) {
+                    Memory.containersControllers[room.name] = {
+                        "container": structure.id,
+                        "built": (null != structure.hitsMax && null == structure.progress)
+                    };
+                }
+            }
+        }
+
+        if (null == Memory.containersControllers[room.name]) {
+            Memory.containersControllers[room.name] = {
+                "container": null,
+                "built": false
+            };
+        }
     }
+
 
 
 };
