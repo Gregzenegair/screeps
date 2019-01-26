@@ -226,7 +226,8 @@ var roleUtility = {
         return (creep.memory.role === "filler" && creep.carry.energy !== 0 && creep.memory.roomHome === creep.room.name)
                 || (creep.memory.role === "filler" && creep.carry.energy === creep.carryCapacity && creep.memory.roomHome !== creep.room.name)
                 || (creep.memory.role !== "filler" && creep.carry.energy !== 0
-                        && Memory.minerMaxCount[creep.room.name] === Memory.minerUnitCount[creep.room.name] && Memory.minerMaxCount[creep.room.name] > 0);
+                        && Memory.minerMaxCount[creep.room.name] === Memory.minerUnitCount[creep.room.name] && Memory.minerMaxCount[creep.room.name] > 0)
+                || (creep.memory.role !== "filler" && creep.carry.energy === creep.carryCapacity);
     },
 
     mustUpgrade: function (creep) {
