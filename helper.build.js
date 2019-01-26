@@ -33,15 +33,21 @@ var helperBuild = {
                 for (var j = 0; j < coords.length; j++) {
                     var coord = coords[j];
                     if (TERRAIN_MASK_WALL !== Game.map.getRoomTerrain(room.name).get(coord.x, coord.y)) {
-                        var buildRoad = room.createConstructionSite(coord.x, coord.y, STRUCTURE_ROAD);
-                        console.log("Build road around source resulted=" + buildRoad);
-                        // should be somehow built only if  Memory.pathBuilt[room] = false
-                        // this build roads around  each ressource
+                        var canBuild = true;
+                        var lookAts = room.lookAt(new RoomPosition(coord.x, coord.y, room.name));
+                        for (var j = 0; j < lookAts.length; j++) {
+                            var lookAt = lookAts[j];
+                            if (null != lookAt.type && lookAt.type === "structure") {
+                                canBuild = false;
+                            }
+                        }
 
+                        if (canBuild) {
+                            var buildRoad = room.createConstructionSite(coord.x, coord.y, STRUCTURE_ROAD);
+                            console.log("Build road around source resulted=" + buildRoad);
+                        }
                     }
-
                 }
-
             }
             Memory.pathBuiltAroundSources[room.name] = true;
         }
@@ -117,8 +123,8 @@ var helperBuild = {
         if (null == Memory.containersControllers) {
             Memory.containersControllers = {};
         }
-        
-        
+
+
         if (null == Memory.containersControllers[room.name]) {
             var controller = (null != room.controller && room.controller.my) ? room.controller : null;
 
@@ -137,7 +143,7 @@ var helperBuild = {
                 }
             }
         }
-        
+
         if (null == Memory.containersControllers[room.name]) {
             Memory.containersControllers[room.name] = {
                 "container": null,
