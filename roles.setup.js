@@ -234,14 +234,14 @@ var rolesSetup = {
             for (var i = 0; i < droppedResources.length; i++) {
                 var droppedResource = droppedResources[i];
                 if (droppedResource.amount > 1000) {
-                    result = parseInt(Memory.previousUtilityMaxCount[room.name]) + 0.5;
+                    result = Memory.previousUtilityMaxCount[room.name] + 0.5;
                     upgraded = true;
                     break;
                 }
             }
 
             if (!upgraded) {
-                result = parseInt(Memory.previousUtilityMaxCount[room.name]) - 1;
+                result = Memory.previousUtilityMaxCount[room.name] - 1;
             }
 
             result = result < 1 ? 1 : result;
