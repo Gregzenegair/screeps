@@ -218,13 +218,6 @@ var rolesSetup = {
     },
 
     calcMaxUtility: function (room) {
-        if (null == Memory.maxUtilityBase || null == Memory.maxUtilityBase[room.name]) {
-            Memory.maxUtilityBase = {};
-            Memory.maxUtilityBase[room.name] = {};
-            Memory.maxUtilityBase[room.name].baseValue = 5;
-            Memory.maxUtilityBase[room.name].currentValue = 5;
-            // ^ Not used yet
-        }
 
         var roomControlerLevel = -1;
         if (null != room.controller) {
