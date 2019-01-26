@@ -171,7 +171,6 @@ var roleUtility = {
                 //TODO : or controller is full, there is no more anything to do here
                 //TODO : or has movved to an other room, keep it back to home
                 if (creep.memory.roomHome != creep.room.name) {
-                    target = -1; // quick fix
                     if (null != creep.memory.roomHome) {
                         creep.say('BHome ☢︎');
                         moveExit = helperCreep.moveToAnOtherRoom(creep, creep.memory.roomHome);
@@ -179,6 +178,7 @@ var roleUtility = {
                         creep.say('BRand ☢︎');
                         moveExit = helperCreep.assigneRandomExitRoom(creep);
                     }
+                    return;
                 }
             }
 
