@@ -296,18 +296,18 @@ var helperEnergy = {
     },
 
     findContainerController: function (creep, checkNotEmpty) {
-
-        var containerController = Memory.containersControllers[creep.room.name];
-        if (null != containerController) {
-            var container = Game.getObjectById(containerController.container);
-            if (containerController.built && null != container) {
-                if (checkNotEmpty && container.store[RESOURCE_ENERGY] < creep.carryCapacity / 4) {
-                    return null;
+        if (null != Memory.containersControllers) {
+            var containerController = Memory.containersControllers[creep.room.name];
+            if (null != containerController) {
+                var container = Game.getObjectById(containerController.container);
+                if (containerController.built && null != container) {
+                    if (checkNotEmpty && container.store[RESOURCE_ENERGY] < creep.carryCapacity / 4) {
+                        return null;
+                    }
+                    return container;
                 }
-                return container;
             }
         }
-
         return null;
     },
 

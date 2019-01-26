@@ -118,7 +118,6 @@ var helperBuild = {
             Memory.containersControllers = {};
         }
         
-        var containerControllerFound = false;
         
         if (null == Memory.containersControllers[room.name]) {
             var controller = (null != room.controller && room.controller.my) ? room.controller : null;
@@ -131,7 +130,6 @@ var helperBuild = {
                  * Check if container is built
                  */
                 if (structure.structureType === STRUCTURE_CONTAINER) {
-                    containerControllerFound = true;
                     Memory.containersControllers[room.name] = {
                         "container": structure.id,
                         "built": (null != structure.hitsMax && null == structure.progress)
@@ -140,7 +138,7 @@ var helperBuild = {
             }
         }
         
-        if (!containerControllerFound) {
+        if (null == Memory.containersControllers[room.name]) {
             Memory.containersControllers[room.name] = {
                 "container": null,
                 "built": false
