@@ -9,6 +9,7 @@ var helperRoom = require('helper.room');
 var helperEnergy = require('helper.energy');
 var helperBuild = require('helper.build');
 var helperController = require('helper.controller');
+var helperSecurity = require('helper.security');
 
 require('object.extension')();
 
@@ -91,6 +92,8 @@ module.exports.loop = function () {
     }
 
     Memory.combatUnitCount = combatUnitCount;
+
+    helperSecurity.run();
 
     if (null == Memory.pathBuiltAroundSources || null == Memory.pathBuilt || null == Memory.storageBuilt || null == Memory.containersControllers
             || Game.time % 2048 === 0) {
