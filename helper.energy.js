@@ -101,21 +101,18 @@ var helperEnergy = {
         if (null != notWantedContainer) {
             notWantedContainer = notWantedContainer.id;
         }
-        var method = function () {
-            var target = creep.pos.findClosestByRangeInMemory(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return (notWantedContainer != structure.id
-                            && structure.structureType === STRUCTURE_CONTAINER
-                            && structure.store[RESOURCE_ENERGY] > creep.carryCapacity
-                            );
-                }
-            });
-            return target;
-        };
 
-        var target = this.getTargetFromCache(creep, "findClosestContainerOperatorMoreFilledThanCreep", method);
-
+        var target = creep.pos.findClosestByRangeInMemory(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (notWantedContainer != structure.id
+                        && structure.structureType === STRUCTURE_CONTAINER
+                        && structure.store[RESOURCE_ENERGY] > creep.carryCapacity
+                        );
+            }
+        });
+        
         return target;
+
     },
 
     findMostFilledContainerOperator: function (creep) {
@@ -123,7 +120,7 @@ var helperEnergy = {
         if (null != notWantedContainer) {
             notWantedContainer = notWantedContainer.id;
         }
-        
+
         var targets = this.findMostFilledContainerOperatorTargetMethod(creep);
 
         var result = null;
@@ -180,31 +177,6 @@ var helperEnergy = {
                         && structure.store[RESOURCE_ENERGY] > creep.carryCapacity);
             }
         });
-    },
-
-    getTargetFromCache: function (creep, cacheRule, method) {
-        var room = creep.room;
-        var target = null;
-
-        if (Game.time % 64 === 0 || null == Memory.energyHelper) {
-            Memory.energyHelper = {};
-        }
-
-        if (null == Memory.energyHelper[room.name]) {
-            Memory.energyHelper[room.name] = {};
-        }
-
-        if (null != Memory.energyHelper[room.name][cacheRule]) {
-            if (null != Memory.energyHelper[room.name][cacheRule]) {
-                target = Game.getObjectById(Memory.energyHelper[room.name][cacheRule]);
-            }
-        } else {
-            target = method(creep);
-            if (null != target) {
-                Memory.energyHelper[room.name][cacheRule] = target.id;
-            }
-        }
-        return target;
     },
 
     findNotFullDeposit: function (room) {
