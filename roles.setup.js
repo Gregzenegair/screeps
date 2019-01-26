@@ -235,7 +235,9 @@ var rolesSetup = {
             roomControlerLevel = room.controller.level;
         }
         if (null != room.controller && room.controller.my && roomControlerLevel > 3
-                && null != Memory.previousUtilityMaxCount[room.name]) {
+                && null != Memory.previousUtilityMaxCount[room.name]
+                && null != Memory.minerMaxCount[room.name]
+                && Memory.minerMaxCount[room.name] > 0) {
             var result = 0;
             var upgraded = false;
             var droppedResources = room.findInMemory(FIND_DROPPED_RESOURCES);
