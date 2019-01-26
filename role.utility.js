@@ -111,8 +111,9 @@ var roleUtility = {
                         || creep.memory.energySourceType == helperEnergy.ENERGY_SOURCE_TYPES.DROPPED) {
                     creep.memory.filler = true;
                 }
-
-                creep.say('Get ☢︎');
+                if (Game.time % 4 === 0) {
+                    creep.say('Get ☢︎');
+                }
             } else {
                 console.log("energySource is null or not found");
                 creep.memory.energySourceId = null;
@@ -120,7 +121,9 @@ var roleUtility = {
                 // TODO: set something to do if no energy source
 
                 helperCreep.moveRandomly(creep, 2); // prevent to stay stuck (may block a miner position)
-                creep.say('418 ☢︎');
+                if (Game.time % 4 === 0) {
+                    creep.say('418 ☢︎');
+                }
             }
         }
 
@@ -133,7 +136,9 @@ var roleUtility = {
                     && ((Memory.fillerUnitCount[creep.room.name] < Memory.utilityMaxCount[creep.room.name]
                             && creep.memory.role !== "filler") || creep.memory.role === "filler")) {
                 target = roleFiller.run(creep);
-                creep.say('Drop ☢︎');
+                if (Game.time % 4 === 0) {
+                    creep.say('Drop ☢︎');
+                }
             }
 
             if (null == target && creep.memory.filler && creep.memory.role !== "filler") {
@@ -150,17 +155,23 @@ var roleUtility = {
                         && null != creep.room.controller
                         && creep.room.controller && creep.room.controller.my) {
                     target = roleRepairer.run(creep);
-                    creep.say('Repair');
+                    if (Game.time % 4 === 0) {
+                        creep.say('Repair');
+                    }
                 }
 
                 if (null == target && !creep.memory.upgrade) {
                     target = roleBuilder.run(creep);
-                    creep.say('Build');
+                    if (Game.time % 4 === 0) {
+                        creep.say('Build');
+                    }
                 }
 
                 if (null == target) {
                     target = roleUpgrader.run(creep);
-                    creep.say('Upgrade');
+                    if (Game.time % 4 === 0) {
+                        creep.say('Upgrade');
+                    }
                 }
             }
 
@@ -172,10 +183,14 @@ var roleUtility = {
                 //TODO : or has movved to an other room, keep it back to home
                 if (creep.memory.roomHome != creep.room.name) {
                     if (null != creep.memory.roomHome) {
-                        creep.say('BHome ☢︎');
+                        if (Game.time % 4 === 0) {
+                            creep.say('BHome ☢︎');
+                        }
                         moveExit = helperCreep.moveToAnOtherRoom(creep, creep.memory.roomHome);
                     } else {
-                        creep.say('BRand ☢︎');
+                        if (Game.time % 4 === 0) {
+                            creep.say('BRand ☢︎');
+                        }
                         moveExit = helperCreep.assigneRandomExitRoom(creep);
                     }
                     return;
@@ -195,7 +210,9 @@ var roleUtility = {
 
             if (null == target || moveExit != OK && creep.fatigue === 0) {
                 helperCreep.moveRandomly(creep, 2); // prevent to stay stuck (may block a miner position)
-                creep.say('418 ☢︎');
+                if (Game.time % 4 === 0) {
+                    creep.say('418 ☢︎');
+                }
             }
 
         }

@@ -76,7 +76,9 @@ var roleClaimer = {
 
             if (room.findInMemory(FIND_SOURCES).length > 1) {
                 claimResult = creep.claimController(room.controller);
-                creep.say("C=" + claimResult);
+                if (Game.time % 4 === 0) {
+                    creep.say("C=" + claimResult);
+                }
             }
 
             if (null == claimResult || claimResult === ERR_NOT_IN_RANGE) {
@@ -87,7 +89,9 @@ var roleClaimer = {
 
             if (null == claimResult || claimResult !== OK) {
                 var claimReserveResult = creep.reserveController(room.controller);
-                creep.say("C R=" + claimReserveResult);
+                if (Game.time % 4 === 0) {
+                    creep.say("C R=" + claimReserveResult);
+                }
 
                 if (claimReserveResult === ERR_NOT_IN_RANGE) {
                     if (!creep.memory.claimingSpot) {
@@ -102,7 +106,9 @@ var roleClaimer = {
 
                 } else if (claimReserveResult === ERR_INVALID_TARGET) {
                     var claimAttackResult = creep.attackController(room.controller);
-                    creep.say("C A=" + claimAttackResult);
+                    if (Game.time % 4 === 0) {
+                        creep.say("C A=" + claimAttackResult);
+                    }
                     if (claimAttackResult != OK) {
 //                        creep.memory.claimingSpotError++;
                     }

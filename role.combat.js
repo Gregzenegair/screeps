@@ -40,7 +40,8 @@ var roleCombat = {
             } else {
                 maxRooms = 16;
             }
-            creep.say("💀", true);
+            if (Game.time % 4 === 0) {
+            creep.say("💀", true);}
 //            if (creep.room.name === target.room.name) {
             if (creep.attack(target) == ERR_NOT_IN_RANGE) {
                 var moveAttack = creep.moveTo(target, {
@@ -50,8 +51,8 @@ var roleCombat = {
                 });
             }
 //            }
-        } else {
-            creep.say("NoTarget");
+        } else {if (Game.time % 4 === 0) {
+            creep.say("NoTarget");}
             Memory.combatTarget = null;
             Memory.combatExitRoom = null;
         }

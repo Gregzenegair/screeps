@@ -127,7 +127,7 @@ var helperCreep = {
             newPosY = newPosY < 0 ? 0 : newPosY;
             newPosX = newPosX > 49 ? 49 : newPosX;
             newPosY = newPosY > 49 ? 49 : newPosY;
-            
+
             helperCreep.moveTo(creep, new RoomPosition(parseInt(newPosX), parseInt(newPosY), creep.room.name));
         }
     },
@@ -302,7 +302,10 @@ var helperCreep = {
 
         if (creep.room.name != creep.memory.roomAssigned && !creep.memory.roomAssignedReached) {
             roomFromTo.to = creep.memory.roomAssigned;
-            creep.say("🏃");
+            if (Game.time % 4 === 0) {
+                creep.say("🏃");
+            }
+
 
             var moveExit = helperCreep.moveToAnOtherRoom(creep, creep.memory.roomAssigned);
 //            var isStuck = this.isStuck(creep);

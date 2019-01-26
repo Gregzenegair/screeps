@@ -82,9 +82,13 @@ var roleMiner = {
                     && creep.pos.y === containerSpot.pos.y) {
                 creep.memory.mineSpotReached = true;
             }
-            creep.say("Go ⚒");
+            if (Game.time % 4 === 0) {
+                creep.say("Go ⚒");
+            }
         } else {
-            creep.say("Wait ⚒");
+            if (Game.time % 4 === 0) {
+                creep.say("Wait ⚒");
+            }
         }
 
     },
