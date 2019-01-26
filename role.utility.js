@@ -208,7 +208,7 @@ var roleUtility = {
     canWorkCreep: function (creep) {
         return (creep.memory.role === "filler" && creep.carry.energy !== 0 && creep.memory.roomHome === creep.room.name)
                 || (creep.memory.role === "filler" && creep.carry.energy === creep.carryCapacity && creep.memory.roomHome !== creep.room.name)
-                || (creep.memory.role !== "filler" && creep.carry.energy === creep.carryCapacity);
+                || (creep.memory.role !== "filler" && creep.carry.energy !== 0);
     },
 
     mustUpgrade: function (creep) {
