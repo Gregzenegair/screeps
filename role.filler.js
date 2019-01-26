@@ -25,10 +25,9 @@ var roleFiller = {
         if (creep.memory.role !== "filler" && null == target) {
             target = helperEnergy.findEmptyClosestDeposit(creep);
         }
-        // NO MORE FILL CONTAINERS
+
         if (null == target) {
             target = helperEnergy.findNotFullClosestDeposit(creep);
-            //target = helperEnergy.findNotFullClosestContainer(creep);
         }
 
         if (target) {
