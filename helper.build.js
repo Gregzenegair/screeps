@@ -114,11 +114,13 @@ var helperBuild = {
 
     memoryStoreContainersController: function (room) {
 
-        if (null == Memory.containersControllers || Game.time % 2048 === 0) {
+        if (null == Memory.containersControllers) {
             Memory.containersControllers = {};
         }
-
-        if (Game.time % 256 === 0 || null == Memory.containersControllers[room.name]) {
+        
+        var containerControllerFound = false;
+        
+        if (null == Memory.containersControllers[room.name]) {
             var controller = (null != room.controller && room.controller.my) ? room.controller : null;
 
             if (null != controller) {
@@ -129,12 +131,20 @@ var helperBuild = {
                  * Check if container is built
                  */
                 if (structure.structureType === STRUCTURE_CONTAINER) {
+                    containerControllerFound = true;
                     Memory.containersControllers[room.name] = {
                         "container": structure.id,
                         "built": (null != structure.hitsMax && null == structure.progress)
                     };
                 }
             }
+        }
+        
+        if (!containerControllerFound) {
+            Memory.containersControllers[room.name] = {
+                "container": null,
+                "built": false
+            };
         }
     },
 

@@ -92,13 +92,15 @@ module.exports.loop = function () {
 
     Memory.combatUnitCount = combatUnitCount;
 
-    if (null == Memory.pathBuiltAroundSources || null == Memory.pathBuilt || null == Memory.storageBuilt
+    if (null == Memory.pathBuiltAroundSources || null == Memory.pathBuilt || null == Memory.storageBuilt || null == Memory.containersControllers
             || Game.time % 2048 === 0) {
         Memory.pathBuiltAroundSources = {};
         Memory.pathBuilt = {};
         Memory.storageBuilt = {};
         Memory.combatExitRoom = null; //TODO: rework this
         Memory.unreachableRooms = [];
+        Memory.containersControllers = {};
+
 
         // Remove old constructionSites
         var constructionSites = Game.constructionSites;
