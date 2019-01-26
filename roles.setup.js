@@ -10,9 +10,9 @@ var rolesSetup = {
     FILLER: {name: "filler", maxCount: -1, baseBody: [CARRY, MOVE], filler: true},
     MINER: {name: "miner", maxCount: -1, baseBody: [MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK, WORK], simpleBody: true},
     CLAIMER: {name: "claimer", maxCount: 1, baseBody: [CLAIM, MOVE], simpleBody: false},
-    COMBAT: {name: "combat", maxCount: 1, baseBody: [ATTACK, MOVE, MOVE, TOUGH, TOUGH]},
-    COMBAT2: {name: "combat", maxCount: 1, baseBody: [ATTACK, MOVE, TOUGH]},
-    HEALER: {name: "heal", maxCount: 1, baseBody: [HEAL, MOVE, MOVE, TOUGH]},
+    COMBAT: {name: "combat", maxCount: 1, baseBody: [TOUGH, TOUGH, ATTACK, MOVE, MOVE]},
+    COMBAT2: {name: "combat", maxCount: 1, baseBody: [TOUGH, ATTACK, MOVE]},
+    HEALER: {name: "heal", maxCount: 1, baseBody: [TOUGH, HEAL, MOVE, MOVE]},
 
     /** @param {Creep} creep **/
     spawn: function (type) {
