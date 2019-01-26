@@ -163,18 +163,30 @@ var helperEnergy = {
     },
 
     findMostFilledContainerOperatorTargetMethod: function (creep) {
+        var notWantedContainer = this.findContainerController(creep, false);
+        if (null != notWantedContainer) {
+            notWantedContainer = notWantedContainer.id;
+        }
+        console.log(notWantedContainer);
         return creep.room.findInMemory(FIND_STRUCTURES, {
             filter: (structure) => {
-                return (structure.structureType === STRUCTURE_CONTAINER);
+                return (structure.structureType === STRUCTURE_CONTAINER
+                        && structure.id !== notWantedContainer);
             }
         });
     },
 
     findMostFilledContainerOperatorMoreFilledThanCreepTargetMethod: function (creep) {
+        var notWantedContainer = this.findContainerController(creep, false);
+        if (null != notWantedContainer) {
+            notWantedContainer = notWantedContainer.id;
+        }
+        console.log(notWantedContainer);
         return creep.room.findInMemory(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType === STRUCTURE_CONTAINER
-                        && structure.store[RESOURCE_ENERGY] > creep.carryCapacity);
+                        && structure.store[RESOURCE_ENERGY] > creep.carryCapacity
+                        && structure.id !== notWantedContainer);
             }
         });
     },

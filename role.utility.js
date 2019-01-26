@@ -118,6 +118,9 @@ var roleUtility = {
                 creep.memory.energySourceId = null;
                 creep.memory.energySourceType = null;
                 // TODO: set something to do if no energy source
+                
+                helperCreep.moveRandomly(creep, 1); // prevent to stay stuck (may block a miner position)
+                creep.say('418 ☢︎');
             }
         }
 
@@ -193,7 +196,8 @@ var roleUtility = {
             }
 
             if (null == target || moveExit != OK && creep.fatigue === 0) {
-                helperCreep.moveRandomly(creep, 8); // prevent to stay stuck (may block a miner position)
+                helperCreep.moveRandomly(creep, 1); // prevent to stay stuck (may block a miner position)
+                creep.say('418 ☢︎');
             }
 
         }

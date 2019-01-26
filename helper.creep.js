@@ -117,6 +117,7 @@ var helperCreep = {
 
     /** @param {Creep} creep **/
     moveRandomly: function (creep, range) {
+        range = range < 4 ? 4 : range;
         var newPosX;
         var newPosY;
         if (null == creep.memory.moveToRandomly) {
