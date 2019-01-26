@@ -117,17 +117,17 @@ var helperCreep = {
 
     /** @param {Creep} creep **/
     moveRandomly: function (creep, range) {
-        range = range < 2 ? 2 : range;
-        var newPosX;
-        var newPosY;
-        newPosX = Math.round(creep.pos.x + Math.round(Math.random() * range) - range / 2);
-        newPosY = Math.round(creep.pos.y + Math.round(Math.random() * range) - range / 2);
-        newPosX = newPosX < 0 ? 0 : newPosX;
-        newPosY = newPosY < 0 ? 0 : newPosY;
-        newPosX = newPosX > 49 ? 49 : newPosX;
-        newPosY = newPosY > 49 ? 49 : newPosY;
-
         if (Game.time % 16 === 0) {
+            range = range < 2 ? 2 : range;
+            var newPosX;
+            var newPosY;
+            newPosX = Math.round(creep.pos.x + Math.round(Math.random() * range) - range / 2);
+            newPosY = Math.round(creep.pos.y + Math.round(Math.random() * range) - range / 2);
+            newPosX = newPosX < 0 ? 0 : newPosX;
+            newPosY = newPosY < 0 ? 0 : newPosY;
+            newPosX = newPosX > 49 ? 49 : newPosX;
+            newPosY = newPosY > 49 ? 49 : newPosY;
+            
             helperCreep.moveTo(creep, new RoomPosition(parseInt(newPosX), parseInt(newPosY), creep.room.name));
         }
     },
