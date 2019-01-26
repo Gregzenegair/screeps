@@ -17,7 +17,7 @@ var roleRepairer = {
 
         var target = creep.pos.findClosestByPathInMemory(FIND_MY_STRUCTURES, {
             filter: function (structure) {
-                return (structure.hits < structure.hitsMax / 4 && structure.isActive());
+                return (structure.hits < structure.hitsMax / 2 && structure.isActive());
             }
         });
 
