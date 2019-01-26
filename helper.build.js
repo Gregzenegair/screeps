@@ -36,8 +36,8 @@ var helperBuild = {
                     if (TERRAIN_MASK_WALL !== Game.map.getRoomTerrain(room.name).get(coord.x, coord.y)) {
                         var canBuild = true;
                         var lookAts = room.lookAt(new RoomPosition(coord.x, coord.y, room.name));
-                        for (var j = 0; j < lookAts.length; j++) {
-                            var lookAt = lookAts[j];
+                        for (var k = 0; k < lookAts.length; k++) {
+                            var lookAt = lookAts[k];
                             if (null != lookAt.type && lookAt.type === "structure") {
                                 canBuild = false;
                             }
