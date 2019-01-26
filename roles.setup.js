@@ -71,15 +71,16 @@ var rolesSetup = {
                     }
 
                     if (null == Memory.utilityMaxCount[room.name]) {
+                        var maxMiner = this.calcMaxMiner(room);
+                        Memory.minerMaxCount[room.name] = maxMiner;
+                        Memory.minerUnitCount[room.name] = 0;
+                        console.log("calculated maxMiner=" + maxMiner);
+
                         var maxUtility = this.calcMaxUtility(room); //TODO set max utility by room with spawn ?
                         Memory.utilityMaxCount[room.name] = maxUtility;
                         Memory.utilityUnitCount[room.name] = 0;
                         console.log("calculated maxUtility=" + maxUtility);
 
-                        var maxMiner = this.calcMaxMiner(room);
-                        Memory.minerMaxCount[room.name] = maxMiner;
-                        Memory.minerUnitCount[room.name] = 0;
-                        console.log("calculated maxMiner=" + maxMiner);
                     }
 
 
@@ -267,7 +268,7 @@ var rolesSetup = {
             var mineSpots = helperEnergy.countEnergyMineSpots(room);
             console.log("sourcesCount=" + sourcesCount);
             console.log("mineSpots=" + mineSpots);
-            
+
             if (null != room.controller && null != room.controller.level && room.controller.my) {
 
                 result = Math.round(Math.round(mineSpots * 0.4) - (roomControlerLevel / 2));
