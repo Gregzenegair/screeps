@@ -117,7 +117,7 @@ var helperCreep = {
 
     /** @param {Creep} creep **/
     moveRandomly: function (creep, range) {
-        range = range < 2 ?2 : range;
+        range = range < 2 ? 2 : range;
         var newPosX;
         var newPosY;
         newPosX = Math.round(creep.pos.x + Math.round(Math.random() * range) - range / 2);
@@ -127,8 +127,9 @@ var helperCreep = {
         newPosX = newPosX > 49 ? 49 : newPosX;
         newPosY = newPosY > 49 ? 49 : newPosY;
 
-        helperCreep.moveTo(creep, new RoomPosition(parseInt(newPosX), parseInt(newPosY), creep.room.name));
-
+        if (Game.time % 16 === 0) {
+            helperCreep.moveTo(creep, new RoomPosition(parseInt(newPosX), parseInt(newPosY), creep.room.name));
+        }
     },
 
     findMinerHarvestSource: function (creep) {
