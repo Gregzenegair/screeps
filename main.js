@@ -131,7 +131,6 @@ module.exports.loop = function () {
     }
 
     if (Game.time % 256 === 0) {
-        Memory.lastWantedBuild = {};
 
         var roomWithCombatUnit = 0;
         for (var name in Game.rooms) {
@@ -164,7 +163,6 @@ module.exports.loop = function () {
 
                     // for debug purpose, or to use somewhere else
                     var scanneds = room.lookAt(newPosX, newPosY);
-                    Memory.lastWantedBuild[room.name] = scanneds;
                     // this allow to not build on roads
                     var canBuild = true;
                     for (var i = 0; i < scanneds.length; i++) {

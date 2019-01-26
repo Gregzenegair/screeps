@@ -5,7 +5,8 @@ require('object.extension')();
 var helperBuild = {
 
     buildRoutesAround: function (room, sources) {
-        if (!Memory.pathBuiltAroundSources[room.name]) {
+        if (null == Memory.pathBuiltAroundSources[room.name]
+                || !Memory.pathBuiltAroundSources[room.name]) {
             var allCoords = [];
             var spawns = helperRoom.findSpawns(room);
             if (null != spawns) {
