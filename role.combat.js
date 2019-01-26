@@ -57,7 +57,7 @@ var roleCombat = {
         }
 
         if ((!maxCombatUnit && null == target && Game.time % 8 === 0) || null != creep.memory.moveToRandomly) {
-            helperCreep.moveRandomly(creep, 8);
+            helperCreep.moveRandomly(creep, 2);
         } else {
             if (null == Memory.combatExitRoom) {
                 helperCreep.assigneRandomExitRoom(creep, {unwantedRooms: Memory.noControllerRooms});
