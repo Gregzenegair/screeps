@@ -117,28 +117,18 @@ var helperCreep = {
 
     /** @param {Creep} creep **/
     moveRandomly: function (creep, range) {
+        range = range < 2 ?2 : range;
         var newPosX;
         var newPosY;
-        if (null == creep.memory.moveToRandomly) {
-            newPosX = Math.round(creep.pos.x + Math.round(Math.random() * range) - range / 2);
-            newPosY = Math.round(creep.pos.y + Math.round(Math.random() * range) - range / 2);
-            newPosX = newPosX < 0 ? 0 : newPosX;
-            newPosY = newPosY < 0 ? 0 : newPosY;
-            newPosX = newPosX > 49 ? 49 : newPosX;
-            newPosY = newPosY > 49 ? 49 : newPosY;
+        newPosX = Math.round(creep.pos.x + Math.round(Math.random() * range) - range / 2);
+        newPosY = Math.round(creep.pos.y + Math.round(Math.random() * range) - range / 2);
+        newPosX = newPosX < 0 ? 0 : newPosX;
+        newPosY = newPosY < 0 ? 0 : newPosY;
+        newPosX = newPosX > 49 ? 49 : newPosX;
+        newPosY = newPosY > 49 ? 49 : newPosY;
 
-            creep.memory.moveToRandomly = {};
-            creep.memory.moveToRandomly.x = newPosX;
-            creep.memory.moveToRandomly.y = newPosY;
-        } else {
-            newPosX = creep.memory.moveToRandomly.x;
-            newPosY = creep.memory.moveToRandomly.y;
-        }
-        creep.moveTo(newPosX, newPosY, {reusePath: 32, visualizePathStyle: {stroke: '#ffffff'}});
+        helperCreep.moveTo(creep, new RoomPosition(parseInt(newPosX), parseInt(newPosY), creep.room.name));
 
-        if (creep.pos.x === newPosX && creep.pos.y === newPosY) {
-            creep.memory.moveToRandomly = null;
-        }
     },
 
     findMinerHarvestSource: function (creep) {
