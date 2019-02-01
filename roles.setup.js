@@ -174,7 +174,8 @@ var rolesSetup = {
                             continue;
                         }
 
-                        if ((type.name === this.CLAIMER.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name])
+                        if ((!spawnForItself && type.name === this.CLAIMER.name)
+                                || (type.name === this.CLAIMER.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name])
                                 || (type.name === this.CLAIMER.name && null != room.controller && room.controller.my && room.controller.level <= 5)
                                 || (null != room.controller && !room.controller.my)
                                 || null == room.controller) {
