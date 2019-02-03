@@ -123,9 +123,27 @@ var rolesSetup = {
                         continue;
                     }
 
+                    if (!(type.name === this.MINER.name || type.name === this.UTILITY.name || type.name === this.FILLER.name)) {
+                        var foundTowers = room.findInMemory(FIND_MY_STRUCTURES, {
+                            filter: {structureType: STRUCTURE_TOWER}
+                        });
+
+                        var emptyTower = false;
+                        for (var i = 0; i < foundTowers.length; i++) {
+                            if (foundTowers[i].energy < foundTowers[i].energyCapacity / 2) {
+                                emptyTower = true;
+                            }
+                        }
+
+                        if (emptyTower) {
+                            console.log("Not spawning spawn room [" + spawn.room.name + "] for this room " + room.name + " a tower is nearly empty");
+                            continue;
+                        }
+                    }
+
 //                    console.log("Current status for spawn=" + spawn.name + ", " + type.name + "=" + seekTypes.length);
 
-                    if ((type.name === this.COMBAT.name || type.name === this.HEALER.name) && Game.cpu.bucket < 5000) {
+                    if ((type.name === this.CLAIMER.name || type.name === this.COMBAT.name || type.name === this.HEALER.name) && Game.cpu.bucket < 5000) {
                         console.log("Not building combat, bucket is under 5000");
                         continue;
                     }
