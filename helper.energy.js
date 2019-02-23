@@ -258,7 +258,7 @@ var helperEnergy = {
             var containerController = Memory.containersControllers[creep.room.name];
             if (null != containerController) {
                 var container = Game.getObjectById(containerController.container);
-                if (containerController.built && null != container) {
+                if (containerController.built && null != container && null != container.store) {
                     if (checkNotEmpty && container.store[RESOURCE_ENERGY] < creep.carryCapacity / 4) {
                         return null;
                     }
