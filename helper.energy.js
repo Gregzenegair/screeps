@@ -243,6 +243,15 @@ var helperEnergy = {
         return target;
     },
 
+    findRoomstorage: function (room) {
+        var target = room.findInMemory(STRUCTURE_STORAGE);
+
+        if (null != target && null != target[0]) {
+            target = target[0];
+        }
+        return target;
+    },
+
     findContainerController: function (creep, checkNotEmpty) {
         helperRoom.memoryStoreContainersController(creep.room);
         if (null != Memory.containersControllers) {

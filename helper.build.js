@@ -91,7 +91,8 @@ var helperBuild = {
         helperRoom.memoryStoreContainersController(room);
 
         if (null == Memory.containerSources[room.name] // If no source container yet, no need to build container for controller
-                || null != Memory.containersControllers[room.name]) {
+                || (null != Memory.containersControllers[room.name] 
+                    && Memory.containersControllers[room.name].built == true)) {
             return;
         }
 
@@ -111,6 +112,7 @@ var helperBuild = {
                         var buildContainer = room.createConstructionSite(coord.x, coord.y, STRUCTURE_CONTAINER);
                         console.log("Build container controller resulted=" + buildContainer);
                         if (buildContainer === OK) {
+                            Memory.containersControllers[room.name].built = true;
                             return;
                         }
                     }

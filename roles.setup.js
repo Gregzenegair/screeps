@@ -25,6 +25,10 @@ var rolesSetup = {
                     Memory.previousUtilityMaxCount = JSON.parse(JSON.stringify(Memory.utilityMaxCount));
                 }
 
+                if (null == Memory.roomDatas || Game.time % 4096 === 0) {
+                    Memory.roomDatas = {};
+                }
+
                 Memory.utilityMaxCount = {};
                 Memory.utilityUnitCount = {};
                 Memory.minerMaxCount = {};

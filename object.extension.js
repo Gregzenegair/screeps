@@ -22,9 +22,9 @@ module.exports = function () {
          * Or
          * If if not spawning for itself
          */
-        if (room.findInMemory(FIND_SOURCES).length === 1/* || !spawnForItself*/) {
-            maxParts = Math.round(maxParts / 2);
-        }
+//        if (room.findInMemory(FIND_SOURCES).length === 1/* || !spawnForItself*/) {
+//            maxParts = Math.round(maxParts / 2);
+//        }
 
         while (maxParts > 0) {
             cost += allPartsCost;

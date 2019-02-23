@@ -207,6 +207,17 @@ var roleUtility = {
                     helperCreep.moveTo(creep, target, true);
                 }
             }
+            
+            if (null == target && creep.memory.role === "filler") {
+                target = helperEnergy.findRoomstorage(creep.room);
+            }
+
+            if (null != target) {
+                creep.memory.fillTarget = target.id;
+                if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    helperCreep.moveTo(creep, target, true);
+                }
+            }
 
             if (null == target || moveExit != OK && creep.fatigue === 0) {
                 helperCreep.moveRandomly(creep, 2); // prevent to stay stuck (may block a miner position)

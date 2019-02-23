@@ -15,7 +15,7 @@ require('object.extension')();
 
 module.exports.loop = function () {
 
-    if (Game.cpu.bucket < 200) {
+    if (Game.cpu.bucket < 500) {
         console.log("Game.cpu.bucket=" + Game.cpu.bucket);
         console.log("Game.cpu.tickLimit=" + Game.cpu.tickLimit);
         return;
@@ -147,7 +147,7 @@ module.exports.loop = function () {
                 var spawn = helperRoom.findSpawn(room);
 
                 if (spawn) {// TODO: move random positionner to a class helper
-                    var depositRange
+                    var depositRange;
                     if (null != room && null != room.controller) {
                         depositRange = Math.floor(room.controller.level * 4 / 3);
                         depositRange = depositRange < 4 ? 4 : depositRange;
