@@ -309,6 +309,10 @@ var rolesSetup = {
     },
 
     calcMaxMiner: function (room) {
+        var roomControlerLevel = -1;
+        if (null != room.controller) {
+            roomControlerLevel = room.controller.level;
+        }
         if (null != room.controller && room.controller.my && roomControlerLevel == 8
             && null != Memory.previousUtilityMaxCount[room.name]
             && null != Memory.minerMaxCount[room.name]
