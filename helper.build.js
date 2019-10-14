@@ -35,17 +35,19 @@ var helperBuild = {
                     var coord = coords[j];
                     if (TERRAIN_MASK_WALL !== Game.map.getRoomTerrain(room.name).get(coord.x, coord.y)) {
                         var canBuild = true;
-                        var lookAts = room.lookAt(new RoomPosition(coord.x, coord.y, room.name));
-                        for (var k = 0; k < lookAts.length; k++) {
-                            var lookAt = lookAts[k];
-                            if (null != lookAt.type && lookAt.type === "structure") {
-                                canBuild = false;
+                        if (null != coord.x && null != coord.y && null != room.name) {
+                            var lookAts = room.lookAt(new RoomPosition(coord.x, coord.y, room.name));
+                            for (var k = 0; k < lookAts.length; k++) {
+                                var lookAt = lookAts[k];
+                                if (null != lookAt.type && lookAt.type === "structure") {
+                                    canBuild = false;
+                                }
                             }
-                        }
 
-                        if (canBuild) {
-                            var buildRoad = room.createConstructionSite(coord.x, coord.y, STRUCTURE_ROAD);
-                            console.log("Build road around source resulted=" + buildRoad);
+                            if (canBuild) {
+                                var buildRoad = room.createConstructionSite(coord.x, coord.y, STRUCTURE_ROAD);
+                                console.log("Build road around source resulted=" + buildRoad);
+                            }
                         }
                     }
                 }
