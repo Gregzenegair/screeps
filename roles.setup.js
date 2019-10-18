@@ -53,11 +53,6 @@ var rolesSetup = {
             for (var key in Game.spawns) {
                 var spawn = Game.spawns[key];
 
-                if (spawn.spawning) {
-                    console.log("Not spawning spawn room [" + spawn.room.name + "] for this room " + room.name + " a spawner is spawning (only one spawner is used a time)");
-                    Memory.roomSpawnedType[room.name][type.name] = true;
-                }
-
                 //                var assignableRooms = {};
                 //
                 //                assignableRooms = Game.map.describeExits(spawn.room.name);
@@ -92,6 +87,9 @@ var rolesSetup = {
 
                     }
 
+                    if (spawn.spawning || Memory.roomSpawnedType[room.name][type.name]) {
+                        console.log("Not spawning spawn room [" + room.name + "] for this room " + room.name + " a spawner is spawning (only one spawner is used a time)");
+                    }
 
                     if (Game.cpu.bucket < 1000 && !spawnForItself) {
                         console.log("Not spawning spawn room [" + spawn.room.name + "] for this room " + room.name + " bucket is under 1000");
