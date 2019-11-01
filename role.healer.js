@@ -16,7 +16,7 @@ var roleHealer = {
             }
         }
 
-        if (target) {
+        if (target && creep) {
             if (creep.heal(target) === ERR_NOT_IN_RANGE) {
                 var moveToResult = helperCreep.moveTo(creep, target);
                 if (moveToResult === ERR_NO_PATH) {
