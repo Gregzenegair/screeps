@@ -86,6 +86,10 @@ var rolesSetup = {
                         console.log("calculated maxUtility=" + maxUtility);
 
                     }
+					
+					if (null == Memory.roomSpawnedType[room.name]) {
+						Memory.roomSpawnedType[room.name] = {};
+					}
 
                     if (spawn.spawning || Memory.roomSpawnedType[room.name][type.name]) {
                         console.log("Not spawning spawn room [" + room.name + "] for this room " + room.name + " a spawner is spawning (only one spawner is used a time)");
