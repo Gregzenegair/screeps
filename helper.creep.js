@@ -147,7 +147,7 @@ var helperCreep = {
 
                     }
 
-                    return source.energy > 0;
+                    return source.store[RESOURCE_ENERGY] > 0;
                 }
             }));
         }
@@ -172,7 +172,7 @@ var helperCreep = {
                     energySourceType = this.ENERGY_SOURCE_TYPES.SOURCE;
                     target = otherRoom.findInMemory(FIND_SOURCES, {
                         filter: function (source) {
-                            return source.energy > 0;
+                            return source.store[RESOURCE_ENERGY] > 0;
                         }
                     });
                 }

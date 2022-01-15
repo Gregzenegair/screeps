@@ -14,7 +14,7 @@ var roleFiller = {
                 if (memTarget.structureType === STRUCTURE_CONTAINER
                         || memTarget.structureType === STRUCTURE_TERMINAL
                         || memTarget.structureType === STRUCTURE_STORAGE) {
-                    target = _.sum(memTarget.store) < memTarget.storeCapacity ? memTarget : null;
+                    target = _.sum(memTarget.store[RESOURCE_ENERGY]) < memTarget.store.getCapacity(RESOURCE_ENERGY) ? memTarget : null;
                 } else {
                     target = memTarget.energy < memTarget.energyCapacity ? memTarget : null;
                 }

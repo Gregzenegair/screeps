@@ -41,8 +41,7 @@ var roleTowers = {
 
                     if (null == closestHostile) {
                         var closestDamagedStructure = tower.pos.findClosestByRangeInMemory(FIND_STRUCTURES, {
-                            filter: (structure) => structure.hits < structure.hitsMax / 3 && structure.structureType !== STRUCTURE_WALL
-                                        && structure.isActive()
+                            filter: (structure) => structure.hits < structure.hitsMax / 3 && structure.structureType !== STRUCTURE_WALL && structure.isActive()
                         });
                         Memory.myTowers[name][i].closestDamagedStructure = closestDamagedStructure;
                     }

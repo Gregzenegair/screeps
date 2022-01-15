@@ -141,7 +141,7 @@ var rolesSetup = {
 
                         var emptyTower = false;
                         for (var i = 0; i < foundTowers.length; i++) {
-                            if (foundTowers[i].energy < foundTowers[i].energyCapacity / 2) {
+                            if (foundTowers[i].store[RESOURCE_ENERGY] < foundTowers[i].store.getCapacity(RESOURCE_ENERGY) / 2) {
                                 emptyTower = true;
                             }
                         }
@@ -205,10 +205,10 @@ var rolesSetup = {
 
                         if ((!spawnForItself && type.name === this.CLAIMER.name)
                             || (type.name === this.CLAIMER.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name])
-                            || (type.name === this.CLAIMER.name && null != room.controller && room.controller.my && room.controller.level <= 5)
+                            || (type.name === this.CLAIMER.name && null != room.controller && room.controller.my && room.controller.level <= 4)
                             || (null != room.controller && !room.controller.my)
                             || null == room.controller) {
-                            console.log('Not spawning claimer yet, reason: not enough utility or room.controller.level <= 3');
+                            console.log('Not spawning claimer yet, reason: not enough utility or room.controller.level <= 4');
                             continue;
                         }
 

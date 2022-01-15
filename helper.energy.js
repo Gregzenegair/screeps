@@ -29,16 +29,10 @@ var helperEnergy = {
 
     structureValues: {
         'energy': function (structure) {
-            return structure.energy;
-        },
-        'energyCapacity': function (structure) {
-            return structure.energyCapacity;
-        },
-        'store': function (structure) {
             return structure.store[RESOURCE_ENERGY];
         },
-        'storeCapacity': function (structure) {
-            return structure.storeCapacity;
+        'energyCapacity': function (structure) {
+            return structure.store.getCapacity(RESOURCE_ENERGY);
         },
         'zero': function (structure) {
             return 0;
@@ -130,7 +124,7 @@ var helperEnergy = {
                 result = target;
             } else {
                 if (notWantedContainer != target.id
-                        && target.store > result.store) {
+                        && target.store[RESOURCE_ENERGY] > result.store[RESOURCE_ENERGY]) {
                     result = target;
                 }
             }
@@ -153,7 +147,7 @@ var helperEnergy = {
                 result = target;
             } else if (null != target) {
                 if (notWantedContainer != target.id
-                        && target.store > result.store) {
+                        && target.store[RESOURCE_ENERGY] > result.store[RESOURCE_ENERGY]) {
                     result = target;
                 }
             }
@@ -224,21 +218,21 @@ var helperEnergy = {
     },
 
     findFullClosestContainer: function (creep) {
-        return this.findClosestContainerOperator(creep, 'eq', this.structureValues.store, this.structureValues.storeCapacity);
+        return this.findClosestContainerOperator(creep, 'eq', this.structureValues.energy, this.structureValues.energyCapacity);
     },
 
     findNotEmptyClosestContainer: function (creep) {
-        return this.findClosestContainerOperator(creep, 'sup', this.structureValues.store, this.structureValues.zero);
+        return this.findClosestContainerOperator(creep, 'sup', this.structureValues.energy, this.structureValues.zero);
     },
 
     findNotFullClosestContainer: function (creep) {
-        return this.findClosestContainerOperator(creep, 'inf', this.structureValues.store, this.structureValues.storeCapacity);
+        return this.findClosestContainerOperator(creep, 'inf', this.structureValues.energy, this.structureValues.energyCapacity);
     },
 
     findNotFullNotEmptyClosestContainer: function (creep) {
-        var target = this.findClosestContainerOperator(creep, 'inf', this.structureValues.store, this.structureValues.storeCapacity);
+        var target = this.findClosestContainerOperator(creep, 'inf', this.structureValues.energy, this.structureValues.energyCapacity);
         if (target.store[RESOURCE_ENERGY] === 0) {
-            target = this.findClosestContainerOperator(creep, 'sup', this.structureValues.store, this.structureValues.zero);
+            target = this.findClosestContainerOperator(creep, 'sup', this.structureValues.energy, this.structureValues.zero);
         }
         return target;
     },
@@ -258,7 +252,7 @@ var helperEnergy = {
             var containerController = Memory.containersControllers[creep.room.name];
             if (null != containerController) {
                 var container = Game.getObjectById(containerController.container);
-                if (containerController.built && null != container && null != container.store) {
+                if (containerController.built && null != container && null != container.store[RESOURCE_ENERGY]) {
                     if (checkNotEmpty && container.store[RESOURCE_ENERGY] < creep.carryCapacity / 4) {
                         return null;
                     }
