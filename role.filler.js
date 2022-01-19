@@ -10,7 +10,7 @@ var roleFiller = {
 
         if (null != creep.memory.fillTarget) {
             var memTarget = Game.getObjectById(creep.memory.fillTarget);
-            if (null != memTarget) {
+            if (null != memTarget && null != memTarget.store) {
                 if (memTarget.structureType === STRUCTURE_CONTAINER
                         || memTarget.structureType === STRUCTURE_TERMINAL
                         || memTarget.structureType === STRUCTURE_STORAGE) {
