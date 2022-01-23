@@ -106,7 +106,7 @@ var rolesSetup = {
                     }
 
                     var seekTypes = _.filter(Game.creeps, (creep) => creep.memory.role == type.name && creep.memory.roomAssigned == room.name
-                        && creep.ticksToLive > 48); // replace a dying creep sooner (by not counting it if under 32ttl)
+                        && creep.ticksToLive > 48); // replace a dying creep sooner (by not counting it if under 48 ttl)
 
                     if (type.name === "utility") {
                         Memory.utilityUnitCount[room.name] = seekTypes.length;
