@@ -188,18 +188,18 @@ var rolesSetup = {
 
                     if (seekTypes.length < type.maxCount) {
                         if ((type.name === this.COMBAT.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name])
-                            || (type.name === this.COMBAT.name && null != room.controller && room.controller.my && room.controller.level <= 3)
+                            || (type.name === this.COMBAT.name && null != room.controller && room.controller.my && room.controller.level <= 5)
                             && Memory.hasBeenUnderAttack < 6) {
-                            console.log('Not spawning combat yet, reason: not enough utility or room.controller.level <= 3');
+                            console.log('Not spawning combat yet, reason: not enough utility or room.controller.level <= 5');
                             continue;
                         }
 
                         if ((type.name === this.HEALER.name && Memory.utilityUnitCount[room.name] < Memory.utilityMaxCount[room.name])
-                            || (type.name === this.HEALER.name && null != room.controller && room.controller.my && room.controller.level <= 3)
+                            || (type.name === this.HEALER.name && null != room.controller && room.controller.my && room.controller.level <= 5)
                             && Memory.hasBeenUnderAttack < 9
                             || (null != room.controller && !room.controller.my)
                             || null == room.controller) {
-                            console.log('Not spawning heal yet, reason: not enough utility or room.controller.level <= 3');
+                            console.log('Not spawning heal yet, reason: not enough utility or room.controller.level <= 5');
                             continue;
                         }
 

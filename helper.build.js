@@ -260,6 +260,28 @@ var helperBuild = {
         }
 
         return paths;
+    },
+    
+    /**
+     * For building purposes
+     * @param {type} room
+     * @returns 
+     */
+    findPathControllers: function (room) {
+        var spawn = helperRoom.findSpawn(room);
+        var paths = [];
+        var controller = helperRoom.getMyRoomController(room);
+        if (spawn && null != controller && controller.my) {
+            paths.push(spawn.pos.findPathToInMemory(controller, {
+                ignoreCreeps: true,
+                ignoreDestructibleStructures: false,
+                ignoreRoads: false,
+                swampCost: 2,
+                plainCost: 2
+            }));
+        }
+
+        return paths;
     }
 
 };

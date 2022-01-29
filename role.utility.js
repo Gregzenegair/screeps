@@ -246,6 +246,14 @@ var roleUtility = {
             return false;
         }
 
+        if (null != Memory.containersControllers[creep.room.name]) {
+            var containersController = Game.getObjectById(Memory.containersControllers[creep.room.name].container);
+            if (null != containersController && null != containersController.store && null != containersController.store[RESOURCE_ENERGY]
+               && containersController.store[RESOURCE_ENERGY] > 0) {
+                creep.memory.upgrade = true;
+            }
+        }
+        
         if (creep.room.controller && creep.room.controller.ticksToDowngrade < 4096) {
             creep.memory.upgrade = true;
         } else {
