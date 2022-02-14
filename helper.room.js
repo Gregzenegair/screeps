@@ -47,15 +47,17 @@ var helperRoom = {
     },
 
     findSpawns: function (room) {
+        if (null != room) {
+            var targets = room.findInMemory(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.structureType == STRUCTURE_SPAWN
+                            && structure.my);
+                }
+            });
 
-        var targets = room.findInMemory(FIND_STRUCTURES, {
-            filter: (structure) => {
-                return (structure.structureType == STRUCTURE_SPAWN
-                        && structure.my);
-            }
-        });
-
-        return targets;
+            return targets;
+        }
+        return [];
     },
 
     activateSafeMode: function (room) {

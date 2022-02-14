@@ -228,7 +228,7 @@ var roleUtility = {
 
         }
 
-        if (Game.time % 256 === 0 || null == creep.memory.upgrade) {
+        if (Game.time % 64 === 0 || null == creep.memory.upgrade) {
             this.mustUpgrade(creep);
         }
     },
@@ -245,6 +245,17 @@ var roleUtility = {
         if (creep.memory.role === "filler") {
             return false;
         }
+        
+        var fillerCounts = _.filter(Game.creeps, (filteredCreep) => filteredCreep.memory.role == "filler" && filteredCreep.memory.roomAssigned == creep.room.name
+                        && filteredCreep.ticksToLive > 48);
+        
+        if (fillerCounts >= 1) {
+            var constructionSites = creep.room.findInMemory(Game.CONSTRUCTION_SITES);
+            if (null == constructionSites || constructionSites.length == 0) {
+                creep.memory.upgrade = true; 
+                return;
+            }            
+        }
 
         if (null != Memory.containersControllers[creep.room.name]) {
             var containersController = Game.getObjectById(Memory.containersControllers[creep.room.name].container);
@@ -256,9 +267,13 @@ var roleUtility = {
         
         if (creep.room.controller && creep.room.controller.ticksToDowngrade < 4096) {
             creep.memory.upgrade = true;
-        } else {
+        }
+        
+        if (null ==creep.memory.upgrade) {
             creep.memory.upgrade = false;
         }
+        
+        
     },
 
     getBuildingPriority: function (creep) {
