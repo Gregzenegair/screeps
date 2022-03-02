@@ -254,9 +254,9 @@ var roleUtility = {
             constructionSites = creep.room.findInMemory(Game.CONSTRUCTION_SITES);
             if (null == constructionSites || constructionSites.length == 0) {
                 creep.memory.upgrade = true;
-                constructionSites = constructionSites.length;
                 return;
-            }            
+            }
+            constructionSites = constructionSites.length;
         }
 
         if (null != Memory.containersControllers[creep.room.name]) {
