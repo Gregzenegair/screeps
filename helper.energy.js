@@ -52,6 +52,7 @@ var helperEnergy = {
         var targets = room.findInMemory(FIND_MY_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType !== STRUCTURE_CONTROLLER &&
+                        structure.structureType !== STRUCTURE_STORAGE &&
                         this.operators[operator](a(structure), b(structure)
                         ));
             }
@@ -65,10 +66,11 @@ var helperEnergy = {
         var target = creep.pos.findClosestByRangeInMemory(FIND_MY_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType !== STRUCTURE_CONTROLLER &&
+                        structure.structureType !== STRUCTURE_STORAGE &&
                         this.operators[operator](a(structure), b(structure)
                         ));
             }
-        });
+        }, 32);
 
         return target;
     },
@@ -85,7 +87,7 @@ var helperEnergy = {
                         this.operators[operator](a(structure), b(structure)
                         ));
             }
-        });
+        }, 2048);
 
         return target;
     },

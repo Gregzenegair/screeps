@@ -147,7 +147,7 @@ var rolesSetup = {
                         }
 
                         if (emptyTower) {
-                            console.log("Not spawning spawn room [" + spawn.room.name + "] for this room " + room.name + " a tower is nearly empty");
+                            console.log("Not spawning non utilitary/filler/miner for spawn room [" + spawn.room.name + "] for this room " + room.name + " a tower is nearly empty");
                             continue;
                         }
                     }

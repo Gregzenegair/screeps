@@ -92,8 +92,8 @@ var helperBuild = {
     buildContainersController: function (room) {
         helperRoom.memoryStoreContainersController(room);
 
-        if (null == Memory.containerSources[room.name] // If no source container yet, no need to build container for controller
-                || (null != Memory.containersControllers[room.name] 
+        if (null != Memory.containerSources && null == Memory.containerSources[room.name] // If no source container yet, no need to build container for controller
+                || (null != Memory.containerSources && null != Memory.containersControllers[room.name] 
                     && Memory.containersControllers[room.name].built == true)) {
             return;
         }

@@ -216,8 +216,12 @@ module.exports = function () {
         return Math.findAnythingInMemory("findClosestByPath", key, defaultFunction, context, 8192);
     };
 
-    RoomPosition.prototype.findClosestByRangeInMemory = function findClosestByRangeInMemory(type, options) {
+    RoomPosition.prototype.findClosestByRangeInMemory = function findClosestByRangeInMemory(type, options, cacheRefresh) {
         var sOptions = "";
+        
+        if (null == cacheRefresh) {
+            cacheRefresh = 8192;
+        }
 
         if (null == options) {
             options = {};
@@ -243,7 +247,7 @@ module.exports = function () {
             options: options
         };
 
-        return Math.findAnythingInMemory("findClosestByRange", key, defaultFunction, context, 8192);
+        return Math.findAnythingInMemory("findClosestByRange", key, defaultFunction, context, cacheRefresh);
     };
 
 
