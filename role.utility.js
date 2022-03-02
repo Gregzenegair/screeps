@@ -249,10 +249,12 @@ var roleUtility = {
         var fillerCounts = _.filter(Game.creeps, (filteredCreep) => filteredCreep.memory.role == "filler" && filteredCreep.memory.roomAssigned == creep.room.name
                         && filteredCreep.ticksToLive > 48);
         
+        var construcitonSites = 0;
         if (fillerCounts.length >= 1) {
-            var constructionSites = creep.room.findInMemory(Game.CONSTRUCTION_SITES);
+            constructionSites = creep.room.findInMemory(Game.CONSTRUCTION_SITES);
             if (null == constructionSites || constructionSites.length == 0) {
-                creep.memory.upgrade = true; 
+                creep.memory.upgrade = true;
+                constructionSites = constructionSites.length;
                 return;
             }            
         }
@@ -260,7 +262,7 @@ var roleUtility = {
         if (null != Memory.containersControllers[creep.room.name]) {
             var containersController = Game.getObjectById(Memory.containersControllers[creep.room.name].container);
             if (null != containersController && null != containersController.store && null != containersController.store[RESOURCE_ENERGY]
-               && containersController.store[RESOURCE_ENERGY] > 0) {
+               && containersController.store[RESOURCE_ENERGY] > 0 && constructionSites == 0) {
                 creep.memory.upgrade = true;
             }
         }
