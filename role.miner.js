@@ -46,7 +46,7 @@ var roleMiner = {
         for (var i = 0; i < containerSources.length; i++) {
             var containerSource = containerSources[i];
             var container = Game.getObjectById(containerSource.container);
-            if (containerSource.free == true) {
+            if (null != container && containerSource.free == true) {
                 var minerAlreadyOn = false;
                 for (var j = 0; j < miners.length; j++) {
                     var miner = miners[j];
