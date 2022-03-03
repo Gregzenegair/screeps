@@ -251,7 +251,7 @@ var roleUtility = {
         
         var construcitonSites = 0;
         if (fillerCounts.length >= 1) {
-            constructionSites = creep.room.findInMemory(Game.CONSTRUCTION_SITES);
+            constructionSites = creep.room.findInMemory(FIND_CONSTRUCTION_SITES);
             if (null == constructionSites || constructionSites.length == 0) {
                 creep.memory.upgrade = true;
                 return;
@@ -282,7 +282,7 @@ var roleUtility = {
         if (creep.memory.role === "filler") {
             return false;
         }
-        var targets = creep.room.findInMemory(Game.CONSTRUCTION_SITES);
+        var targets = creep.room.findInMemory(FIND_CONSTRUCTION_SITES);
 
         return targets.length > 10 && Memory.utilityUnitCount[creep.room.name] === Memory.utilityMaxCount[creep.room.name];
     }
